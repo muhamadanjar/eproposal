@@ -52,6 +52,13 @@ class User extends Authenticatable
         }
         return false;
     }
+    public function isManager()
+    {
+       if ($this->roles->contains('name', 'manager')) {
+            return true;
+        }
+        return false;
+    }
     public function hasRole($role)
     {
         if ($this->isSuper()) {

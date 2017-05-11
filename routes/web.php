@@ -19,8 +19,20 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/proposal','ProposalCtrl@getIndex');
 
+Route::get('provinsi',function ($value=''){
+	$provinsi = \App\Provinsi::orderBy('kode_provinsi')->get();
+	return $provinsi;
+});
+
+Route::get('kecamatan',function ($value=''){
+	$provinsi = \App\Kecamatan::orderBy('kode_kecamatan')->get();
+	return $provinsi;
+});
+
+
+
+Route::get('/proposal','ProposalCtrl@getIndex');
 Route::get('/proposal/periksa','ProposalCtrl@getPeriksaDokumen');
 
 Route::group(array('prefix'=>'proposal'), function(){
@@ -30,15 +42,25 @@ Route::group(array('prefix'=>'proposal'), function(){
 	Route::get('/usulan/tambah','ProposalCtrl@getUsulan');
 	Route::post('/usulan/tambah','ProposalCtrl@postUsulan');
 
+	Route::get('/usulan/{id}','ProposalCtrl@getUbah');
+	Route::post('/usulan/{id}','ProposalCtrl@postUbah');
+
 	Route::get('/pengecekan','PengecekanCtrl@getIndex');
 });
 
 Route::group(array('prefix'=>'pengecekan'), function(){
 	Route::get('/usulan','PengecekanCtrl@getIndex');
 	Route::get('/usulan/{id}','PengecekanCtrl@getUsulan');
+	Route::post('/usulan/{id}','PengecekanCtrl@postUsulan');
 });
 
+Route::group(array('prefix'=>'persyaratan'), function(){
+	Route::get('/jalan','PersyaratanCtrl@getJalan');
 
+	Route::get('/jalan','PersyaratanCtrl@getSab');
+
+	Route::get('/jalan','PersyaratanCtrl@getPlts');
+});
 
 
 Route::group(array('prefix'=>'admin'), function(){

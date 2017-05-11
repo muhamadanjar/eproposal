@@ -14,7 +14,7 @@ class UsulanPersyaratanPlts extends Migration
     public function up()
     {
         Schema::create('usulan_persyaratan_plts', function (Blueprint $table) {
-            $table->unsignedInteger('psab_id');
+            $table->unsignedInteger('pplts_id');
             $table->unsignedInteger('usulan_id');
             $table->unsignedInteger('isi');
             $table->string('file')->nullable();
@@ -23,7 +23,7 @@ class UsulanPersyaratanPlts extends Migration
             //$table->foreign('pjalan_id')->references('id')->on('pjalan')->onDelete('cascade');
             //$table->foreign('usulan_id')->references('id')->on('usulan')->onDelete('cascade');
         
-            $table->primary(['psab_id', 'usulan_id']);
+            $table->primary(['pplts_id', 'usulan_id']);
         });
     }
 

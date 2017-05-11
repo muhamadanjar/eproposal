@@ -13,8 +13,8 @@ class UserSeeder extends Seeder
     {
         App\Role::insert([
             ['name' => 'admin'],
-            ['name' => 'user'],
             ['name' => 'manager'],
+            ['name' => 'user'],
         ]);
     
         // Basic permissions data

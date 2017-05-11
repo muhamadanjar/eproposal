@@ -188,13 +188,60 @@ $('select#provinsi').on('change', function (){
             var table = '<div class="box">';
             var table_admin = '<tr><th colspan="3">Admin</th></tr>';
             var table_teknis = '<tr><th colspan="3">Teknis</th></tr>';
-            table += '<div class="box-header"><h3 class="box-title">Jalan</h3></div>';
+            table += '<div class="box-header"><h3 class="box-title">Jalan</h3><div class="box-tools"><a href="/proposal/usulan/'+d.id+'" type="button" class="btn btn-block btn-primary">Ubah</a></div></div>';
             table += '<div class="box-body"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
                 table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th></tr>';
                 table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th></tr>';
                 for (var i = d.pjalan.length - 1; i >= 0; i--) {
                     data = d.pjalan[i];
                     var adatidak = (d.pjalan[i]['isi'] == 1) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
+                    if (data['tipeusulan'] == 'admin') {
+                        table_admin += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td></tr>';
+                    }else if(data['tipeusulan'] == 'teknis'){
+                        table_teknis += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td></tr>';
+                    }
+                }
+                table += table_admin;
+                table += table_teknis;
+                table += '</table></div></div>';
+            }
+        }
+        if (d.hasOwnProperty('psab')) {
+            if (d.psab.length > 0) {
+            var table = '<div class="box">';
+            var table_admin = '<tr><th colspan="3">Admin</th></tr>';
+            var table_teknis = '<tr><th colspan="3">Teknis</th></tr>';
+            table += '<div class="box-header"><h3 class="box-title">SAB</h3><div class="box-tools"><a href="/proposal/usulan/'+d.id+'" type="button" class="btn btn-block btn-primary">Ubah</a></div></div>';
+            table += '<div class="box-body"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
+                table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th></tr>';
+                table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th></tr>';
+                for (var i = d.psab.length - 1; i >= 0; i--) {
+                    data = d.psab[i];
+                    var adatidak = (d.psab[i]['isi'] == 1) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
+                    if (data['tipeusulan'] == 'admin') {
+                        table_admin += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td></tr>';
+                    }else if(data['tipeusulan'] == 'teknis'){
+                        table_teknis += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td></tr>';
+                    }
+                }
+                table += table_admin;
+                table += table_teknis;
+                table += '</table></div></div>';
+            }
+        }
+
+        if (d.hasOwnProperty('pplts')) {
+            if (d.pplts.length > 0) {
+            var table = '<div class="box">';
+            var table_admin = '<tr><th colspan="3">Admin</th></tr>';
+            var table_teknis = '<tr><th colspan="3">Teknis</th></tr>';
+            table += '<div class="box-header"><h3 class="box-title">SAB</h3><div class="box-tools"><a href="/proposal/usulan/'+d.id+'" type="button" class="btn btn-block btn-primary">Ubah</a></div></div>';
+            table += '<div class="box-body"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
+                table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th></tr>';
+                table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th></tr>';
+                for (var i = d.pplts.length - 1; i >= 0; i--) {
+                    data = d.pplts[i];
+                    var adatidak = (d.pplts[i]['isi'] == 1) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
                     if (data['tipeusulan'] == 'admin') {
                         table_admin += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td></tr>';
                     }else if(data['tipeusulan'] == 'teknis'){
@@ -227,7 +274,7 @@ $('select#provinsi').on('change', function (){
             { "data": "jumlah_usulan" },
             
         ],
-        "order": [[4, 'asc']]
+        "order": [[1, 'asc']]
     });
     
     $('#table_usulan tbody').on('click', 'td.details-control', function () {
@@ -276,6 +323,54 @@ $('select#provinsi').on('change', function (){
                 table += '</table></div></div>';
             }
         }
+
+        if (d.hasOwnProperty('psab')) {
+            if (d.psab.length > 0) {
+            var table = '<div class="box box-primary">';
+            var table_admin = '<tr><th colspan="3">Admin</th></tr>';
+            var table_teknis = '<tr><th colspan="3">Teknis</th></tr>';
+            table += '<div class="box-header"><h3 class="box-title">SAB</h3><div class="box-tools"><a href="/pengecekan/usulan/'+d.id+'" type="button" class="btn btn-block btn-primary">Cek</a></div></div>';
+            table += '<div class="box-body"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
+                table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Dokumen</th></tr>';
+                table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Dokumen</th></tr>';
+                for (var i = d.psab.length - 1; i >= 0; i--) {
+                    data = d.psab[i];
+                    var adatidak = (d.psab[i]['isi'] == 1) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
+                    if (data['tipeusulan'] == 'admin') {
+                        table_admin += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td><a href="/files/'+data['file']+'" class="fa fa-file-text text-green"></a></td></tr>';
+                    }else if(data['tipeusulan'] == 'teknis'){
+                        table_teknis += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td><a href="/files/'+data['file']+'" class="fa fa-file-text text-green"></a></td></tr>';
+                    }
+                }
+                table += table_admin;
+                table += table_teknis;
+                table += '</table></div></div>';
+            }
+        }
+
+        if (d.hasOwnProperty('pplts')) {
+            if (d.pplts.length > 0) {
+            var table = '<div class="box">';
+            var table_admin = '<tr><th colspan="3">Admin</th></tr>';
+            var table_teknis = '<tr><th colspan="3">Teknis</th></tr>';
+            table += '<div class="box-header"><h3 class="box-title">PLTS</h3><div class="box-tools"><a href="/pengecekan/usulan/'+d.id+'" type="button" class="btn btn-block btn-primary">Cek</a></div></div>';
+            table += '<div class="box-body"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
+                table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Dokumen</th></tr>';
+                table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Dokumen</th></tr>';
+                for (var i = d.pplts.length - 1; i >= 0; i--) {
+                    data = d.pplts[i];
+                    var adatidak = (d.pplts[i]['isi'] == 1) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
+                    if (data['tipeusulan'] == 'admin') {
+                        table_admin += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td><a href="/files/'+data['file']+'" class="fa fa-file-text text-green"></a></td></tr>';
+                    }else if(data['tipeusulan'] == 'teknis'){
+                        table_teknis += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td><a href="/files/'+data['file']+'" class="fa fa-file-text text-green"></a></td></tr>';
+                    }
+                }
+                table += table_admin;
+                table += table_teknis;
+                table += '</table></div></div>';
+            }
+        }
             
         return table;
     }
@@ -295,6 +390,7 @@ $('select#provinsi').on('change', function (){
             { "data": "desa" },
             { "data": "skpd_pengusul" },
             { "data": "jumlah_usulan" },
+            { "data": "tahun_usulan" },
             
         ],
         "order": [[1, 'asc']]

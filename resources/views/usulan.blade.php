@@ -173,7 +173,7 @@
                                           <th>Ada</th>
                                           <th>Tidak</th>
                                           <th>File</th>
-                                          <th>Keterangan</th>
+                                          
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -185,7 +185,7 @@
                                           <td><input type="radio" name="jalanadmin[{{$k}}]" value="1"></td>
                                           <td><input type="radio" name="jalanadmin[{{$k}}]" value="0"></td>
                                           <td><input type="file" name="jalanadmin_file[{{$k}}]"></td>
-                                          <td><input type="text" name="jalanadmin_keterangan[{{$k}}]"></td>
+                                          
                                           
                                           <td>
                                             
@@ -206,7 +206,7 @@
                                           <th>Ada</th>
                                           <th>Tidak</th>
                                           <th>File</th>
-                                          <th>Keterangan</th>
+                                          
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -218,7 +218,7 @@
                                           <td><input type="radio" name="jalanteknis[{{$k}}]" value="1"></td>
                                           <td><input type="radio" name="jalanteknis[{{$k}}]" value="0"></td>
                                           <td><input type="file" name="jalanteknis_file[{{$k}}]"></td>
-                                          <td><input type="text" name="jalanteknis_keterangan[{{$k}}]"></td>
+                                          
                                           
                                           <td>
                                             
@@ -255,7 +255,7 @@
                                           <th>Ada</th>
                                           <th>Tidak</th>
                                           <th>File</th>
-                                          <th>Keterangan</th>
+                                          
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -267,7 +267,6 @@
                                           <td><input type="radio" name="sabadmin[{{$k}}]" value="1"></td>
                                           <td><input type="radio" name="sabadmin[{{$k}}]" value="0"></td>
                                           <td><input type="file" name="sabadmin_file[{{$k}}]"></td>
-                                          <td><input type="text" name="sabadmin_keterangan[{{$k}}]"></td>
                                           
                                           <td>
                                             
@@ -288,7 +287,7 @@
                                           <th>Ada</th>
                                           <th>Tidak</th>
                                           <th>File</th>
-                                          <th>Keterangan</th>
+                                          
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -300,7 +299,7 @@
                                           <td><input type="radio" name="sabteknis[{{$k}}]" value="1"></td>
                                           <td><input type="radio" name="sabteknis[{{$k}}]" value="0"></td>
                                           <td><input type="file" name="sabteknis_file[{{$k}}]"></td>
-                                          <td><input type="text" name="sabteknis_keterangan[{{$k}}]"></td>
+                                          
                                           
                                           <td>
                                             
@@ -315,7 +314,6 @@
                         </div>
                     </div>
                 </div>
-                
             </div>
             <div class="pplts">
                 <div class="box-header">
@@ -338,7 +336,7 @@
                                           <th>Ada</th>
                                           <th>Tidak</th>
                                           <th>File</th>
-                                          <th>Keterangan</th>
+                                          
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -350,7 +348,7 @@
                                           <td><input type="radio" name="pltsadmin[{{$k}}]" value="1"></td>
                                           <td><input type="radio" name="pltsadmin[{{$k}}]" value="0"></td>
                                           <td><input type="file" name="pltsadmin_file[{{$k}}]"></td>
-                                          <td><input type="text" name="pltsadmin_keterangan[{{$k}}]"></td>
+                                          
                                           <td>
                                             <input type="hidden" name="ppltsadmin_id[{{$k}}]" value="{{ $v->id }}">
                                           </td>
@@ -369,7 +367,7 @@
                                           <th>Ada</th>
                                           <th>Tidak</th>
                                           <th>File</th>
-                                          <th>Keterangan</th>
+                                          
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -381,7 +379,7 @@
                                           <td><input type="radio" name="pltsteknis[{{$k}}]" value="1"></td>
                                           <td><input type="radio" name="pltsteknis[{{$k}}]" value="0"></td>
                                           <td><input type="file" name="pltsteknis_file[{{$k}}]"></td>
-                                          <td><input type="text" name="pltsteknis_keterangan[{{$k}}]"></td>
+                                          
                                           
                                           <td>
                                             

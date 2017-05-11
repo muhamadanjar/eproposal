@@ -65,7 +65,8 @@
             
           </ul>
         </li>
-
+        @endif
+        @if(\Auth::user()->hasRole('admin') || \Auth::user()->hasRole('manager'))
         <li>
           <a href="{{ url('/pengecekan/usulan') }}">
             <i class="fa fa-commenting"></i> <span>Pengecekan</span>

@@ -22,21 +22,50 @@ class ProposalCtrl extends Controller
         $this->tgl = Carbon::now('Asia/Jakarta');
 	}
 
+    public function getShowUsulanQuery($id=''){
+        $usulan ='';
+        if (!empty($id)) {
+            if (auth()->user()->isSuper() || auth()->user()->isManager()) {
+                $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
+                ->join('kabupaten', 'kabupaten.kode_kabupaten', '=', 'usulan.kode_kabupaten')
+                ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
+                ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
+                ->where('usulan.id',$id)
+                ->where('usulan.user_id',auth()->user()->id)
+                ->first();
+            }else{
+                $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
+                ->join('kabupaten', 'kabupaten.kode_kabupaten', '=', 'usulan.kode_kabupaten')
+                ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
+                ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
+                ->where('usulan.id',$id)
+                ->first();
+            }
+            
+        }else{
+            if (auth()->user()->isSuper() || auth()->user()->isManager()) {
+                $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
+                ->join('kabupaten', 'kabupaten.kode_kabupaten', '=', 'usulan.kode_kabupaten')
+                ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
+                ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
+                ->get();
+            }else{
+                $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
+                ->join('kabupaten', 'kabupaten.kode_kabupaten', '=', 'usulan.kode_kabupaten')
+                ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
+                ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
+                ->where('usulan.user_id',auth()->user()->id)
+                ->get();
+            }
+        }
+        return $usulan;
+    }
+
     public function getArrayUsulan($value=''){
-        $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
-        ->join('kabupaten', 'kabupaten.kode_kabupaten', '=', 'usulan.kode_kabupaten')
-        ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
-        ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
-        ->get();
-        
+        $usulan = $this->getShowUsulanQuery();
         $array = array();
         foreach ($usulan as $key => $value) {
             $array['data'][$key] = $value;
-            /*$array['data'][$key]['jalan'] = $value->jalan;
-            $array['data'][$key]['sab'] = $value->sab;
-            $array['data'][$key]['plts'] = $value->plts;*/
-
-            //$array['data'][$key]['pjalan'] = $value->pjalan;
             $pjalan = DB::table('usulan_persyaratan_jalan')
                 ->join('usulan','usulan.id','usulan_persyaratan_jalan.usulan_id')
                 ->join('pjalan','pjalan.id','usulan_persyaratan_jalan.pjalan_id')
@@ -51,10 +80,38 @@ class ProposalCtrl extends Controller
                 ->orderBy('no','DESC')
                 ->where('usulan_persyaratan_jalan.usulan_id',$value->id)
                 ->get();
+
+            $psab = DB::table('usulan_persyaratan_sab')
+                ->join('usulan','usulan.id','usulan_persyaratan_sab.usulan_id')
+                ->join('psab','psab.id','usulan_persyaratan_sab.psab_id')
+                ->select(
+                    'usulan.id as UsulID',
+                    'psab.no',
+                    'psab.namausulan',
+                    'psab.tipeusulan',
+                    'usulan_persyaratan_sab.isi',
+                    'usulan_persyaratan_sab.file'
+                )
+                ->orderBy('no','DESC')
+                ->where('usulan_persyaratan_sab.usulan_id',$value->id)
+                ->get();
+            $pplts = DB::table('usulan_persyaratan_plts')
+                ->join('usulan','usulan.id','usulan_persyaratan_plts.usulan_id')
+                ->join('pplts','pplts.id','usulan_persyaratan_plts.pplts_id')
+                ->select(
+                    'usulan.id as UsulID',
+                    'pplts.no',
+                    'pplts.namausulan',
+                    'pplts.tipeusulan',
+                    'usulan_persyaratan_plts.isi',
+                    'usulan_persyaratan_plts.file'
+                )
+                ->orderBy('no','DESC')
+                ->where('usulan_persyaratan_plts.usulan_id',$value->id)
+                ->get();
             $array['data'][$key]['pjalan'] = $pjalan;
-
-            
-
+            $array['data'][$key]['psab'] = $psab;
+            $array['data'][$key]['pplts'] = $pplts;
         }
 
         return $array;
@@ -64,15 +121,12 @@ class ProposalCtrl extends Controller
     public function getIndex($value=''){
         DB::connection()->enableQueryLog();
     	$this->getArrayUsulan();
-
-    
         dd(DB::getQueryLog());
     }
 
     public function getUsulanList($value=''){
         $usulan = Usulan::orderBy('id')->get();
         if (! auth()->user()->hasRole('admin')) {
-
             $usulan = Usulan::orderBy('id')->where('user_id',auth()->user()->id)->get();
         }
         
@@ -91,6 +145,8 @@ class ProposalCtrl extends Controller
             ->withPlts($plts)
             ->withProvinsi($provinsi);
     }
+
+    
 
     public function postUsulan(Request $r){
 
@@ -282,6 +338,125 @@ class ProposalCtrl extends Controller
         }
 
         return redirect('proposal/usulan');
+    }
+
+    public function getUbah($id=''){
+        $usulan = $this->getShowUsulanQuery($id);
+
+        $pjalan = DB::table('usulan_persyaratan_jalan')
+                ->join('usulan','usulan.id','usulan_persyaratan_jalan.usulan_id')
+                ->join('pjalan','pjalan.id','usulan_persyaratan_jalan.pjalan_id')
+                ->select(
+                    'usulan.id as UsulID',
+                    'pjalan.id as JalanID',
+                    'pjalan.no',
+                    'pjalan.namausulan',
+                    'pjalan.tipeusulan',
+                    'usulan_persyaratan_jalan.isi',
+                    'usulan_persyaratan_jalan.file'
+                )
+                ->orderBy('tipeusulan','ASC')
+                ->orderBy('no','DESC')
+                ->where('usulan_persyaratan_jalan.usulan_id',$id)
+                ->get();
+        $psab = DB::table('usulan_persyaratan_sab')
+                ->join('usulan','usulan.id','usulan_persyaratan_sab.usulan_id')
+                ->join('psab','psab.id','usulan_persyaratan_sab.psab_id')
+                ->select(
+                    'usulan.id as UsulID',
+                    'psab.id as SabID',
+                    'psab.no',
+                    'psab.namausulan',
+                    'psab.tipeusulan',
+                    'usulan_persyaratan_sab.isi',
+                    'usulan_persyaratan_sab.file'
+                )
+                ->orderBy('no','DESC')
+                ->where('usulan_persyaratan_sab.usulan_id',$id)
+                ->get();
+        $pplts = DB::table('usulan_persyaratan_plts')
+                ->join('usulan','usulan.id','usulan_persyaratan_plts.usulan_id')
+                ->join('pplts','pplts.id','usulan_persyaratan_plts.pplts_id')
+                ->select(
+                    'usulan.id as UsulID',
+                    'pplts.id as PltsID',
+                    'pplts.no',
+                    'pplts.namausulan',
+                    'pplts.tipeusulan',
+                    'usulan_persyaratan_plts.isi',
+                    'usulan_persyaratan_plts.file'
+                )
+                ->orderBy('no','DESC')
+                ->where('usulan_persyaratan_plts.usulan_id',$id)
+                ->get();
+
+        $usulan['pjalan'] = $pjalan;
+        $usulan['psab'] = $psab;
+        $usulan['pplts'] = $pplts;
+
+
+
+        return view('usulan.usulanEdit')
+            ->withJalan($pjalan)
+            ->withSab($psab)
+            ->withPlts($pplts)
+        ->with('usulan',$usulan);
+    }
+
+    public function postUbah(Request $r){
+        if($r->jenis_usulan == '1'){
+            foreach ($r->pjalanadmin_id as $key => $v) {
+            $ver = isset($r->jalanadmin[$key]);            
+                \DB::table('usulan_persyaratan_jalan')
+                ->where('pjalan_id',$r->pjalanadmin_id[$key])
+                ->where('usulan_id',$r->usulan_id)
+                    ->update(
+                        [
+                        'pjalan_id' => $r->pjalanadmin_id[$key], 
+                        'usulan_id' => $r->usulan_id, 
+                        'isi' => $r->jalanadmin[$key]
+                        ]
+                    );
+            }
+            foreach ($r->pjalanteknis_id as $key => $v) {
+                $ver = isset($r->jalanteknis[$key]);   
+                \DB::table('usulan_persyaratan_jalan')
+                ->where('pjalan_id',$r->pjalanteknis_id[$key])
+                ->where('usulan_id',$r->usulan_id)
+                    ->update(
+                        [
+                        'pjalan_id' => $r->pjalanteknis_id[$key], 
+                        'usulan_id' => $r->usulan_id, 
+                        'isi' => $r->jalanteknis[$key]
+                        ]
+                    );
+            }
+        }elseif($r->jenis_usulan == '2'){
+            foreach ($r->psabadmin_id as $key => $v) {                
+                \DB::table('usulan_persyaratan_sab')
+                ->where('psab_id',$r->psabadmin_id[$key])
+                ->where('usulan_id',$r->usulan_id)
+                    ->update(
+                        [
+                        'psab_id' => $r->psabadmin_id[$key], 
+                        'usulan_id' => $r->usulan_id, 
+                        'isi' => $r->sabadmin[$key]
+                        ]
+                    );
+            }
+            foreach ($r->psabteknis_id as $key => $v) {
+                \DB::table('usulan_persyaratan_sab')
+                ->where('psab_id',$r->psabteknis_id[$key])
+                ->where('usulan_id',$r->usulan_id)
+                    ->update(
+                        [
+                        'psab_id' => $r->psabteknis_id[$key], 
+                        'usulan_id' => $r->usulan_id, 
+                        'isi' => $r->sabteknis[$key]
+                        ]
+                    );
+            }
+        }
     }
 
     public function getPeriksaDokumen($value=''){
