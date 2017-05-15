@@ -45,6 +45,8 @@ Route::group(array('prefix'=>'proposal'), function(){
 	Route::get('/usulan/{id}','ProposalCtrl@getUbah');
 	Route::post('/usulan/{id}','ProposalCtrl@postUbah');
 
+	Route::post('upload','ProposalCtrl@postUpload');
+
 	Route::get('/pengecekan','PengecekanCtrl@getIndex');
 });
 

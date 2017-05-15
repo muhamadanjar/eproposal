@@ -1,3 +1,33 @@
+//AIzaSyBUFQ_PdoGGeFoaimy-7AMAicWHQ3EGp3U
+$.ajaxSetup({
+    headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') }
+});
+
+(function($, window, document){
+    $('.formConfirm').on('click', function(e) {
+        e.preventDefault();
+        console.log(e);
+        var el = $(this).parent();
+        var title = el.attr('data-title');
+        var msg = el.attr('data-message');
+        var dataForm = el.attr('data-form');
+        
+        $('#formConfirm')
+        .find('#frm_body').html('<h6>'+msg+'</h6>')
+        .end().find('#frm_title').html(title)
+        .end().modal('show');
+        
+        $('#formConfirm').find('#frm_submit').attr('data-form', dataForm);
+    });
+
+    $('#formConfirm').on('click', '#frm_submit', function(e) {
+        var id = $(this).attr('data-form');
+        console.log(id);
+        $(id).submit();
+    });
+    
+}(jQuery, window, document));
+
 (function($, window, document){
 $('.loader').hide();
 $('select#provinsi').select2({
@@ -235,7 +265,7 @@ $('select#provinsi').on('change', function (){
             var table = '<div class="box">';
             var table_admin = '<tr><th colspan="3">Admin</th></tr>';
             var table_teknis = '<tr><th colspan="3">Teknis</th></tr>';
-            table += '<div class="box-header"><h3 class="box-title">SAB</h3><div class="box-tools"><a href="/proposal/usulan/'+d.id+'" type="button" class="btn btn-block btn-primary">Ubah</a></div></div>';
+            table += '<div class="box-header"><h3 class="box-title">PLTS</h3><div class="box-tools"><a href="/proposal/usulan/'+d.id+'" type="button" class="btn btn-block btn-primary">Ubah</a></div></div>';
             table += '<div class="box-body"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
                 table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th></tr>';
                 table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th></tr>';
@@ -497,87 +527,96 @@ $('select#provinsi').on('change', function (){
         
     });
 
-    function dataupload(id){
-        $("#btnselectiamge"+ id).on('click',function(){
-                    $("#fileinput"+ id).val('');
-                    $("#fileinput"+ id).trigger('click');
-        });
-        $("#fileinput"+ id).on('change',function(){
-                    $("#picture"+ id).parent().parent().find('label.parsley-error').remove();
-                    var allowed = ['chm','pdf','doc','docx'];
-                    /*if(id==2)
-                    {
-                        var allowed = ['png','jpg','gif','jpeg'];
-                    }*/
-                    var tmp = $(this).val();
-                    var ex_tmp = tmp.split('.');
-                    if(allowed.indexOf(ex_tmp[ex_tmp.length-1])<0)
-                    {
-                        $("#picture"+ id).addClass('parsley-error');
-                        $("#picture"+ id).parent().parent().append('<label class="parsley-error" for="image">Extension File Not Allowed</label>');
-                        return false;
-                    }
-                    //checking validation size
-                    var size = $(this)[0].size;
-                    var max_size =20*1024*1024;
-                    if(size>max_size)
-                    {
-                        $("#picture"+ id).addClass('parsley-error');
-                        $("#picture"+ id).parent().parent().append('<label class="parsley-error" for="image">File Size Allowed '+ max_size +' byte</label>');
-                        return false;
-                    }
-                    //end checking size
-                    input = document.getElementById("fileinput"+ id);
-                    file = input.files[0];
-                    if(file != undefined){
-                        formData= new FormData();
-                        if(!!file.type.match(/.*/)){
-                            formData.append("images", file);
-                            $.ajax({
-                                url: "http://localhost/baper/public/kebijakan/upload",
-                                type: "POST",
-                                data: formData,
-                                processData: false,
-                                contentType: false,
-                                dataType:'json',
-                                beforeSend: function(){
-                                    $("#picture").parent().parent().find('label.parsley-error').remove();
-                                    submit_form = false;
-                                },
-                                complete: function(){
-                                     
-                                },
-                                success: function(data){
-                                    if(data.error)
-                                    {
-                                        $("#picture"+ id).parent().parent().find('label.parsley-error').remove();
-                                        $("#picture"+ id).parent().parent().append('<label class="parsley-error" for="image">'+data.message+'</label>');
-                                        return false;
-                                    }
-                                    else if(!data.error)
-                                    {
-                                        $("#picture"+ id).parent().parent().find('label.parsley-error').remove();
-                                        $("#picture"+ id).val(data.filename);
-                                        submit_form = true;
-                                        return false;
-                                    }
-                                }
-                              });
-                        }else{
-                            $("#picture"+ id).parent().parent().find('label.parsley-error').remove();
-                            $("#picture"+ id).parent().parent().append('<label class="parsley-error" for="image">Invalid File</label>');
-                            return false;
-                        }
-                    }else{
-                        $("#picture"+ id).parent().find('label.error').remove();
-                        $("#picture"+ id).parent().append('<label class="error" for="image">Invalid File</label>');
-                        return false;
-                    }
-        });
-        $("#clearimage"+ id).on('click',function(){
-                    $("#picture"+ id).val('');
-        }); 
+    
+
+
+}(jQuery, window, document));
+
+
+(function($, window, document){
+    if ($('#jenis_usulan').val() == 3) {
+    var key;
+    $('.formUpload').on('click', function(e) {
+        e.preventDefault();
+        var el = $(this).parent();
+        key =el.attr('data-key');
+        console.log(key);
+        
+            $('#pltsadmin_file'+key).trigger('click');
+        
+                
+        
+        var title = el.attr('data-title');
+        var msg = el.attr('data-message');
+        var usulan = el.attr('data-usulan');
+        var dataForm = el.attr('data-form');
+        //console.log(usulan);
+        
+        
+    });
+    $("#pltsadmin_file_text"+ key).on('change',function(){
+
+    });
     }
 
+    $(':file').change(function(){
+        var file = this.files[0];
+        name = file.name;
+        size = file.size;
+        type = file.type;
+        console.log(file);
+
+        if(file.name.length < 1) {
+        }
+        else if(file.size > 100000) {
+            alert("The file is too big");
+        }
+        else if(file.type != 'image/png' && file.type != 'image/jpg' && file.type != 'image/gif' && file.type != 'image/jpeg' ) {
+            alert("The file does not match png, jpg or gif");
+            $(this).val('');
+        }else { 
+            $(':submit').click(function(){
+                var formData = new FormData($('*formId*')[0]);
+                $.ajax({
+                    url: '/proposal/upload',  //server script to process data
+                    type: 'POST',
+                    xhr: function() {  // custom xhr
+                        myXhr = $.ajaxSettings.xhr();
+                        if(myXhr.upload){ // if upload property exists
+                            myXhr.upload.addEventListener('progress', progressHandlingFunction, false); // progressbar
+                        }
+                        return myXhr;
+                    },
+                    // Ajax events
+                    success: completeHandler = function(data) {
+                        /*
+                        * Workaround for Chrome browser // Delete the fake path
+                        */
+                        if(navigator.userAgent.indexOf('Chrome')) {
+                            var catchFile = $(":file").val().replace(/C:\\fakepath\\/i, '');
+                        }
+                        else {
+                            var catchFile = $(":file").val();
+                        }
+                        var writeFile = $(":file");
+                        writeFile.html(writer(catchFile));
+                        $("*setIdOfImageInHiddenInput*").val(data.logo_id);
+                    },
+                    error: errorHandler = function() {
+                        alert("Something went wrong!");
+                    },
+                    // Form data
+                    data: formData,
+                    // Options to tell jQuery not to process data or worry about the content-type
+                    cache: false,
+                    contentType: false,
+                    processData: false
+                }, 'json');
+            });
+        }
+    });
+
+    
+    
 }(jQuery, window, document));
  

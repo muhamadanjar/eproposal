@@ -46,6 +46,86 @@
   <link rel="stylesheet" type="text/css" href="{{ asset('/css/eproposal.css') }}">
   <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png" sizes="16x16">
 
+  <!-- jQuery 2.2.3 -->
+  <script src="{{asset('assets/plugins/jQuery/jquery-2.2.3.min.js')}}"></script>
+  <script type="text/javascript">
+  function dataupload(id){
+        $("#btnselectiamge"+ id).on('click',function(){
+            $("#fileinput"+ id).val('');
+            $("#fileinput"+ id).trigger('click');
+            
+        });
+        $("#fileinput"+ id).on('change',function(){
+            $("#picture"+ id).parent().parent().find('label.parsley-error').remove();
+            var allowed = ['chm','pdf','doc','docx'];
+
+            var tmp = $(this).val();
+            var ex_tmp = tmp.split('.');
+            if(allowed.indexOf(ex_tmp[ex_tmp.length-1])<0){
+                $("#picture"+ id).addClass('parsley-error');
+                $("#picture"+ id).parent().parent().append('<label class="parsley-error" for="image">Extension File Not Allowed</label>');
+                return false;
+            }
+                //checking validation size
+                var size = $(this)[0].size;
+                var max_size =20*1024*1024;
+                if(size>max_size){
+                    $("#picture"+ id).addClass('parsley-error');
+                    $("#picture"+ id).parent().parent().append('<label class="parsley-error" for="image">File Size Allowed '+ max_size +' byte</label>');
+                    return false;
+                }
+                    //end checking size
+                    input = document.getElementById("fileinput"+ id);
+                    file = input.files[0];
+                    if(file != undefined){
+                        formData= new FormData();
+                        if(!!file.type.match(/.*/)){
+                            formData.append("images", file);
+                            $.ajax({
+                                url: "/proposal/upload",
+                                type: "POST",
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                dataType:'json',
+                                beforeSend: function(){
+                                    $("#picture").parent().parent().find('label.parsley-error').remove();
+                                    submit_form = false;
+                                },
+                                complete: function(){
+                                     
+                                },
+                                success: function(data){
+                                    if(data.error){
+                                        $("#picture"+ id).parent().parent().find('label.parsley-error').remove();
+                                        $("#picture"+ id).parent().parent().append('<label class="parsley-error" for="image">'+data.message+'</label>');
+                                        return false;
+                                    }else if(!data.error){
+                                      console.log(data.filename);
+                                        $("#picture"+ id).parent().parent().find('label.parsley-error').remove();
+                                        $("#picture"+ id).val(data.filename);
+                                        submit_form = true;
+                                        return false;
+                                    }
+                                }
+                              });
+                        }else{
+                            $("#picture"+ id).parent().parent().find('label.parsley-error').remove();
+                            $("#picture"+ id).parent().parent().append('<label class="parsley-error" for="image">Invalid File</label>');
+                            return false;
+                        }
+                    }else{
+                        $("#picture"+ id).parent().find('label.error').remove();
+                        $("#picture"+ id).parent().append('<label class="error" for="image">Invalid File</label>');
+                        return false;
+                    }
+        });
+        $("#clearimage"+ id).on('click',function(){
+            $("#picture"+ id).val('');
+        }); 
+  }
+  </script>
+
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -330,7 +410,7 @@
 <!-- ./wrapper -->
 
 <!-- jQuery 2.2.3 -->
-<script src="{{asset('assets/plugins/jQuery/jquery-2.2.3.min.js')}}"></script>
+<!--<script src="{{asset('assets/plugins/jQuery/jquery-2.2.3.min.js')}}"></script>-->
 <!-- jQuery UI 1.11.4 -->
 <script src="{{asset('assets/plugins/jQueryUI/jquery-ui.min.js')}}"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
@@ -377,6 +457,7 @@
 <script src="{{ asset('assets/plugins/select2/select2.full.min.js')}}"></script>
 <!-- assets dashboard demo (This is only for demo purposes) -->
 <script src="{{ asset('assets/dist/js/pages/dashboard2.js')}}"></script>
+
 
 
 <!-- assets for demo purposes -->

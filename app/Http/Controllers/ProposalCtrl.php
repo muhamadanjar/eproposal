@@ -13,6 +13,12 @@ use App\Jalan;
 use App\PJalan;
 use App\PSAB;
 use App\PPLTS;
+use App\User;
+use Illuminate\Support\Facades\Log;
+
+use App\Jobs\SendEmail;
+use App\Notifications\UsulanUpdated;
+use Mail;
 
 class ProposalCtrl extends Controller
 {
@@ -189,56 +195,59 @@ class ProposalCtrl extends Controller
             if ($usulan->save()) {
                 if($r->jenis_usulan == '1'){
                     foreach ($r->pjalanadmin_id as $key => $v) {                
+                        $isi = isset($r->jalanadmin[$key]);
                         \DB::table('usulan_persyaratan_jalan')
                         ->insert(
                             ['pjalan_id' => $r->pjalanadmin_id[$key], 
                             'usulan_id' => $usulan->id, 
-                            'isi' => $r->jalanadmin[$key]]
+                            'isi' => $isi]
                         );
                     }
                     foreach ($r->pjalanteknis_id as $key => $v) {
-                        
+                        $isi = isset($r->jalanteknis[$key]);
                         \DB::table('usulan_persyaratan_jalan')
                         ->insert(
                             ['pjalan_id' => $r->pjalanteknis_id[$key], 
                             'usulan_id' => $usulan->id, 
-                            'isi' => $r->jalanteknis[$key]]
+                            'isi' => $isi]
                         );
                     }
                 }elseif($r->jenis_usulan == '2'){
-                    foreach ($r->psabadmin_id as $key => $v) {                
+                    foreach ($r->psabadmin_id as $key => $v) {   
+                        $isi = isset($r->sabadmin[$key]);            
                         \DB::table('usulan_persyaratan_sab')
                         ->insert(
                             ['psab_id' => $r->psabadmin_id[$key], 
                             'usulan_id' => $usulan->id, 
-                            'isi' => $r->sabadmin[$key]]
+                            'isi' => $isi]
                         );
                     }
                     foreach ($r->psabteknis_id as $key => $v) {
-                        
+                        $isi = isset($r->sabteknis[$key]);
                         \DB::table('usulan_persyaratan_sab')
                         ->insert(
                             ['psab_id' => $r->psabteknis_id[$key], 
                             'usulan_id' => $usulan->id, 
-                            'isi' => $r->sabteknis[$key]]
+                            'isi' => $isi]
                         );
                     }
                 }elseif($r->jenis_usulan == '3'){
-                    foreach ($r->ppltsadmin_id as $key => $v) {                
+                    foreach ($r->ppltsadmin_id as $key => $v) {
+                        $isi = isset($r->pltsadmin[$key]);          
                         \DB::table('usulan_persyaratan_plts')
                         ->insert(
                             ['pplts_id' => $r->ppltsadmin_id[$key], 
                             'usulan_id' => $usulan->id, 
-                            'isi' => $r->pltsadmin[$key]]
+                            'isi' => $isi]
                         );
                     }
                     foreach ($r->ppltsteknis_id as $key => $v) {
-                        
+                        $isi = isset($r->pltsadmin[$key]);
                         \DB::table('usulan_persyaratan_plts')
                         ->insert(
                             ['pplts_id' => $r->ppltsteknis_id[$key], 
                             'usulan_id' => $usulan->id, 
-                            'isi' => $r->pltsteknis[$key]]
+                            'isi' => $isi]
                         );
                     }
                 }else{
@@ -248,86 +257,7 @@ class ProposalCtrl extends Controller
             }
             
 
-            /*if($r->jenis_usulan == '1') {
-                $proyek = new Jalan();
-                $proyek->jalan_admin_1 = $r->jalan_admin_1;
-                $proyek->jalan_admin_1_file = $r->jalan_admin_1_file;
-                $proyek->jalan_admin_2 = $r->jalan_admin_2;
-                $proyek->jalan_admin_3 = $r->jalan_admin_3;
-                $proyek->jalan_admin_4 = $r->jalan_admin_4;
-                $proyek->jalan_admin_5 = $r->jalan_admin_5;
-                $proyek->jalan_admin_6 = $r->jalan_admin_6;
-                $proyek->jalan_admin_7 = $r->jalan_admin_7;
-                $proyek->jalan_admin_8 = $r->jalan_admin_8;
-                $proyek->jalan_admin_9 = $r->jalan_admin_9;
-
-                $proyek->jalan_teknis_1 = $r->jalan_teknis_1;
-                $proyek->jalan_teknis_2 = $r->jalan_teknis_2;
-                $proyek->jalan_teknis_2 = $r->jalan_teknis_2;
-                $proyek->jalan_teknis_3 = $r->jalan_teknis_3;
-                $proyek->jalan_teknis_4 = $r->jalan_teknis_4;
-                $proyek->jalan_teknis_5 = $r->jalan_teknis_5;
-                $proyek->jalan_teknis_6 = $r->jalan_teknis_6;
-
-                $proyek->status = 0;
-                $proyek->user_id = auth()->user()->id;
-                $proyek->usulan_id = $usulan->id;
-                $proyek->save();
-            }elseif($r->jenis_usulan == '2'){
-                $proyek = new SAB();
-                $proyek->sab_admin_1 = $r->sab_admin_1;
-                //$proyek->sab_admin_1_file = $r->sab_admin_1_file;
-                $proyek->sab_admin_2 = $r->sab_admin_2;
-                $proyek->sab_admin_3 = $r->sab_admin_3;
-                $proyek->sab_admin_4 = $r->sab_admin_4;
-                $proyek->sab_admin_5 = $r->sab_admin_5;
-                $proyek->sab_admin_6 = $r->sab_admin_6;
-                $proyek->sab_admin_7 = $r->sab_admin_7;
-                $proyek->sab_admin_8 = $r->sab_admin_8;
-                $proyek->sab_admin_9 = $r->sab_admin_9;
-
-                $proyek->sab_teknis_1 = $r->sab_teknis_1;
-                $proyek->sab_teknis_2 = $r->sab_teknis_2;
-                $proyek->sab_teknis_2 = $r->sab_teknis_2;
-                $proyek->sab_teknis_3 = $r->sab_teknis_3;
-                $proyek->sab_teknis_4 = $r->sab_teknis_4;
-                $proyek->sab_teknis_5 = $r->sab_teknis_5;
-                $proyek->sab_teknis_6 = $r->sab_teknis_6;
-                $proyek->sab_teknis_7 = $r->sab_teknis_7;
-                $proyek->sab_teknis_8 = $r->sab_teknis_8;
-                $proyek->sab_teknis_9 = $r->sab_teknis_9;
-
-                $proyek->status = 0;
-                $proyek->user_id = auth()->user()->id;
-                $proyek->usulan_id = $usulan->id;
-                $proyek->save();
-            }elseif($r->jenis_usulan == '3'){
-                $proyek = new PLTS();
-                $proyek->plts_admin_1 = $r->plts_admin_1;
-                $proyek->plts_admin_1_file = $r->plts_admin_1_file;
-                $proyek->plts_admin_2 = $r->plts_admin_2;
-                $proyek->plts_admin_3 = $r->plts_admin_3;
-                $proyek->plts_admin_4 = $r->plts_admin_4;
-                $proyek->plts_admin_5 = $r->plts_admin_5;
-                $proyek->plts_admin_6 = $r->plts_admin_6;
-                $proyek->plts_admin_7 = $r->plts_admin_7;
-                $proyek->plts_admin_8 = $r->plts_admin_8;
-                $proyek->plts_admin_9 = $r->plts_admin_9;
-
-                $proyek->plts_teknis_1 = $r->plts_teknis_1;
-                $proyek->plts_teknis_2 = $r->plts_teknis_2;
-                $proyek->plts_teknis_2 = $r->plts_teknis_2;
-                $proyek->plts_teknis_3 = $r->plts_teknis_3;
-                $proyek->plts_teknis_4 = $r->plts_teknis_4;
-                $proyek->plts_teknis_5 = $r->plts_teknis_5;
-                $proyek->plts_teknis_6 = $r->plts_teknis_6;
-                $proyek->plts_teknis_7 = $r->plts_teknis_7;
-                
-                $proyek->status = 0;
-                $proyek->user_id = auth()->user()->id;
-                $proyek->usulan_id = $usulan->id;
-                $proyek->save();
-            }*/
+            
             DB::commit();
 
             $r->session()->flash('Usulanstatus', 'Data Sudah di tampung!');
@@ -371,7 +301,7 @@ class ProposalCtrl extends Controller
                     'usulan_persyaratan_sab.isi',
                     'usulan_persyaratan_sab.file'
                 )
-                ->orderBy('no','DESC')
+                ->orderBy('no','ASC')
                 ->where('usulan_persyaratan_sab.usulan_id',$id)
                 ->get();
         $pplts = DB::table('usulan_persyaratan_plts')
@@ -386,7 +316,7 @@ class ProposalCtrl extends Controller
                     'usulan_persyaratan_plts.isi',
                     'usulan_persyaratan_plts.file'
                 )
-                ->orderBy('no','DESC')
+                ->orderBy('no','ASC')
                 ->where('usulan_persyaratan_plts.usulan_id',$id)
                 ->get();
 
@@ -406,7 +336,7 @@ class ProposalCtrl extends Controller
     public function postUbah(Request $r){
         if($r->jenis_usulan == '1'){
             foreach ($r->pjalanadmin_id as $key => $v) {
-            $ver = isset($r->jalanadmin[$key]);            
+            $isi = isset($r->jalanadmin[$key]);            
                 \DB::table('usulan_persyaratan_jalan')
                 ->where('pjalan_id',$r->pjalanadmin_id[$key])
                 ->where('usulan_id',$r->usulan_id)
@@ -414,12 +344,12 @@ class ProposalCtrl extends Controller
                         [
                         'pjalan_id' => $r->pjalanadmin_id[$key], 
                         'usulan_id' => $r->usulan_id, 
-                        'isi' => $r->jalanadmin[$key]
+                        'isi' => $isi
                         ]
                     );
             }
             foreach ($r->pjalanteknis_id as $key => $v) {
-                $ver = isset($r->jalanteknis[$key]);   
+                $isi = isset($r->jalanteknis[$key]);
                 \DB::table('usulan_persyaratan_jalan')
                 ->where('pjalan_id',$r->pjalanteknis_id[$key])
                 ->where('usulan_id',$r->usulan_id)
@@ -427,12 +357,13 @@ class ProposalCtrl extends Controller
                         [
                         'pjalan_id' => $r->pjalanteknis_id[$key], 
                         'usulan_id' => $r->usulan_id, 
-                        'isi' => $r->jalanteknis[$key]
+                        'isi' => $isi
                         ]
                     );
             }
         }elseif($r->jenis_usulan == '2'){
-            foreach ($r->psabadmin_id as $key => $v) {                
+            foreach ($r->psabadmin_id as $key => $v) {
+            $isi = isset($r->sabadmin[$key]);        
                 \DB::table('usulan_persyaratan_sab')
                 ->where('psab_id',$r->psabadmin_id[$key])
                 ->where('usulan_id',$r->usulan_id)
@@ -440,11 +371,12 @@ class ProposalCtrl extends Controller
                         [
                         'psab_id' => $r->psabadmin_id[$key], 
                         'usulan_id' => $r->usulan_id, 
-                        'isi' => $r->sabadmin[$key]
+                        'isi' => $isi
                         ]
                     );
             }
             foreach ($r->psabteknis_id as $key => $v) {
+            $isi = isset($r->sabteknis[$key]);
                 \DB::table('usulan_persyaratan_sab')
                 ->where('psab_id',$r->psabteknis_id[$key])
                 ->where('usulan_id',$r->usulan_id)
@@ -452,42 +384,92 @@ class ProposalCtrl extends Controller
                         [
                         'psab_id' => $r->psabteknis_id[$key], 
                         'usulan_id' => $r->usulan_id, 
-                        'isi' => $r->sabteknis[$key]
+                        'isi' => $isi
                         ]
                     );
             }
+        }elseif($r->jenis_usulan == '3'){
+            foreach ($r->ppltsadmin_id as $key => $v) {
+                
+                if ($r->pltsadmin_file_text != null) {
+                        $array = array(
+                            'pplts_id' => $r->ppltsadmin_id[$key], 
+                            'usulan_id' => $r->usulan_id, 
+                            'isi' => $r->pltsadmin[$key],
+                            'file' => $r->pltsadmin_file_text
+                            );
+                }else{
+                        $array = array(
+                            'pplts_id' => $r->ppltsadmin_id[$key], 
+                            'usulan_id' => $r->usulan_id, 
+                            'isi' => $r->pltsadmin[$key],
+                            );
+                }
+                
+                \DB::table('usulan_persyaratan_plts')
+                ->where('pplts_id',$r->ppltsadmin_id[$key])
+                ->where('usulan_id',$r->usulan_id)
+                    ->update($array);
+            }
+            foreach ($r->ppltsteknis_id as $key => $v) {
+                    
+                    if ($r->pltsteknis_file_text[$key] != null) {
+                        $array = array(
+                            'pplts_id' => $r->ppltsteknis_id[$key], 
+                            'usulan_id' => $r->usulan_id, 
+                            'isi' => $r->pltsteknis[$key],
+                            'file' => $r->pltsteknis_file_text[$key]
+                            );
+                    }else{
+                        $array = array(
+                            'pplts_id' => $r->ppltsteknis_id[$key], 
+                            'usulan_id' => $r->usulan_id, 
+                            'isi' => $r->pltsteknis[$key]
+                            );
+                    }
+                
+                    \DB::table('usulan_persyaratan_plts')
+                    ->where('pplts_id',$r->ppltsteknis_id[$key])
+                    ->where('usulan_id',$r->usulan_id)
+                        ->update(
+                            $array
+                        );
+            }
         }
+
+        /*$data = new \stdClass();
+        $data->subject = 'Usulan Telah Di Update';
+        $data->body = 'Usulan Telah Di Update '.$r->usulan_id;
+        $data->to = auth()->user()->email;
+        $this->sendEmail($data);*/
+
+        //$user = \App\User::find(auth()->user()->id);
+        //$user->notify(new UsulanUpdated($user));
+        return redirect('proposal/usulan');
     }
 
-    public function getPeriksaDokumen($value=''){
-        $arrayJ = array();
-        $jalan_admin_1 = array('key'=>'jalan_admin_1');
+    public function postUpload(){
+            $dir = public_path('files')."/";
+            if(!is_dir($dir))
+                mkdir($dir);
+                $ext = pathinfo($_FILES["images"]["name"],PATHINFO_EXTENSION);
+                $filename = time().'_'.urlencode(pathinfo($_FILES["images"]["name"],PATHINFO_FILENAME)).'.'.$ext;
+                if(move_uploaded_file($_FILES["images"]["tmp_name"], $dir. $filename))
+                {
+                    
+                    echo json_encode(array('error'=>false,'filename'=>$filename));
+                    exit;
+                }
+            echo json_encode(array('error'=>true,'message'=>'Upload process error'));
+            exit;
+    }
 
-        array_push($arrayJ, $jalan_admin_1);
+    public function sendEmail($data){
 
-        $array = [
-            ['label'=>'Surat Pengantar Proposal Permohonan Bantuan Pemerintah dari Bupati','key'=>'jalan_admin_1'],
-            ['label'=>'Surat Keputusan Bupati tentang Usulan Penetapan Lokasi','key'=>'jalan_admin_2'],
-            ['label'=>'Surat Keterangan Pembebasan Lahan','key'=>'jalan_admin_3'],
-            ['label'=>'Surat Keputusan Bupati tentang Penunjukan Organisasi Perangkat Daerah (OPD) Teknis','key'=>'jalan_admin_4'],
-            ['label'=>'Surat Keputusan Bupati tentang Tim Usulan Tim Pengendali Teknis Bantuan Pemerintah','key'=>'jalan_admin_5'],
-            ['label'=>'Surat Pernyataan Bupati bahwa lokasi kegiatan adalah jalan non-status belum pernah dilakukan penanganan','key'=>'jalan_admin_6'],
-            ['label'=>'Surat Pernyataan Bupati bahwa kegiatan sesuai dengan arah kebijakan pemanfaatan ruang','key'=>'jalan_admin_7'],
-            ['label'=>'Surat Pernyataan Bupati tentang kesediaan menerima hibah aset bantuan pemerintah','key'=>'jalan_admin_8'],
-            ['label'=>'Surat Pernyataan Bupati mengenai kesanggupan mengelola, memelihara dan mengembangkan aset bantuan pemerintah','key'=>'jalan_admin_9'],
+        $this->dispatch(new SendEmail($data));
+        //return new SendEmail($data);
 
-            ['label'=>'Isi Proposal Teknis','key'=>'jalan_teknis_1'],
-            ['label'=>'Kerangka Acuan Kerja (KAK)','key'=>'jalan_teknis_2'],
-            ['label'=>'Peta Orientasi Lokasi Bantuan Pemerintah (lokasi yang akan dilakukan pembangunan)','key'=>'jalan_teknis_3'],
-            ['label'=>'Spesifikasi Teknis','key'=>'jalan_teknis_4'],
-            ['label'=>'Gambar Teknis atau Detail Engineering Design (DED) (telah disetujui dan disahkan oleh pejabat yang berwenang)','key'=>'jalan_teknis_5'],
-            ['label'=>'Analisa Harga Satuan','key'=>'jalan_teknis_6'],
-            ['label'=>'Standar Biaya Daerah (SBD) dan/atau Standar Biaya Masukan (SBM)','key'=>'jalan_teknis_7'],
-            ['label'=>'Rencana Anggaran Biaya (RAB)','key'=>'jalan_teknis_8'],
-            
-        ];
 
-    	return view('periksa_dokumen')->with('jalan_array',($array));
     }
 
     
