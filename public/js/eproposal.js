@@ -534,32 +534,20 @@ $('select#provinsi').on('change', function (){
 
 
 (function($, window, document){
-    if ($('#jenis_usulan').val() == 3) {
-    var key;
+    
     $('.formUpload').on('click', function(e) {
-        e.preventDefault();
-        var el = $(this).parent();
-        key =el.attr('data-key');
-        console.log(key);
-        
-            $('#pltsadmin_file'+key).trigger('click');
-        
-                
-        
-        var title = el.attr('data-title');
-        var msg = el.attr('data-message');
-        var usulan = el.attr('data-usulan');
-        var dataForm = el.attr('data-form');
-        //console.log(usulan);
-        
+        var pltsadmin_file = $(this).closest('span').find('.pltsadmin_file');
+        var pltsteknis_file = $(this).closest('span').find('.pltsteknis_file');
+        if (pltsadmin_file.length > 0) {
+            pltsadmin_file.trigger('click');    
+        }else if (pltsteknis_file.length > 0) {
+            pltsteknis_file.trigger('click');    
+        }
         
     });
-    $("#pltsadmin_file_text"+ key).on('change',function(){
-
-    });
-    }
 
     $(':file').change(function(){
+        var fileinput = $(this);
         var file = this.files[0];
         name = file.name;
         size = file.size;
@@ -567,17 +555,17 @@ $('select#provinsi').on('change', function (){
         console.log(file);
 
         if(file.name.length < 1) {
-        }
-        else if(file.size > 100000) {
+        }else if(file.size > 100000) {
             alert("The file is too big");
-        }
-        else if(file.type != 'image/png' && file.type != 'image/jpg' && file.type != 'image/gif' && file.type != 'image/jpeg' ) {
+        }else if(file.type != 'image/png' && file.type != 'image/jpg' && file.type != 'image/gif' && file.type != 'image/jpeg' && file.type != 'application/pdf' && file.type != 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
             alert("The file does not match png, jpg or gif");
             $(this).val('');
         }else { 
-            $(':submit').click(function(){
-                var formData = new FormData($('*formId*')[0]);
-                $.ajax({
+            var formData = new FormData($('*formId*')[0]);
+                if(!!file.type.match(/.*/)){
+                    formData.append("images", file);
+                }
+                /*$.ajax({
                     url: '/proposal/upload',  //server script to process data
                     type: 'POST',
                     xhr: function() {  // custom xhr
@@ -589,18 +577,16 @@ $('select#provinsi').on('change', function (){
                     },
                     // Ajax events
                     success: completeHandler = function(data) {
-                        /*
-                        * Workaround for Chrome browser // Delete the fake path
-                        */
+                        
                         if(navigator.userAgent.indexOf('Chrome')) {
                             var catchFile = $(":file").val().replace(/C:\\fakepath\\/i, '');
-                        }
-                        else {
+                        }else {
                             var catchFile = $(":file").val();
                         }
                         var writeFile = $(":file");
                         writeFile.html(writer(catchFile));
                         $("*setIdOfImageInHiddenInput*").val(data.logo_id);
+                        console.log($(this).closest('jalanadmin_ft'));
                     },
                     error: errorHandler = function() {
                         alert("Something went wrong!");
@@ -611,8 +597,32 @@ $('select#provinsi').on('change', function (){
                     cache: false,
                     contentType: false,
                     processData: false
-                }, 'json');
-            });
+                }, 'json');*/
+                
+                $.ajax({
+                    url: "/proposal/upload",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType:'json',
+                    complete: function(){
+                                     
+                    },
+                    success: function(data){
+                        
+                        if ($('.pltsadmin_ft').length > 0) {
+                            fileinput.closest('td').find('.pltsadmin_ft')
+                            .css({"color": "red", "border": "2px solid red"}).val(data.filename);    
+                        }
+                        if($('.pltsteknis_ft').length > 0){
+                            fileinput.closest('td').find('.pltsteknis_ft')
+                            .css({"color": "red", "border": "2px solid red"}).val(data.filename);
+                        }
+                        
+
+                    }
+                });
         }
     });
 

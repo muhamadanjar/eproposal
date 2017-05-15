@@ -396,7 +396,7 @@ class ProposalCtrl extends Controller
                             'pplts_id' => $r->ppltsadmin_id[$key], 
                             'usulan_id' => $r->usulan_id, 
                             'isi' => $r->pltsadmin[$key],
-                            'file' => $r->pltsadmin_file_text
+                            'file' => $r->pltsadmin_file_text[$key]
                             );
                 }else{
                         $array = array(
@@ -414,18 +414,18 @@ class ProposalCtrl extends Controller
             foreach ($r->ppltsteknis_id as $key => $v) {
                     
                     if ($r->pltsteknis_file_text[$key] != null) {
-                        $array = array(
+                        $array = [
                             'pplts_id' => $r->ppltsteknis_id[$key], 
                             'usulan_id' => $r->usulan_id, 
                             'isi' => $r->pltsteknis[$key],
                             'file' => $r->pltsteknis_file_text[$key]
-                            );
+                            ];
                     }else{
-                        $array = array(
+                        $array = [
                             'pplts_id' => $r->ppltsteknis_id[$key], 
                             'usulan_id' => $r->usulan_id, 
                             'isi' => $r->pltsteknis[$key]
-                            );
+                            ];
                     }
                 
                     \DB::table('usulan_persyaratan_plts')

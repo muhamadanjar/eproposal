@@ -108,7 +108,7 @@
                                         return false;
                                     }
                                 }
-                              });
+                            });
                         }else{
                             $("#picture"+ id).parent().parent().find('label.parsley-error').remove();
                             $("#picture"+ id).parent().parent().append('<label class="parsley-error" for="image">Invalid File</label>');

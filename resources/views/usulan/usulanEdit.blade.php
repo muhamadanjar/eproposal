@@ -44,7 +44,7 @@
 	                                          <td><input type="radio" name="jalanadmin[{{$k}}]" @if($v->isi) checked @endif value="1"></td>
 	                                          <td><input type="radio" name="jalanadmin[{{$k}}]" @if(!$v->isi) checked @endif value="0"></td>
 	                                          <td>
-												<input type="hidden" name="jalanadmin_file_text[{{$k}}]">
+												<input type="text" name="jalanadmin_file_text[{{$k}}]" class="jalanadmin_ft">
 	                                          	<input type="file" name="jalanadmin_file[{{$k}}]">
 	                                          </td>
 	                                          <td>
@@ -132,13 +132,16 @@
 	                                          <td><input type="radio" name="sabadmin[{{$k}}]" @if($v->isi) checked @endif value="1"></td>
 	                                          <td><input type="radio" name="sabadmin[{{$k}}]" @if(!$v->isi) checked @endif value="0"></td>
 	                                          <td>
-												<input type="hidden" name="sabadmin_file_text[{{$k}}]">
-	                                          	<input type="file" name="sabadmin_file[{{$k}}]">
+												<div class="input-group margin">
+									                <input type="text" class="form-control sabadmin_ft" readonly="readonly" name="sabadmin_file_text[{{$k}}]">
+									                <span class="input-group-btn">
+									                	<input type="file" name="sabadmin_file[{{$k}}]" class="hidden sabadmin_file">
+									                    <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
+									                </span>
+									            </div>
+									            <input type="hidden" name="psabadmin_id[{{$k}}]" value="{{ $v->SabID }}">
 	                                          </td>
-	                                          <td>
-	                                            
-	                                            <input type="hidden" name="psabadmin_id[{{$k}}]" value="{{ $v->SabID }}">
-	                                          </td>
+	                                          
 	                                        </tr>
 	                                        @endif
 	                                    @endforeach
@@ -168,8 +171,13 @@
 	                                          <td><input type="radio" name="sabteknis[{{$k}}]" @if($v->isi) checked @endif value="1"></td>
 	                                          <td><input type="radio" name="sabteknis[{{$k}}]" @if(!$v->isi) checked @endif value="0"></td>
 	                                          <td>
-	                                          	<input type="hidden" name="sabteknis_file_text[{{$k}}]">
-	                                          	<input type="file" name="sabteknis_file[{{$k}}]">
+	                                          	<div class="input-group margin">
+									                <input type="text" class="form-control sabteknis_ft" readonly="readonly" name="sabteknis_file_text[{{$k}}]">
+									                <span class="input-group-btn">
+									                	<input type="file" name="sabteknis_file[{{$k}}]" class="hidden sabteknis_file">
+									                    <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
+									                </span>
+									            </div>
 	                                          </td>
 	                                          <td>
 	                                            
@@ -221,26 +229,16 @@
 	                                          <td><input type="radio" name="pltsadmin[{{$k}}]" @if($v->isi) checked @endif value="1"></td>
 	                                          <td><input type="radio" name="pltsadmin[{{$k}}]" @if(!$v->isi) checked @endif value="0"></td>
 	                                          <td>
-				                                	<div class="input-group">
-				                        				<input type="file" name="pltsadmin_file[$k]" id="pltsadmin_file{{$k}}">
-				                        				<input readonly="" 
-				                                        id="pltsadmin_file{{$k}}"  
-				                                        name="pltsteknis_file_text[{{$k}}]" 
-				                                        placeholder="Files" 
-				                                        class="form-control required pltsadmin_file" type="text" value=""> 
-				                                		<span class="input-group-btn" data-key={{$k}} 
-				                                		data-apa="pltsadmin"
-				                                		data-usulan={{ $usulan->jenis_usulan}}>
-					                                        <button type="button" 
-					                                        	class="btn btn-primary btn-flat formUpload" 
-					                                        	>Select Files</button>
-					                                    </span>	
-				                                	</div>
+	                                          	<div class="input-group margin">
+									                <input type="text" class="form-control pltsadmin_ft" readonly="readonly" name="pltsadmin_file_text[{{$k}}]">
+									                <span class="input-group-btn">
+									                	<input type="file" name="pltsadmin_file[{{$k}}]" class="hidden pltsadmin_file">
+									                    <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
+									                </span>
+									            </div>
+									            <input type="hidden" name="ppltsadmin_id[{{$k}}]" value="{{ $v->PltsID }}">
 	                                          </td>
-	                                          <td>
-	                                            
-	                                            <input type="hidden" name="ppltsadmin_id[{{$k}}]" value="{{ $v->PltsID }}">
-	                                          </td>
+	                                          
 	                                        </tr>
 	                                        @endif
 	                                    @endforeach
@@ -270,31 +268,16 @@
 	                                          <td><input type="radio" name="pltsteknis[{{$k}}]" @if($v->isi) checked @endif value="1"></td>
 	                                          <td><input type="radio" name="pltsteknis[{{$k}}]" @if(!$v->isi) checked @endif value="0"></td>
 	                                          <td>
-	                                          	
-	                                          	
-
-	                                          	<div class="input-group">
-				                               		<input type="file" id="fileinput{{$k}}" class="hide" />
-				                                        <input readonly="" 
-				                                        id="picture{{$k}}"  
-				                                        name="pltsteknis_file_text[{{$k}}]" 
-				                                        placeholder="Files" 
-				                                        class="form-control required" type="text" value=""> 
-				                                  
-				                                   	<span class="input-group-btn">
-				                                        <button type="button" class="btn btn-primary btn-flat" id="btnselectiamge{{$k}}">Select Files</button>
-				                                    </span>
-				                                 
-				                                   	<script>
-												   		dataupload({{$k}});
-												   	</script>
-				                                </div>
-
+	                                          	<div class="input-group margin">
+									                <input type="text" class="form-control pltsteknis_ft" readonly="readonly" name="pltsteknis_file_text[{{$k}}]">
+									                <span class="input-group-btn">
+									                	<input type="file" name="pltsteknis_file[{{$k}}]" class="hidden pltsteknis_file">
+									                    <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
+									                </span>
+									            </div>
+									            <input type="hidden" name="ppltsteknis_id[{{$k}}]" value="{{ $v->PltsID }}">
 	                                          </td>
-	                                          <td>
-	                                            
-	                                            <input type="hidden" name="ppltsteknis_id[{{$k}}]" value="{{ $v->PltsID }}">
-	                                          </td>
+	                                          
 	                                        </tr>
 	                                        @endif
 	                                    @endforeach
