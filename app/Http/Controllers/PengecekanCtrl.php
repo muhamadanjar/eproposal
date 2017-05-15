@@ -46,7 +46,8 @@ class PengecekanCtrl extends Controller
                     'usulan_persyaratan_jalan.pjalan_id',
                     'usulan_persyaratan_jalan.isi',
                     'usulan_persyaratan_jalan.file',
-                    'usulan_persyaratan_jalan.verifikasi'
+                    'usulan_persyaratan_jalan.verifikasi',
+                    'usulan_persyaratan_jalan.keterangan'
                 )
                 ->orderBy('tipeusulan','ASC')
                 ->orderBy('no','ASC')
@@ -64,7 +65,8 @@ class PengecekanCtrl extends Controller
                     'usulan_persyaratan_sab.psab_id',
                     'usulan_persyaratan_sab.isi',
                     'usulan_persyaratan_sab.file',
-                    'usulan_persyaratan_sab.verifikasi'
+                    'usulan_persyaratan_sab.verifikasi',
+                    'usulan_persyaratan_sab.keterangan'
                 )
                 ->orderBy('tipeusulan','ASC')
                 ->orderBy('no','ASC')
@@ -82,7 +84,8 @@ class PengecekanCtrl extends Controller
                     'usulan_persyaratan_plts.pplts_id',
                     'usulan_persyaratan_plts.isi',
                     'usulan_persyaratan_plts.file',
-                    'usulan_persyaratan_plts.verifikasi'
+                    'usulan_persyaratan_plts.verifikasi',
+                    'usulan_persyaratan_plts.keterangan'
                 )
                 ->orderBy('tipeusulan','ASC')
                 ->orderBy('no','ASC')
@@ -91,41 +94,61 @@ class PengecekanCtrl extends Controller
       $usulan['pjalan'] = $pjalan;
       $usulan['psab'] = $psab;
       $usulan['pplts'] = $pplts;
-   		return view('usulan.pengecekanUsulan')->withUsulan($usulan);
+      $jenis_usulan = DB::table('jenis_usulan')->where('id',$usulan->jenis_usulan)->first();
+      if ($jenis_usulan->name == 'jalan' ) {
+          $_jenis = 'Jalan Sirip';
+      }elseif ($jenis_usulan->name == 'sab') {
+          $_jenis = 'SAB';
+      }elseif ($jenis_usulan->name == 'plts') {
+          $_jenis = 'PLTS';
+      }else{
+          $_jenis = 'Lainnya';
+      }
+
+      
+   		return view('usulan.pengecekanUsulan')
+        ->with('jenis',$_jenis)
+        ->withUsulan($usulan);
    	}
 
     public function postUsulan(Request $r){
+      
+      $usulan = Usulan::find($r->usulan_id);
+      $usulan->status = $r->status;
+      $usulan->save();
       if($r->jenis_usulan == '1'){
           foreach ($r->pjalan_id as $key => $id) {
               $ver = isset($r->verifikasi[$key]);
               \DB::table('usulan_persyaratan_jalan')
                 ->where('pjalan_id',$id)
                 ->where('usulan_id',$r->usulan_id)
-                        ->update(
-                            ['verifikasi' => $ver]
-                        );
+                        ->update([
+                          'verifikasi' => $ver,
+                          'keterangan' => $r->keterangan[$key],
+                        ]);
           }   
-          
       }elseif($r->jenis_usulan == '2'){
           foreach ($r->psab_id as $key => $v) {
               $ver = isset($r->verifikasi[$key]);            
               \DB::table('usulan_persyaratan_sab')
-                ->where('psab_id',$id)
+                ->where('psab_id',$v)
                 ->where('usulan_id',$r->usulan_id)
-                        ->update(
-                            ['verifikasi' => $ver]
-                        );
+                        ->update([
+                            'verifikasi' => $ver,
+                            'keterangan' => $r->keterangan[$key],
+                        ]);
           }
           
       }elseif($r->jenis_usulan == '3'){
           foreach ($r->pplts_id as $key => $v) {
             $ver = isset($r->verifikasi[$key]);        
               \DB::table('usulan_persyaratan_plts')
-                ->where('pplts_id',$id)
+                ->where('pplts_id',$v)
                 ->where('usulan_id',$r->usulan_id)
-                        ->update(
-                            ['verifikasi' => $ver]
-                        );
+                        ->update([
+                            'verifikasi' => $ver,
+                            'keterangan' => $r->keterangan[$key],
+                        ]);
           }
       }
 

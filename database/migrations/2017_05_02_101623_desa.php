@@ -16,7 +16,7 @@ class Desa extends Migration
         Schema::create('desa', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('kode_kecamatan',8);
-            $table->string('kode_desa',10);
+            $table->string('kode_desa',14);
             $table->string('desa');
             $table->integer('isactived')->default(0);
             $table->timestamps();

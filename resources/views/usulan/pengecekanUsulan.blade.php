@@ -40,7 +40,7 @@
                   <div class="col-sm-4 invoice-col">
                     
                     <address>
-                      <strong>Admin, Inc.</strong><br>
+                      <strong></strong><br>
                       {{$usulan->provinsi}}<br>
                       {{$usulan->kabupaten}}<br>
                       {{$usulan->kecamatan}}<br>
@@ -61,7 +61,7 @@
                   <div class="col-sm-4 invoice-col">
                     <b>Usulan #{{$usulan->tahun_usulan}}{{ rand() }}{{$usulan->user_id}}</b><br>
                     <br>
-                    <b>Pengusulan:</b> {{$usulan->jenis_usulan}}
+                    <b>Pengusulan:</b> {{$jenis}}
                     <input type="hidden" name="jenis_usulan" value="{{$usulan->jenis_usulan}}"><br>
                     <b>Tahun:</b> {{$usulan->tahun_usulan}}<br>
                     <b>User:</b> {{$usulan->user_id}}
@@ -99,7 +99,7 @@
                         <td>
                           <input type="checkbox" name="verifikasi[{{$k}}]" value="1" {{$disabled}}>
                         </td>
-                        <td><input type="text" name="keterangan[{{$k}}]"></td>
+                        <td><input type="text" name="keterangan[{{$k}}]" value="{{$v->keterangan}}"></td>
                       </tr>
                       @endforeach
                       <?php
@@ -112,15 +112,16 @@
                       @foreach($usulan->psab as $k => $v)
                         <?php
                           $disabled = ($v->isi) ? '' : 'disabled';
+                          $verifikasi = ($v->verifikasi) ? 'checked':'';
                         ?>
                       <tr>
                         <td><input type="hidden" name="psab_id[{{$k}}]" value="{{$v->psab_id}}">{{$v->no}}</td>
                         <td>{{$v->namausulan}}</td>
                         <td>{{$v->isi}}</td>
                         <td>
-                          <input type="checkbox" name="verifikasi[{{$k}}]" value="1" {{$disabled}}>
+                          <input type="checkbox" name="verifikasi[{{$k}}]" value="1" {{$disabled}} {{$verifikasi}}>
                         </td>
-                        <td><input type="text" name="keterangan[{{$k}}]"></td>
+                        <td><input type="text" name="keterangan[{{$k}}]" value="{{$v->keterangan}}"></td>
                       </tr>
                       @endforeach
                       <?php
@@ -141,7 +142,7 @@
                         <td>
                           <input type="checkbox" name="verifikasi[{{$k}}]" value="1" {{$disabled}}>
                         </td>
-                        <td><input type="text" name="keterangan[{{$k}}]"></td>
+                        <td><input type="text" name="keterangan[{{$k}}]" value="{{$v->keterangan}}"></td>
                       </tr>
                       @endforeach
                       <?php
@@ -158,8 +159,17 @@
               
                 <!-- this row will not appear when printing -->
                 <div class="row no-print">
-                  <div class="col-xs-12">
-                    <button type="submit" class="btn btn-success pull-right">Submit</button>
+                  
+                  <div class="col-xs-5 pull-right">
+                    <div class="input-group margin">
+                      <select name="status" class="form-control">
+                        <option value="0">Belum Disetujui</option>
+                        <option value="1">Disetujui</option>
+                      </select>
+                      <span class="input-group-btn">
+                          <button type="submit" class="btn btn-success pull-right">Submit</button>
+                      </span>
+                    </div>
                   </div>
                 </div>        
             </div>

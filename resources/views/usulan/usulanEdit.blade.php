@@ -44,12 +44,14 @@
 	                                          <td><input type="radio" name="jalanadmin[{{$k}}]" @if($v->isi) checked @endif value="1"></td>
 	                                          <td><input type="radio" name="jalanadmin[{{$k}}]" @if(!$v->isi) checked @endif value="0"></td>
 	                                          <td>
-												<input type="text" name="jalanadmin_file_text[{{$k}}]" class="jalanadmin_ft">
-	                                          	<input type="file" name="jalanadmin_file[{{$k}}]">
-	                                          </td>
-	                                          <td>
-	                                            
-	                                            <input type="hidden" name="pjalanadmin_id[{{$k}}]" value="{{ $v->JalanID }}">
+												<div class="input-group margin">
+									                <input type="text" class="form-control jalanadmin_ft" readonly="readonly" name="jalanadmin_file_text[{{$k}}]" value="{{ $v->file }}">
+									                <span class="input-group-btn">
+									                	<input type="file" name="jalanadmin_file[{{$k}}]" class="hidden jalanadmin_file">
+									                    <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
+									                </span>
+									            </div>
+									            <input type="hidden" name="pjalanadmin_id[{{$k}}]" value="{{ $v->JalanID }}">
 	                                          </td>
 	                                        </tr>
 	                                        @endif
@@ -80,11 +82,14 @@
 	                                          <td><input type="radio" name="jalanteknis[{{$k}}]" @if($v->isi) checked @endif value="1"></td>
 	                                          <td><input type="radio" name="jalanteknis[{{$k}}]" @if(!$v->isi) checked @endif value="0"></td>
 	                                          <td>
-	                                          	<input type="hidden" name="jalanteknis_file_text[{{$k}}]">
-	                                          	<input type="file" name="jalanteknis_file[{{$k}}]">
-	                                          </td>
-	                                          <td>
-	                                            <input type="hidden" name="pjalanteknis_id[{{$k}}]" value="{{ $v->JalanID }}">
+	                                          	<div class="input-group margin">
+									                <input type="text" class="form-control jalanteknis_ft" readonly="readonly" name="jalanteknis_file_text[{{$k}}]" value="{{ $v->file }}">
+									                <span class="input-group-btn">
+									                	<input type="file" name="jalanteknis_file[{{$k}}]" class="hidden jalanteknis_file">
+									                    <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
+									                </span>
+									            </div>
+									            <input type="hidden" name="pjalanteknis_id[{{$k}}]" value="{{ $v->JalanID }}">
 	                                          </td>
 	                                        </tr>
 	                                        @endif
@@ -133,7 +138,7 @@
 	                                          <td><input type="radio" name="sabadmin[{{$k}}]" @if(!$v->isi) checked @endif value="0"></td>
 	                                          <td>
 												<div class="input-group margin">
-									                <input type="text" class="form-control sabadmin_ft" readonly="readonly" name="sabadmin_file_text[{{$k}}]">
+									                <input type="text" class="form-control sabadmin_ft" readonly="readonly" name="sabadmin_file_text[{{$k}}]" value="{{ $v->file }}">
 									                <span class="input-group-btn">
 									                	<input type="file" name="sabadmin_file[{{$k}}]" class="hidden sabadmin_file">
 									                    <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
@@ -172,7 +177,7 @@
 	                                          <td><input type="radio" name="sabteknis[{{$k}}]" @if(!$v->isi) checked @endif value="0"></td>
 	                                          <td>
 	                                          	<div class="input-group margin">
-									                <input type="text" class="form-control sabteknis_ft" readonly="readonly" name="sabteknis_file_text[{{$k}}]">
+									                <input type="text" class="form-control sabteknis_ft" readonly="readonly" name="sabteknis_file_text[{{$k}}]" value="{{ $v->file }}">
 									                <span class="input-group-btn">
 									                	<input type="file" name="sabteknis_file[{{$k}}]" class="hidden sabteknis_file">
 									                    <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
@@ -194,6 +199,7 @@
 	                </div>
 	            </div>
 	            @endif
+	            @if(count($usulan->plts) > 0)
 	            <div class="pplts">
 	                <div class="box-header">
 	                  <h3 class="box-title">PLTS</h3>
@@ -230,7 +236,7 @@
 	                                          <td><input type="radio" name="pltsadmin[{{$k}}]" @if(!$v->isi) checked @endif value="0"></td>
 	                                          <td>
 	                                          	<div class="input-group margin">
-									                <input type="text" class="form-control pltsadmin_ft" readonly="readonly" name="pltsadmin_file_text[{{$k}}]">
+									                <input type="text" class="form-control pltsadmin_ft" readonly="readonly" name="pltsadmin_file_text[{{$k}}]" value="{{ $v->file }}">
 									                <span class="input-group-btn">
 									                	<input type="file" name="pltsadmin_file[{{$k}}]" class="hidden pltsadmin_file">
 									                    <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
@@ -269,7 +275,7 @@
 	                                          <td><input type="radio" name="pltsteknis[{{$k}}]" @if(!$v->isi) checked @endif value="0"></td>
 	                                          <td>
 	                                          	<div class="input-group margin">
-									                <input type="text" class="form-control pltsteknis_ft" readonly="readonly" name="pltsteknis_file_text[{{$k}}]">
+									                <input type="text" class="form-control pltsteknis_ft" readonly="readonly" name="pltsteknis_file_text[{{$k}}]" value="{{ $v->file }}">
 									                <span class="input-group-btn">
 									                	<input type="file" name="pltsteknis_file[{{$k}}]" class="hidden pltsteknis_file">
 									                    <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
@@ -288,6 +294,7 @@
 	                    </div>
 	                </div>
 	            </div>
+	            @endif
 	        </div>
         </div>
     </div>

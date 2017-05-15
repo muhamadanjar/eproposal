@@ -25,6 +25,10 @@ class Usulan extends Model{
         //return $this->hasMany(PJalan::class);
     }
 
+    public function users(){
+        return $this->hasMany('App\User');
+    }
+
     public function addPersyaratanJalan($jalan){
         if (is_string($jalan)) {
             $jalan = PJalan::where('id', $jalan)->first();

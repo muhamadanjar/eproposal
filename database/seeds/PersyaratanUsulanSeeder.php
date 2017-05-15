@@ -10,12 +10,12 @@ class PersyaratanUsulanSeeder extends Seeder
      * @return void
      */
     public function run(){
-        DB::table('jenis_usulan')->insert(
+        DB::table('jenis_usulan')->insert([
             ['name'=>'jalan'],
             ['name'=>'sab'],
             ['name'=>'plts'],
             ['name'=>'lainnya']
-        );
+        ]);
         $this->jalanadmin();
         $this->jalanteknis();
 
@@ -51,7 +51,7 @@ class PersyaratanUsulanSeeder extends Seeder
             ],*/
 
             [
-            'no' => 4,
+            'no' => 3,
             'slugusulan'=>'jalan_admin_4',
             'namausulan' => 'Surat Keputusan Bupati tentang Penunjukan Organisasi Perangkat Daerah (OPD) Teknis',
             'tipeusulan' => 'admin'
@@ -112,7 +112,7 @@ class PersyaratanUsulanSeeder extends Seeder
             ],*/
 
             [
-            'no' => 3,
+            'no' => 2,
             'slugusulan'=>'jalan_teknis_3',
             'namausulan' => 'Peta Orientasi Lokasi Bantuan Pemerintah (lokasi yang akan dilakukan pembangunan)',
             'tipeusulan' => 'teknis'
@@ -126,28 +126,28 @@ class PersyaratanUsulanSeeder extends Seeder
             ],*/
 
             [
-            'no' => 5,
+            'no' => 3,
             'slugusulan'=>'jalan_teknis_5',
             'namausulan' => 'Gambar Teknis atau Detail Engineering Design (DED) (telah disetujui dan disahkan oleh pejabat yang berwenang)',
             'tipeusulan' => 'teknis'
             ],
 
             [
-            'no' => 6,
+            'no' => 4,
             'slugusulan'=>'jalan_teknis_6',
             'namausulan' => 'Analisa Harga Satuan',
             'tipeusulan' => 'teknis'
             ],
 
             [
-            'no' => 7,
+            'no' => 5,
             'slugusulan'=>'jalan_teknis_7',
             'namausulan' => 'Standar Biaya Daerah (SBD) dan/atau Standar Biaya Masukan (SBM)',
             'tipeusulan' => 'teknis'
             ],
 
             [
-            'no' => 8,
+            'no' => 6,
             'slugusulan'=>'jalan_teknis_8',
             'namausulan' => 'Rencana Anggaran Biaya (RAB)',
             'tipeusulan' => 'teknis'

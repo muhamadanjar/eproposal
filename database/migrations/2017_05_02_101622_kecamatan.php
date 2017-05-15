@@ -10,7 +10,7 @@ class Kecamatan extends Migration{
         Schema::create('kecamatan', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('kode_kabupaten',6);
-            $table->string('kode_kecamatan',8);
+            $table->string('kode_kecamatan',10);
             $table->string('kecamatan');
             $table->integer('isactived')->default(0);
             $table->integer('lokpri')->default(0)->nullable();

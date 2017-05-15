@@ -196,59 +196,97 @@ class ProposalCtrl extends Controller
                 if($r->jenis_usulan == '1'){
                     foreach ($r->pjalanadmin_id as $key => $v) {                
                         $isi = isset($r->jalanadmin[$key]);
+                        if ($r->jalanadmin_file_text != null) {
+                            $array = ['pjalan_id' => $r->pjalanadmin_id[$key], 
+                            'usulan_id' => $usulan->id, 
+                            'isi' => $isi,
+                            'file' => $r->jalanadmin_file_text[$key]];
+                        }else{
+                            $array = ['pjalan_id' => $r->pjalanadmin_id[$key], 
+                            'usulan_id' => $usulan->id, 
+                            'isi' => $isi];
+                        }
                         \DB::table('usulan_persyaratan_jalan')
                         ->insert(
-                            ['pjalan_id' => $r->pjalanadmin_id[$key], 
-                            'usulan_id' => $usulan->id, 
-                            'isi' => $isi]
+                            $array
                         );
                     }
                     foreach ($r->pjalanteknis_id as $key => $v) {
                         $isi = isset($r->jalanteknis[$key]);
-                        \DB::table('usulan_persyaratan_jalan')
-                        ->insert(
-                            ['pjalan_id' => $r->pjalanteknis_id[$key], 
+                        if ($r->jalanteknis_file_text != null) {
+                            $array = ['pjalan_id' => $r->pjalanteknis_id[$key], 
                             'usulan_id' => $usulan->id, 
-                            'isi' => $isi]
-                        );
+                            'isi' => $isi,
+                            'file' => $r->jalanteknis_file_text[$key]];
+                        }else{
+                            $array = ['pjalan_id' => $r->pjalanteknis_id[$key], 
+                            'usulan_id' => $usulan->id, 
+                            'isi' => $isi];
+                        }
+                        \DB::table('usulan_persyaratan_jalan')
+                        ->insert($array);
                     }
                 }elseif($r->jenis_usulan == '2'){
                     foreach ($r->psabadmin_id as $key => $v) {   
-                        $isi = isset($r->sabadmin[$key]);            
-                        \DB::table('usulan_persyaratan_sab')
-                        ->insert(
-                            ['psab_id' => $r->psabadmin_id[$key], 
+                        $isi = isset($r->sabadmin[$key]);
+                        if ($r->sabadmin_file_text != null) {
+                            $array = ['psab_id' => $r->psabadmin_id[$key], 
                             'usulan_id' => $usulan->id, 
-                            'isi' => $isi]
-                        );
+                            'isi' => $isi,
+                            'file' => $r->sabadmin_file_text[$key]];
+                        }else{
+                            $array = ['psab_id' => $r->psabadmin_id[$key], 
+                            'usulan_id' => $usulan->id, 
+                            'isi' => $isi];
+                        }          
+                        \DB::table('usulan_persyaratan_sab')
+                        ->insert($array);
                     }
                     foreach ($r->psabteknis_id as $key => $v) {
                         $isi = isset($r->sabteknis[$key]);
-                        \DB::table('usulan_persyaratan_sab')
-                        ->insert(
-                            ['psab_id' => $r->psabteknis_id[$key], 
+                        if ($r->sabteknis_file_text != null) {
+                            $array = ['psab_id' => $r->psabteknis_id[$key], 
                             'usulan_id' => $usulan->id, 
-                            'isi' => $isi]
-                        );
+                            'isi' => $isi,
+                            'file' => $r->sabteknis_file_text[$key]];
+                        }else{
+                            $array = ['psab_id' => $r->psabteknis_id[$key], 
+                            'usulan_id' => $usulan->id, 
+                            'isi' => $isi];
+                        }
+                        \DB::table('usulan_persyaratan_sab')
+                        ->insert($array);
                     }
                 }elseif($r->jenis_usulan == '3'){
                     foreach ($r->ppltsadmin_id as $key => $v) {
-                        $isi = isset($r->pltsadmin[$key]);          
-                        \DB::table('usulan_persyaratan_plts')
-                        ->insert(
-                            ['pplts_id' => $r->ppltsadmin_id[$key], 
+                        $isi = isset($r->pltsadmin[$key]);
+                        if ($r->pltsadmin_file_text != null) {
+                            $array = ['pplts_id' => $r->ppltsadmin_id[$key], 
                             'usulan_id' => $usulan->id, 
-                            'isi' => $isi]
-                        );
+                            'isi' => $isi,
+                            'file' => $r->pltsadmin_file_text[$key]];
+                        }else{
+                            $array = ['pplts_id' => $r->ppltsadmin_id[$key], 
+                            'usulan_id' => $usulan->id, 
+                            'isi' => $isi];
+                        }       
+                        \DB::table('usulan_persyaratan_plts')
+                        ->insert($array);
                     }
                     foreach ($r->ppltsteknis_id as $key => $v) {
                         $isi = isset($r->pltsadmin[$key]);
-                        \DB::table('usulan_persyaratan_plts')
-                        ->insert(
-                            ['pplts_id' => $r->ppltsteknis_id[$key], 
+                        if ($r->pltsteknis_file_text != null) {
+                            $array = ['pplts_id' => $r->ppltsteknis_id[$key], 
                             'usulan_id' => $usulan->id, 
-                            'isi' => $isi]
-                        );
+                            'isi' => $isi,
+                            'file'=>$r->pltsteknis_file_text[$key]];
+                        }else{
+                            $array = ['pplts_id' => $r->ppltsteknis_id[$key], 
+                            'usulan_id' => $usulan->id, 
+                            'isi' => $isi];
+                        }
+                        \DB::table('usulan_persyaratan_plts')
+                        ->insert($array);
                     }
                 }else{
 
@@ -286,7 +324,7 @@ class ProposalCtrl extends Controller
                     'usulan_persyaratan_jalan.file'
                 )
                 ->orderBy('tipeusulan','ASC')
-                ->orderBy('no','DESC')
+                ->orderBy('no','ASC')
                 ->where('usulan_persyaratan_jalan.usulan_id',$id)
                 ->get();
         $psab = DB::table('usulan_persyaratan_sab')
@@ -334,59 +372,93 @@ class ProposalCtrl extends Controller
     }
 
     public function postUbah(Request $r){
+        
         if($r->jenis_usulan == '1'){
             foreach ($r->pjalanadmin_id as $key => $v) {
-            $isi = isset($r->jalanadmin[$key]);            
+                if ($r->jalanadmin_file_text != null) {
+                    $array = [
+                        'pjalan_id' => $r->pjalanadmin_id[$key], 
+                        'usulan_id' => $r->usulan_id, 
+                        'isi' => $r->jalanadmin[$key],
+                        'file' => $r->jalanadmin_file_text[$key]
+                        ];
+                }else{
+                    $array = [
+                        'pjalan_id' => $r->pjalanadmin_id[$key], 
+                        'usulan_id' => $r->usulan_id, 
+                        'isi' => $r->jalanadmin[$key]
+                        ];
+                }
+                 
                 \DB::table('usulan_persyaratan_jalan')
                 ->where('pjalan_id',$r->pjalanadmin_id[$key])
                 ->where('usulan_id',$r->usulan_id)
                     ->update(
-                        [
-                        'pjalan_id' => $r->pjalanadmin_id[$key], 
-                        'usulan_id' => $r->usulan_id, 
-                        'isi' => $isi
-                        ]
+                        $array
                     );
             }
             foreach ($r->pjalanteknis_id as $key => $v) {
-                $isi = isset($r->jalanteknis[$key]);
+                if ($r->jalanteknis_file_text[$key] != null) {
+                    $array = [
+                        'pjalan_id' => $r->pjalanteknis_id[$key], 
+                        'usulan_id' => $r->usulan_id, 
+                        'isi' => $r->jalanteknis[$key],
+                        'file' => $r->jalanteknis_file_text[$key]
+                        ];
+                }else{
+                    $array = [
+                        'pjalan_id' => $r->pjalanteknis_id[$key], 
+                        'usulan_id' => $r->usulan_id, 
+                        'isi' => $r->jalanteknis[$key]
+                        ];
+                }
                 \DB::table('usulan_persyaratan_jalan')
                 ->where('pjalan_id',$r->pjalanteknis_id[$key])
                 ->where('usulan_id',$r->usulan_id)
                     ->update(
-                        [
-                        'pjalan_id' => $r->pjalanteknis_id[$key], 
-                        'usulan_id' => $r->usulan_id, 
-                        'isi' => $isi
-                        ]
+                        $array
                     );
             }
         }elseif($r->jenis_usulan == '2'){
             foreach ($r->psabadmin_id as $key => $v) {
-            $isi = isset($r->sabadmin[$key]);        
+                if ($r->sabadmin_file_text[$key] != null) {
+                    $array = array(
+                        'psab_id' => $r->psabadmin_id[$key], 
+                        'usulan_id' => $r->usulan_id, 
+                        'isi' => $r->sabadmin[$key],
+                        'file' => $r->sabadmin_file_text[$key]
+                    );
+                }else{
+                    $array = array(
+                            'psab_id' => $r->psabadmin_id[$key], 
+                            'usulan_id' => $r->usulan_id, 
+                            'isi' => $r->sabadmin[$key]
+                    );
+                } 
                 \DB::table('usulan_persyaratan_sab')
                 ->where('psab_id',$r->psabadmin_id[$key])
                 ->where('usulan_id',$r->usulan_id)
-                    ->update(
-                        [
-                        'psab_id' => $r->psabadmin_id[$key], 
-                        'usulan_id' => $r->usulan_id, 
-                        'isi' => $isi
-                        ]
-                    );
+                    ->update($array);
             }
             foreach ($r->psabteknis_id as $key => $v) {
-            $isi = isset($r->sabteknis[$key]);
+                if ($r->sabteknis_file_text[$key] != null) {
+                    $array = array(
+                        'psab_id' => $r->psabteknis_id[$key], 
+                        'usulan_id' => $r->usulan_id, 
+                        'isi' => $r->sabteknis[$key],
+                        'file' => $r->sabteknis_file_text[$key]
+                    );
+                }else{
+                    $array = array(
+                        'psab_id' => $r->psabteknis_id[$key], 
+                        'usulan_id' => $r->usulan_id, 
+                        'isi' => $r->sabteknis[$key]
+                    );
+                } 
                 \DB::table('usulan_persyaratan_sab')
                 ->where('psab_id',$r->psabteknis_id[$key])
                 ->where('usulan_id',$r->usulan_id)
-                    ->update(
-                        [
-                        'psab_id' => $r->psabteknis_id[$key], 
-                        'usulan_id' => $r->usulan_id, 
-                        'isi' => $isi
-                        ]
-                    );
+                    ->update($array);
             }
         }elseif($r->jenis_usulan == '3'){
             foreach ($r->ppltsadmin_id as $key => $v) {
@@ -413,7 +485,7 @@ class ProposalCtrl extends Controller
             }
             foreach ($r->ppltsteknis_id as $key => $v) {
                     
-                    if ($r->pltsteknis_file_text[$key] != null) {
+                    if ($r->pltsteknis_file_text != null) {
                         $array = [
                             'pplts_id' => $r->ppltsteknis_id[$key], 
                             'usulan_id' => $r->usulan_id, 

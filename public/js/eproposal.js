@@ -3,6 +3,82 @@ $.ajaxSetup({
     headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') }
 });
 
+function dataupload(id){
+        $("#btnselectiamge"+ id).on('click',function(){
+            $("#fileinput"+ id).val('');
+            $("#fileinput"+ id).trigger('click');
+            
+        });
+        $("#fileinput"+ id).on('change',function(){
+            $("#picture"+ id).parent().parent().find('label.parsley-error').remove();
+            var allowed = ['chm','pdf','doc','docx'];
+
+            var tmp = $(this).val();
+            var ex_tmp = tmp.split('.');
+            if(allowed.indexOf(ex_tmp[ex_tmp.length-1])<0){
+                $("#picture"+ id).addClass('parsley-error');
+                $("#picture"+ id).parent().parent().append('<label class="parsley-error" for="image">Extension File Not Allowed</label>');
+                return false;
+            }
+                //checking validation size
+                var size = $(this)[0].size;
+                var max_size =20*1024*1024;
+                if(size>max_size){
+                    $("#picture"+ id).addClass('parsley-error');
+                    $("#picture"+ id).parent().parent().append('<label class="parsley-error" for="image">File Size Allowed '+ max_size +' byte</label>');
+                    return false;
+                }
+                    //end checking size
+                    input = document.getElementById("fileinput"+ id);
+                    file = input.files[0];
+                    if(file != undefined){
+                        formData= new FormData();
+                        if(!!file.type.match(/.*/)){
+                            formData.append("images", file);
+                            $.ajax({
+                                url: "/proposal/upload",
+                                type: "POST",
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                dataType:'json',
+                                beforeSend: function(){
+                                    $("#picture").parent().parent().find('label.parsley-error').remove();
+                                    submit_form = false;
+                                },
+                                complete: function(){
+                                     
+                                },
+                                success: function(data){
+                                    if(data.error){
+                                        $("#picture"+ id).parent().parent().find('label.parsley-error').remove();
+                                        $("#picture"+ id).parent().parent().append('<label class="parsley-error" for="image">'+data.message+'</label>');
+                                        return false;
+                                    }else if(!data.error){
+                                      console.log(data.filename);
+                                        $("#picture"+ id).parent().parent().find('label.parsley-error').remove();
+                                        $("#picture"+ id).val(data.filename);
+                                        submit_form = true;
+                                        return false;
+                                    }
+                                }
+                            });
+                        }else{
+                            $("#picture"+ id).parent().parent().find('label.parsley-error').remove();
+                            $("#picture"+ id).parent().parent().append('<label class="parsley-error" for="image">Invalid File</label>');
+                            return false;
+                        }
+                    }else{
+                        $("#picture"+ id).parent().find('label.error').remove();
+                        $("#picture"+ id).parent().append('<label class="error" for="image">Invalid File</label>');
+                        return false;
+                    }
+        });
+        $("#clearimage"+ id).on('click',function(){
+            $("#picture"+ id).val('');
+        }); 
+}
+
 (function($, window, document){
     $('.formConfirm').on('click', function(e) {
         e.preventDefault();
@@ -536,10 +612,27 @@ $('select#provinsi').on('change', function (){
 (function($, window, document){
     
     $('.formUpload').on('click', function(e) {
+        var jalanadmin_file = $(this).closest('span').find('.jalanadmin_file');
+        var jalanteknis_file = $(this).closest('span').find('.jalanteknis_file');
+
+        var sabadmin_file = $(this).closest('span').find('.sabadmin_file');
+        var sabteknis_file = $(this).closest('span').find('.sabteknis_file');
+
         var pltsadmin_file = $(this).closest('span').find('.pltsadmin_file');
         var pltsteknis_file = $(this).closest('span').find('.pltsteknis_file');
-        if (pltsadmin_file.length > 0) {
-            pltsadmin_file.trigger('click');    
+
+        if (jalanadmin_file.length > 0) {
+            jalanadmin_file.trigger('click');
+        }else if (jalanteknis_file.length > 0) {
+            jalanteknis_file.trigger('click');
+            
+        }else if (sabadmin_file.length > 0) {
+            sabadmin_file.trigger('click');  
+        }else if (sabteknis_file.length > 0) {
+            sabteknis_file.trigger('click');
+
+        }else if (pltsadmin_file.length > 0) {
+            pltsadmin_file.trigger('click');  
         }else if (pltsteknis_file.length > 0) {
             pltsteknis_file.trigger('click');    
         }
@@ -555,16 +648,16 @@ $('select#provinsi').on('change', function (){
         console.log(file);
 
         if(file.name.length < 1) {
-        }else if(file.size > 100000) {
+        }else if(file.size > 209715200) {
             alert("The file is too big");
         }else if(file.type != 'image/png' && file.type != 'image/jpg' && file.type != 'image/gif' && file.type != 'image/jpeg' && file.type != 'application/pdf' && file.type != 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
             alert("The file does not match png, jpg or gif");
             $(this).val('');
         }else { 
             var formData = new FormData($('*formId*')[0]);
-                if(!!file.type.match(/.*/)){
-                    formData.append("images", file);
-                }
+            if(!!file.type.match(/.*/)){
+                formData.append("images", file);
+            }
                 /*$.ajax({
                     url: '/proposal/upload',  //server script to process data
                     type: 'POST',
@@ -603,15 +696,37 @@ $('select#provinsi').on('change', function (){
                     url: "/proposal/upload",
                     type: "POST",
                     data: formData,
+                    cache: false,
                     processData: false,
                     contentType: false,
                     dataType:'json',
+                    beforeSend: function(){
+                        $('.loader').show();
+                    },
                     complete: function(){
-                                     
+                        $('.loader').hide();
                     },
                     success: function(data){
                         
-                        if ($('.pltsadmin_ft').length > 0) {
+                        if($('.jalanadmin_ft').length > 0) {
+                            fileinput.closest('td').find('.jalanadmin_ft')
+                            .css({"color": "red", "border": "2px solid red"}).val(data.filename);    
+                        }
+                        if($('.jalanteknis_ft').length > 0){
+                            fileinput.closest('td').find('.jalanteknis_ft')
+                            .css({"color": "red", "border": "2px solid red"}).val(data.filename);
+                        }
+
+                        if($('.sabadmin_ft').length > 0) {
+                            fileinput.closest('td').find('.sabadmin_ft')
+                            .css({"color": "red", "border": "2px solid red"}).val(data.filename);    
+                        }
+                        if($('.sabteknis_ft').length > 0){
+                            fileinput.closest('td').find('.sabteknis_ft')
+                            .css({"color": "red", "border": "2px solid red"}).val(data.filename);
+                        }
+
+                        if($('.pltsadmin_ft').length > 0) {
                             fileinput.closest('td').find('.pltsadmin_ft')
                             .css({"color": "red", "border": "2px solid red"}).val(data.filename);    
                         }
@@ -619,9 +734,10 @@ $('select#provinsi').on('change', function (){
                             fileinput.closest('td').find('.pltsteknis_ft')
                             .css({"color": "red", "border": "2px solid red"}).val(data.filename);
                         }
-                        
-
-                    }
+                    },
+                    error: errorHandler = function() {
+                        alert("Something went wrong!");
+                    },
                 });
         }
     });

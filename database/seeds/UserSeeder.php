@@ -48,6 +48,15 @@ class UserSeeder extends Seeder
         $user->assignRole('admin');
 
         $biasa = App\User::create([
+            'username' => 'manajer',
+            'email' => 'manajer@example.com',
+            'name' => 'Manajer Aja',
+            'password' => bcrypt('password'),
+        ]);
+    
+        $biasa->assignRole('manager');
+
+        $biasa = App\User::create([
             'username' => 'user',
             'email' => 'user@example.com',
             'name' => 'User Aja',
