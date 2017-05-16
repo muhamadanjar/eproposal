@@ -3,11 +3,23 @@
 
 @section('content')
 <?php
+
 if(session('aksi') == 'edit'){
 	$id = $users->id;
-}
-else{
+	$username = $users->username;
+	$name = $users->name;
+	$email = $users->email;
+	$password = $users->password;
+
+
+	$readonly = 'readonly';
+}else{
 	$id ='';	
+	$username = '';
+	$name = '';
+	$email = '';
+	$password = '';
+	$readonly = '';
 }
 ?>
 
@@ -33,7 +45,7 @@ else{
 						
 						<div class="form-group">
 							<label>Username</label>
-							<input type="text" class="form-control" name="username">
+							<input type="text" class="form-control" name="username" value="{{ $username }}" {{ $readonly }}>
 							<div class="col-md-6">
 								
 							</div>
@@ -41,7 +53,7 @@ else{
 
 						<div class="form-group">
 							<label>Nama Lengkap</label>
-							<input  class="form-control" name="name" type="text">
+							<input  class="form-control" name="name" type="text" value="{{ $name }}">
 							<div class="col-md-6">
 
 							</div>
@@ -49,7 +61,7 @@ else{
 
 						<div class="form-group">
 							<label >Email</label>
-							<input type="text" class="form-control" name="email" >
+							<input type="text" class="form-control" name="email" value="{{ $email }}">
 							<div class="col-md-6">
 								
 							</div>
@@ -57,13 +69,13 @@ else{
 						
 						@if($status == 'edit')
 						
-						<input type="hidden" class="form-control" name="oldpassword">
+						<input type="hidden" class="form-control" name="oldpassword" value="{{ $password }}">
 							
 						@endif
 
 						<div class="form-group">
 							<label >Password</label>
-							<input type="password" class="form-control" name="password" >
+							<input type="password" class="form-control" name="password" value="{{ $password }}">
 							<div class="col-md-6">
 								
 							</div>
@@ -84,8 +96,6 @@ else{
 	                        <select name="kabupaten" id="kabkota" class="form-control"></select>
 	                    </div>
                       
-
-
 						<!--<div class="form-group">
 							<label>Image</label>
 							<input type="file" class="styled" name="image">
@@ -112,19 +122,16 @@ else{
 				<div class="box-body">
 		            <div class="form-group">
 		            	@foreach($role as $k => $v)
+		            	<?php $c = ($users->hasRole($v->name)) ? 'checked': ''; ?>
 		                <div>
 		                	<label>
-			                  	<input type="radio" class="minimal" name="role" value="{{$v->name}}">
+			                  	<input type="radio" class="minimal" name="role" value="{{$v->name}}" {{$c}}>
 			                  	{{$v->name}}
 			                </label>
 		                </div>
-		                
 		                @endforeach
 		            </div>
 
-		            
-
-					
 				</div>
 			</div>
 

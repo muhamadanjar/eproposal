@@ -15,7 +15,6 @@ class UserCtrl extends Controller
         
     }
     
-
     public function getIndex(){
         if (! $this->authorize('create.user')) {
            return "I can't create new user :(";
@@ -81,11 +80,14 @@ class UserCtrl extends Controller
                 $user->password = bcrypt($request->password);           
             }
             
-
             $user->save();
-            return redirect('admin/user');
+            if (!$user->hasRole($request->role)) {
+                $user->assignRole($request->role);
+            }
+            
+            return redirect('pengaturan/user');
         }else{
-            return redirect('admin/user');
+            return redirect('pengaturan/user');
         }
     }
 
@@ -111,7 +113,7 @@ class UserCtrl extends Controller
         }
         $user = User::find($id);
         $user->delete();
-        return redirect('admin/user');
+        return redirect('pengaturan/user');
     }
 
     public function getAktifnonaktif($id){
@@ -119,7 +121,7 @@ class UserCtrl extends Controller
         $users->isactive = ($users->isactive == 0) ? 1:0;
         $users->save();
         
-        return redirect('admin/user');
+        return redirect('pengaturan/user');
     }
 
     public function getLevel($layerid=''){
@@ -135,6 +137,28 @@ class UserCtrl extends Controller
             array_push($array2,$array); 
         }
         return $array2;
+    }
+
+    public function getGantiPassword(){
+        $user = User::find(auth()->user()->id);
+        return view('master.gantipassword')->withUsers($user);
+    }
+
+    public function postGantiPassword(Request $request){
+        $user = User::find(auth()->user()->id);
+        if($request->oldpassword == $request->password){
+            $user->password = $request->oldpassword;        
+        }else{
+            $user->password = bcrypt($request->password);           
+        }
+        $user->save();
+
+        return redirect('home');
+    }
+
+    public function getHistoryLog(){
+        $history = Activity::orderBy('user_id','DESC')->where('user_id',auth()->user()->id)->get();
+        return view('master.activity_log')->with('history',$history);
     }
 
     public function GetDftrLevel($lvl='') {

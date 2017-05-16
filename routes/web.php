@@ -78,6 +78,8 @@ Route::group(array('prefix'=>'pengaturan'), function(){
 	Route::get('user/edit/{id}','UserCtrl@getUbah');
 	Route::get('user/hapus/{id}','UserCtrl@postHapus');
 	Route::get('user/aktif/{id}','UserCtrl@getAktifnonaktif');
+	Route::get('user/gantipassword','UserCtrl@getGantiPassword');
+	Route::post('user/gantipassword','UserCtrl@postGantiPassword');
 
 	Route::get('role','RoleCtrl@getIndex');
 

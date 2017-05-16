@@ -47,7 +47,6 @@ class ProposalCtrl extends Controller
                 ->where('usulan.id',$id)
                 ->first();
             }
-            
         }else{
             if (auth()->user()->isSuper() || auth()->user()->isManager()) {
                 $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
@@ -299,6 +298,12 @@ class ProposalCtrl extends Controller
             DB::commit();
 
             $r->session()->flash('Usulanstatus', 'Data Sudah di tampung!');
+
+            $data = new \stdClass();
+            $data->subject = 'Status Proposal';
+            $data->body = 'Data Sudah di tampung! '.$r->usulan_id;
+            $data->to = auth()->user()->email;
+            $this->sendEmail($data);
             
         } catch (Exception $e) {
             \DB::rollback();
@@ -509,11 +514,11 @@ class ProposalCtrl extends Controller
             }
         }
 
-        /*$data = new \stdClass();
+        $data = new \stdClass();
         $data->subject = 'Usulan Telah Di Update';
         $data->body = 'Usulan Telah Di Update '.$r->usulan_id;
         $data->to = auth()->user()->email;
-        $this->sendEmail($data);*/
+        $this->sendEmail($data);
 
         //$user = \App\User::find(auth()->user()->id);
         //$user->notify(new UsulanUpdated($user));
@@ -526,10 +531,13 @@ class ProposalCtrl extends Controller
                 mkdir($dir);
                 $ext = pathinfo($_FILES["images"]["name"],PATHINFO_EXTENSION);
                 $filename = time().'_'.urlencode(pathinfo($_FILES["images"]["name"],PATHINFO_FILENAME)).'.'.$ext;
-                if(move_uploaded_file($_FILES["images"]["tmp_name"], $dir. $filename))
-                {
+                if(move_uploaded_file($_FILES["images"]["tmp_name"], $dir. $filename)){
                     
-                    echo json_encode(array('error'=>false,'filename'=>$filename));
+                    echo json_encode(array(
+                        'error'=>false,
+                        'filename'=>$filename,
+                        'data'=>$_FILES["images"]
+                        ));
                     exit;
                 }
             echo json_encode(array('error'=>true,'message'=>'Upload process error'));

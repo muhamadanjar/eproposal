@@ -73,6 +73,16 @@
       opacity: 1;
     }
 
+    .title_planar{
+      color: #FFF;
+      text-align: center;
+      font-size: 25px;
+      line-height: 0.1;
+      margin: 0;
+      text-align: center;
+      padding: 0 20px 20px 20px;
+    }
+
     .login-box-body label{
       color: #fff;
       font-size: 14px;
@@ -111,6 +121,7 @@
   <div class="login-box-body">
     <p class="login-box-msg"></p>
     <div class="title">E-Proposal Kemendes</div>
+    <div class="title_planar">PLANAR</div>
     
     <form method="post" action="{{ url('/admin/login') }}">
       {{ csrf_field() }}

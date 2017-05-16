@@ -79,8 +79,8 @@
                                 </div>
 
                             </div>
+
                                 
-                            
                         </div>
 
                         <div class="form-group{{ $errors->has('penerima_manfaat') ? ' has-error' : '' }}">
@@ -107,6 +107,7 @@
                         <div class="form-group{{ $errors->has('dokumentasi') ? ' has-error' : '' }}">
                             <label for="dokumentasi" class="control-label">Dokumentasi Lokasi Eksisting</label>
                             <input type="file" id="inputgambar" name="dokumentasi" class="validate"/ >
+                            <p class="help-block"><i class="fa fa-file-pdf-o" class="text-red"></i><span>File Maksimal 200 Mb.</span></p>
                                 
                             
                         </div>
@@ -133,11 +134,13 @@
                         </div>
                         </div>-->
 
+                        <div id="map"></div>
+
 
                         <div class="form-group">
                             <div class="col-md-1">
                                 <button type="submit" class="btn btn-primary">
-                                    Proses
+                                    Simpan
                                 </button>
                             </div>
                         </div>
@@ -445,3 +448,18 @@
     </div>
     </form>
 @endsection
+
+
+@section('js_tambahan')
+    <script>
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -34.397, lng: 150.644},
+          zoom: 8
+        });
+      }
+    </script>
+   
+
+@endection

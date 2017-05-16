@@ -11,25 +11,15 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Mail\Mailer;
 use PHPMailer;
 
-class SendEmail implements ShouldQueue
-{
+class SendEmail implements ShouldQueue{
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
+   
+    public function __construct(){
         //
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
+    
     public function handle(PHPMailer $mail){
         
         // Set up SMTP

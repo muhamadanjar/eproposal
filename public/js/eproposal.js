@@ -2,7 +2,7 @@
 $.ajaxSetup({
     headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') }
 });
-
+var map;
 function dataupload(id){
         $("#btnselectiamge"+ id).on('click',function(){
             $("#fileinput"+ id).val('');
@@ -78,6 +78,8 @@ function dataupload(id){
             $("#picture"+ id).val('');
         }); 
 }
+
+
 
 (function($, window, document){
     $('.formConfirm').on('click', function(e) {
@@ -645,8 +647,7 @@ $('select#provinsi').on('change', function (){
         name = file.name;
         size = file.size;
         type = file.type;
-        console.log(file);
-
+        
         if(file.name.length < 1) {
         }else if(file.size > 209715200) {
             alert("The file is too big");
@@ -699,7 +700,7 @@ $('select#provinsi').on('change', function (){
                     cache: false,
                     processData: false,
                     contentType: false,
-                    dataType:'json',
+                    //dataType:'json',
                     beforeSend: function(){
                         $('.loader').show();
                     },
@@ -738,7 +739,7 @@ $('select#provinsi').on('change', function (){
                     error: errorHandler = function() {
                         alert("Something went wrong!");
                     },
-                });
+                },'json');
         }
     });
 

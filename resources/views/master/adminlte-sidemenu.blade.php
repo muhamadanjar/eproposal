@@ -8,20 +8,49 @@
               <i></i>
             </span>
           </a>
-        @if(\Auth::user()->hasRole('admin'))
+        
+        @if(\Auth::user()->hasRole('admin') || \Auth::user()->hasRole('user'))
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-book"></i> <span>Laporan</span>
+            <i class="fa fa-database"></i> <span>Usulan</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#"><i class="fa fa-circle-o"></i> Laporan Usulan</a></li>
+            <li><a href="{{url('proposal/usulan/tambah')}}"><i class="fa fa-circle-o"></i> Tambah Usulan</a></li>
+            <li><a href="{{url('proposal/usulan')}}"><i class="fa fa-circle-o"></i> List Usulan</a></li>
             
           </ul>
         </li>
         @endif
+        @if(\Auth::user()->hasRole('admin') || \Auth::user()->hasRole('manager'))
+        <li>
+          <a href="{{ url('/pengecekan/usulan') }}">
+            <i class="fa fa-commenting"></i> <span>Verifikasi Data</span>
+            <span>
+              <i></i>
+            </span>
+          </a>
+        </li>
+        @endif
+        @if(\Auth::user()->hasRole('admin'))
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-users"></i> <span>User</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="{{ url('pengaturan/user')}}"><i class="fa fa-circle-o"></i> Daftar User</a></li>
+            
+            <li><a href="#"><i class="fa fa-circle-o"></i> History Log</a></li>
+            
+          </ul>
+        </li>
+        @endif
+        
         @if(\Auth::user()->hasRole('admin'))
         <li class="treeview">
           <a href="#">
@@ -51,56 +80,32 @@
           </ul>
         </li>
         @endif
-        @if(\Auth::user()->hasRole('admin') || \Auth::user()->hasRole('user'))
+        @if(\Auth::user()->hasRole('admin'))
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-database"></i> <span>Usulan</span>
+            <i class="fa fa-book"></i> <span>Laporan</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{url('proposal/usulan/tambah')}}"><i class="fa fa-circle-o"></i> Tambah Usulan</a></li>
-            <li><a href="{{url('proposal/usulan')}}"><i class="fa fa-circle-o"></i> List Usulan</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i> Laporan Usulan</a></li>
             
           </ul>
         </li>
         @endif
-        @if(\Auth::user()->hasRole('admin') || \Auth::user()->hasRole('manager'))
         <li>
-          <a href="{{ url('/pengecekan/usulan') }}">
-            <i class="fa fa-commenting"></i> <span>Pengecekan</span>
-            <span>
-              <i></i>
-            </span>
-          </a>
-        </li>
-        @endif
-        @if(\Auth::user()->hasRole('admin'))
-        <li class="treeview">
           <a href="#">
-            <i class="fa fa-users"></i> <span>User</span>
+            <i class="fa fa-tool"></i> <span>Tools</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
             <li><a href="#"><i class="fa fa-circle-o"></i> Profil User</a></li>
-            <li><a href="#"><i class="fa fa-circle-o"></i> Ubah Password</a></li>
-            <li><a href="{{ url('pengaturan/user')}}"><i class="fa fa-circle-o"></i> Daftar User</a></li>
+            <li><a href="{{ url('pengaturan/user/gantipassword')}}"><i class="fa fa-circle-o"></i> Ubah Password</a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i> User Manual</a></li>
-            <li><a href="#"><i class="fa fa-circle-o"></i> History Log</a></li>
-            
           </ul>
-        </li>
-        
-        <li>
-          <a href="#">
-            <i class="fa fa-tool"></i> <span>Tools</span>
-            <span>
-              <i></i>
-            </span>
-          </a>
         </li>
         <li>
           <a href="#">
@@ -110,6 +115,6 @@
             </span>
           </a>
         </li>
-        @endif
+        
 </ul>
 @endif

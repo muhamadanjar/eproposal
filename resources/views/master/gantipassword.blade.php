@@ -1,7 +1,18 @@
-@extends('template.londinium')
+@extends('layouts.adminlte')
+@section('alert')
+    
+    @if(Session::has('Usulanstatus'))
 
+        <div class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h4><i class="icon fa fa-info"></i> Info!</h4>
+            {!! Session::get('Usulanstatus') !!}
+        </div>
+        
+        
+    @endif
+@endsection
 @section('content')
-
 <?php
 
 	$id = $users->id;
@@ -19,13 +30,7 @@
 				<div class="panel-body">
 					<form class="form-horizontal" role="form" method="POST" action="">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
-	
-						<div class="form-group">
-							<label class="col-md-2 control-label">Username</label>
-							<div class="col-md-6">
-								<input type="text" class="form-control" readonly name="username" value="{{ $username }}" readonly>
-							</div>
-						</div>
+
 						
 						<div class="form-group">
 							<label class="col-md-2 control-label">Kata Kunci</label>
@@ -51,4 +56,5 @@
 </div>
 @endsection
 
-@stop
+
+

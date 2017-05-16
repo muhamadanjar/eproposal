@@ -385,7 +385,6 @@
 <script src="{{ asset('assets/dist/js/pages/dashboard2.js')}}"></script>
 
 
-
 <!-- assets for demo purposes -->
 <script src="{{ asset('assets/dist/js/demo.js')}}"></script>
 <script src="{{ asset('/js/eproposal.js')}}"></script>
