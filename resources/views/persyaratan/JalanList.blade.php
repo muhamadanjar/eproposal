@@ -13,7 +13,7 @@
 @endsection
 @section('content')
 
-	<table class="display" cellspacing="0" width="100%">
+	<table id="table_pjalan" class="display" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th></th>
@@ -21,7 +21,6 @@
                 <th>Tipe Usulan</th>
             </tr>
         </thead>
-        
         <tbody>
         	
         </tbody>

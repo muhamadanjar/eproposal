@@ -82,6 +82,7 @@
 
                                 
                         </div>
+                        <div id="map" style="width: 100%;height: 50%"></div>
 
                         <div class="form-group{{ $errors->has('penerima_manfaat') ? ' has-error' : '' }}">
                             <label for="kordinat" class="control-label">Penerima Manfaat </label>
@@ -451,15 +452,22 @@
 
 
 @section('js_tambahan')
-    <script>
-      var map;
+<script>
       function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -34.397, lng: 150.644},
-          zoom: 8
+        var uluru = {lat: -25.363, lng: 131.044};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 4,
+          center: uluru
+        });
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
         });
       }
     </script>
-   
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUFQ_PdoGGeFoaimy-7AMAicWHQ3EGp3U&callback=initMap">
+    </script>
 
-@endection
+    
+@endsection

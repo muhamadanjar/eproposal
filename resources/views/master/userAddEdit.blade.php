@@ -10,6 +10,8 @@ if(session('aksi') == 'edit'){
 	$name = $users->name;
 	$email = $users->email;
 	$password = $users->password;
+	$kprovinsi = $users->kode_provinsi;
+	$kkabupaten = $users->kode_kabupaten;
 
 
 	$readonly = 'readonly';
@@ -20,6 +22,8 @@ if(session('aksi') == 'edit'){
 	$email = '';
 	$password = '';
 	$readonly = '';
+	$kprovinsi = '';
+	$kkabupaten = '';
 }
 ?>
 
@@ -86,14 +90,20 @@ if(session('aksi') == 'edit'){
 	                        <select name="provinsi" id="provinsi" class="form-control chosen-select">
 	                            <option value="--">----</option>
 	                                @foreach($provinsi as $k => $v)
-	                                    <option value="{{ $v->kode_provinsi }}">{{$v->provinsi}}</option>
+	                                    <option value="{{ $v->kode_provinsi }}" @if($v->kode_provinsi == $kprovinsi) selected @endif>{{$v->provinsi}}</option>
 	                                @endforeach
 	                        </select>
 	                    </div>
 
 	                    <div class="form-group{{ $errors->has('kabupaten') ? ' has-error' : '' }}">
 	                        <label>Kabupaten/Kota</label>
-	                        <select name="kabupaten" id="kabkota" class="form-control"></select>
+	                        <select name="kabupaten" id="kabkota" class="form-control">
+	                        	@if(isset($kprovinsi))
+	                        		@foreach($kabupaten as $k => $v)
+	                                    <option value="{{ $v->kode_kabupaten }}" @if($v->kode_kabupaten == $kkabupaten) selected @endif>{{$v->kabupaten}}</option>
+	                                @endforeach
+	                            @endif
+	                        </select>
 	                    </div>
                       
 						<!--<div class="form-group">

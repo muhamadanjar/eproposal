@@ -16,23 +16,47 @@ class PengecekanCtrl extends Controller
    	 	return view('usulan.pengecekanUsulanList');
    	}
 
+    public function getShowUsulanQuery($id=''){
+        $usulan ='';
+        if (!empty($id)) {
+            if (auth()->user()->isSuper() || auth()->user()->isManager()) {
+                $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
+                ->join('kabupaten', 'kabupaten.kode_kabupaten', '=', 'usulan.kode_kabupaten')
+                ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
+                ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
+                ->where('usulan.id',$id)
+                ->first();
+            }else{
+                $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
+                ->join('kabupaten', 'kabupaten.kode_kabupaten', '=', 'usulan.kode_kabupaten')
+                ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
+                ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
+                ->where('usulan.id',$id)
+                ->where('usulan.user_id',auth()->user()->id)
+                ->first();
+            }
+        }else{
+            if (auth()->user()->isSuper() || auth()->user()->isManager()) {
+                $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
+                ->join('kabupaten', 'kabupaten.kode_kabupaten', '=', 'usulan.kode_kabupaten')
+                ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
+                ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
+                ->get();
+            }else{
+                $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
+                ->join('kabupaten', 'kabupaten.kode_kabupaten', '=', 'usulan.kode_kabupaten')
+                ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
+                ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
+                ->where('usulan.user_id',auth()->user()->id)
+                ->get();
+            }
+        }
+        return $usulan;
+    }
+
    	public function getUsulan($id=''){
-   		if (auth()->user()->isSuper() || auth()->user()->isManager()) {
-            $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
-            ->join('kabupaten', 'kabupaten.kode_kabupaten', '=', 'usulan.kode_kabupaten')
-            ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
-            ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
-            ->where('usulan.id',$id)
-            ->first();
-      }else{
-            $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
-            ->join('kabupaten', 'kabupaten.kode_kabupaten', '=', 'usulan.kode_kabupaten')
-            ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
-            ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
-            ->where('usulan.user_id',auth()->user()->id)
-            ->where('usulan.id',$id)
-            ->first();
-      }
+   		
+      $usulan = $this->getShowUsulanQuery($id);
         
       $pjalan = DB::table('usulan_persyaratan_jalan')
                 ->join('usulan','usulan.id','usulan_persyaratan_jalan.usulan_id')
@@ -114,7 +138,7 @@ class PengecekanCtrl extends Controller
     public function postUsulan(Request $r){
       
       $usulan = Usulan::find($r->usulan_id);
-      $usulan->status = $r->status;
+      $usulan->status_usulan = $r->status;
       $usulan->save();
       if($r->jenis_usulan == '1'){
           foreach ($r->pjalan_id as $key => $id) {

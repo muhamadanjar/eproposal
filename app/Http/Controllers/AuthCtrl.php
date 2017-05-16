@@ -74,9 +74,13 @@ class AuthCtrl extends Controller{
      */
     protected function attemptLogin(Request $request)
     {
-        return $this->guard()->attempt(
-            $this->credentials($request), $request->has('remember')
-        );
+        $users = \App\User::where($this->username(),$request->username)->first();
+        if ($users->isactive) {
+            return $this->guard()->attempt(
+                $this->credentials($request), $request->has('remember')
+            );
+        }
+        return $this->sendFailedLoginResponse($request);
     }
 
     /**

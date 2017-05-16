@@ -14,9 +14,7 @@ class PersyaratanCtrl extends Controller
     	return view('persyaratan.jalanList');
     }
 
-    public function postJalan(Request $r){
-    	
-    }
+    
 
     public function getSab($value=''){
     	return view('persyaratan.sabList');

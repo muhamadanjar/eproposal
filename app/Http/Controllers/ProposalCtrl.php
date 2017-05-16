@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Log;
 
 use App\Jobs\SendEmail;
 use App\Notifications\UsulanUpdated;
+use App\Notifications\UsulanAdd;
 use Mail;
 
 class ProposalCtrl extends Controller
@@ -26,6 +27,7 @@ class ProposalCtrl extends Controller
 	{
 		$this->middleware('auth');
         $this->tgl = Carbon::now('Asia/Jakarta');
+
 	}
 
     public function getShowUsulanQuery($id=''){
@@ -37,7 +39,6 @@ class ProposalCtrl extends Controller
                 ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
                 ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
                 ->where('usulan.id',$id)
-                ->where('usulan.user_id',auth()->user()->id)
                 ->first();
             }else{
                 $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
@@ -45,6 +46,7 @@ class ProposalCtrl extends Controller
                 ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
                 ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
                 ->where('usulan.id',$id)
+                ->where('usulan.user_id',auth()->user()->id)
                 ->first();
             }
         }else{
@@ -68,6 +70,7 @@ class ProposalCtrl extends Controller
 
     public function getArrayUsulan($value=''){
         $usulan = $this->getShowUsulanQuery();
+
         $array = array();
         foreach ($usulan as $key => $value) {
             $array['data'][$key] = $value;
@@ -316,11 +319,13 @@ class ProposalCtrl extends Controller
     public function getUbah($id=''){
         $usulan = $this->getShowUsulanQuery($id);
 
+
         $pjalan = DB::table('usulan_persyaratan_jalan')
                 ->join('usulan','usulan.id','usulan_persyaratan_jalan.usulan_id')
                 ->join('pjalan','pjalan.id','usulan_persyaratan_jalan.pjalan_id')
                 ->select(
                     'usulan.id as UsulID',
+                    'usulan.user_id as UserID',
                     'pjalan.id as JalanID',
                     'pjalan.no',
                     'pjalan.namausulan',
@@ -337,6 +342,7 @@ class ProposalCtrl extends Controller
                 ->join('psab','psab.id','usulan_persyaratan_sab.psab_id')
                 ->select(
                     'usulan.id as UsulID',
+                    'usulan.user_id as UserID',
                     'psab.id as SabID',
                     'psab.no',
                     'psab.namausulan',
@@ -352,6 +358,7 @@ class ProposalCtrl extends Controller
                 ->join('pplts','pplts.id','usulan_persyaratan_plts.pplts_id')
                 ->select(
                     'usulan.id as UsulID',
+                    'usulan.user_id as UserID',
                     'pplts.id as PltsID',
                     'pplts.no',
                     'pplts.namausulan',
@@ -514,11 +521,14 @@ class ProposalCtrl extends Controller
             }
         }
 
-        $data = new \stdClass();
+        $jedi = User::findOrFail($r->user_id);
+        //$jedi->notify(new UsulanUpdated($jedi));
+
+        /*$data = new \stdClass();
         $data->subject = 'Usulan Telah Di Update';
         $data->body = 'Usulan Telah Di Update '.$r->usulan_id;
         $data->to = auth()->user()->email;
-        $this->sendEmail($data);
+        $this->sendEmail($data);*/
 
         //$user = \App\User::find(auth()->user()->id);
         //$user->notify(new UsulanUpdated($user));

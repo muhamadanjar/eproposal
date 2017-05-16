@@ -6,6 +6,7 @@
 	{{ csrf_field() }}
 	<input type="hidden" id="jenis_usulan" name="jenis_usulan" value="{{ $usulan->jenis_usulan }}">
 	<input type="hidden" name="usulan_id" value="{{ $usulan->id }}">
+	<input type="hidden" name="user_id" value="{{ $usulan->user_id }}">
 	<div class="row">
         <div class="col-xs-12">
 	        <div class="box">

@@ -188,7 +188,7 @@ $('select#provinsi').on('change', function (){
             
                 var options = '<option value="0">Pilih Desa..</option>';
                 for (var x = 0; x < data.length; x++) {
-                   options += '<option value="' + data[x]['kode_desa'] + '">' + data[x]['desa'] + '</option>';
+                   options += '<option value="' + data[x]['desa'] + '">' + data[x]['desa'] + '</option>';
                 }
                 $('select#desa').select2();
                 $('select#desa').html(options);
@@ -298,15 +298,16 @@ $('select#provinsi').on('change', function (){
             var table_teknis = '<tr><th colspan="3">Teknis</th></tr>';
             table += '<div class="box-header"><h3 class="box-title">Jalan</h3><div class="box-tools"><a href="/proposal/usulan/'+d.id+'" type="button" class="btn btn-block btn-primary">Ubah</a></div></div>';
             table += '<div class="box-body"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
-                table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th></tr>';
-                table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th></tr>';
+                table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th></tr>';
+                table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th></tr>';
                 for (var i = d.pjalan.length - 1; i >= 0; i--) {
                     data = d.pjalan[i];
                     var adatidak = (d.pjalan[i]['isi'] == 1) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
+                    var ver = (d.pjalan[i]['verifikasi']) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
                     if (data['tipeusulan'] == 'admin') {
-                        table_admin += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td></tr>';
+                        table_admin += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td>'+ver+'</td></tr>';
                     }else if(data['tipeusulan'] == 'teknis'){
-                        table_teknis += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td></tr>';
+                        table_teknis += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td>'+ver+'</td></tr>';
                     }
                 }
                 table += table_admin;
@@ -321,15 +322,16 @@ $('select#provinsi').on('change', function (){
             var table_teknis = '<tr><th colspan="3">Teknis</th></tr>';
             table += '<div class="box-header"><h3 class="box-title">SAB</h3><div class="box-tools"><a href="/proposal/usulan/'+d.id+'" type="button" class="btn btn-block btn-primary">Ubah</a></div></div>';
             table += '<div class="box-body"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
-                table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th></tr>';
-                table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th></tr>';
+                table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th></tr>';
+                table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th></tr>';
                 for (var i = d.psab.length - 1; i >= 0; i--) {
                     data = d.psab[i];
                     var adatidak = (d.psab[i]['isi'] == 1) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
+                    var ver = (d.psab[i]['verifikasi']) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
                     if (data['tipeusulan'] == 'admin') {
-                        table_admin += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td></tr>';
+                        table_admin += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td>'+ver+'</td></tr>';
                     }else if(data['tipeusulan'] == 'teknis'){
-                        table_teknis += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td></tr>';
+                        table_teknis += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td>'+ver+'</td></tr>';
                     }
                 }
                 table += table_admin;
@@ -345,15 +347,16 @@ $('select#provinsi').on('change', function (){
             var table_teknis = '<tr><th colspan="3">Teknis</th></tr>';
             table += '<div class="box-header"><h3 class="box-title">PLTS</h3><div class="box-tools"><a href="/proposal/usulan/'+d.id+'" type="button" class="btn btn-block btn-primary">Ubah</a></div></div>';
             table += '<div class="box-body"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
-                table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th></tr>';
-                table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th></tr>';
+                table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th></tr>';
+                table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th></tr>';
                 for (var i = d.pplts.length - 1; i >= 0; i--) {
                     data = d.pplts[i];
                     var adatidak = (d.pplts[i]['isi'] == 1) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
+                    var ver = (d.pplts[i]['verifikasi']) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
                     if (data['tipeusulan'] == 'admin') {
-                        table_admin += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td></tr>';
+                        table_admin += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td>'+ver+'</td></tr>';
                     }else if(data['tipeusulan'] == 'teknis'){
-                        table_teknis += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td></tr>';
+                        table_teknis += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td>'+ver+'</td></tr>';
                     }
                 }
                 table += table_admin;
@@ -420,6 +423,7 @@ $('select#provinsi').on('change', function (){
                 for (var i = d.pjalan.length - 1; i >= 0; i--) {
                     data = d.pjalan[i];
                     var adatidak = (d.pjalan[i]['isi'] == 1) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
+
                     if (data['tipeusulan'] == 'admin') {
                         table_admin += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td><a href="/files/'+data['file']+'" class="fa fa-file-text text-green"></a></td></tr>';
                     }else if(data['tipeusulan'] == 'teknis'){
@@ -650,9 +654,9 @@ $('select#provinsi').on('change', function (){
         
         if(file.name.length < 1) {
         }else if(file.size > 209715200) {
-            alert("The file is too big");
+            alert("File Terlalu Besar, Maksimal 200 Mb");
         }else if(file.type != 'image/png' && file.type != 'image/jpg' && file.type != 'image/gif' && file.type != 'image/jpeg' && file.type != 'application/pdf' && file.type != 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-            alert("The file does not match png, jpg or gif");
+            alert("File tidak diijinkan untuk di upload");
             $(this).val('');
         }else { 
             var formData = new FormData($('*formId*')[0]);
@@ -700,7 +704,7 @@ $('select#provinsi').on('change', function (){
                     cache: false,
                     processData: false,
                     contentType: false,
-                    //dataType:'json',
+                    dataType:'json',
                     beforeSend: function(){
                         $('.loader').show();
                     },
@@ -711,35 +715,35 @@ $('select#provinsi').on('change', function (){
                         
                         if($('.jalanadmin_ft').length > 0) {
                             fileinput.closest('td').find('.jalanadmin_ft')
-                            .css({"color": "red", "border": "2px solid red"}).val(data.filename);    
+                            .css({"color": "red", "border": "2px solid blue"}).val(data.filename);    
                         }
                         if($('.jalanteknis_ft').length > 0){
                             fileinput.closest('td').find('.jalanteknis_ft')
-                            .css({"color": "red", "border": "2px solid red"}).val(data.filename);
+                            .css({"color": "red", "border": "2px solid blue"}).val(data.filename);
                         }
 
                         if($('.sabadmin_ft').length > 0) {
                             fileinput.closest('td').find('.sabadmin_ft')
-                            .css({"color": "red", "border": "2px solid red"}).val(data.filename);    
+                            .css({"color": "red", "border": "2px solid blue"}).val(data.filename);    
                         }
                         if($('.sabteknis_ft').length > 0){
                             fileinput.closest('td').find('.sabteknis_ft')
-                            .css({"color": "red", "border": "2px solid red"}).val(data.filename);
+                            .css({"color": "red", "border": "2px solid blue"}).val(data.filename);
                         }
 
                         if($('.pltsadmin_ft').length > 0) {
                             fileinput.closest('td').find('.pltsadmin_ft')
-                            .css({"color": "red", "border": "2px solid red"}).val(data.filename);    
+                            .css({"color": "red", "border": "2px solid blue"}).val(data.filename);    
                         }
                         if($('.pltsteknis_ft').length > 0){
                             fileinput.closest('td').find('.pltsteknis_ft')
-                            .css({"color": "red", "border": "2px solid red"}).val(data.filename);
+                            .css({"color": "red", "border": "2px solid blue"}).val(data.filename);
                         }
                     },
                     error: errorHandler = function() {
                         alert("Something went wrong!");
                     },
-                },'json');
+                });
         }
     });
 

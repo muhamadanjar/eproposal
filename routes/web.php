@@ -31,6 +31,11 @@ Route::get('kecamatan',function ($value=''){
 });
 
 
+Route::get('map',function ($value=''){
+	return view('map');
+});
+
+
 
 Route::get('/proposal','ProposalCtrl@getIndex');
 Route::get('/proposal/periksa','ProposalCtrl@getPeriksaDokumen');
@@ -80,7 +85,7 @@ Route::group(array('prefix'=>'pengaturan'), function(){
 	Route::get('user/aktif/{id}','UserCtrl@getAktifnonaktif');
 	Route::get('user/gantipassword','UserCtrl@getGantiPassword');
 	Route::post('user/gantipassword','UserCtrl@postGantiPassword');
-
+	Route::get('notify/{id}', ['as' => 'notify',   'uses' => 'UserCtrl@notifyJedi']);
 	Route::get('role','RoleCtrl@getIndex');
 
 });

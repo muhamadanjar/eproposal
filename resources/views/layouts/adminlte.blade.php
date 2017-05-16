@@ -48,9 +48,7 @@
 
   <!-- jQuery 2.2.3 -->
   <script src="{{asset('assets/plugins/jQuery/jquery-2.2.3.min.js')}}"></script>
-  <script type="text/javascript">
-  
-  </script>
+ 
 
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -388,6 +386,8 @@
 <!-- assets for demo purposes -->
 <script src="{{ asset('assets/dist/js/demo.js')}}"></script>
 <script src="{{ asset('/js/eproposal.js')}}"></script>
-@yield('js_tambahan')
+
 </body>
+@yield('js_tambahan')
 </html>
+

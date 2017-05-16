@@ -80,6 +80,7 @@
                         <th>Usulan</th>
                         <th>Ada/Tidak</th>
                         <th>Verifikasi Data</th>
+                        <th>Dokumen</th>
                         <th>Keterangan</th>
                         
                       </tr>
@@ -91,14 +92,17 @@
                       @foreach($usulan->pjalan as $k => $v)
                         <?php
                           $disabled = ($v->isi) ? '' : 'disabled';
+                          $fileexist = (file_exists($v->file)) ? '<a href="/files/{{$v->file}}" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-gray"></a>' ;
+                          $adatidak = ($v->isi) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
                         ?>
                       <tr>
                         <td><input type="hidden" name="pjalan_id[{{$k}}]" value="{{$v->pjalan_id}}">{{$v->no}}</td>
                         <td>{{$v->namausulan}}</td>
-                        <td>{{$v->isi}}</td>
+                        <td>{!!$adatidak!!}</td>
                         <td>
                           <input type="checkbox" name="verifikasi[{{$k}}]" value="1" {{$disabled}}>
                         </td>
+                        <td>{!!$fileexist!!}</td>
                         <td><input type="text" name="keterangan[{{$k}}]" value="{{$v->keterangan}}"></td>
                       </tr>
                       @endforeach
@@ -121,6 +125,8 @@
                         <td>
                           <input type="checkbox" name="verifikasi[{{$k}}]" value="1" {{$disabled}} {{$verifikasi}}>
                         </td>
+                        <td><a href="/files/{{$v->file}}" class="fa fa-file-text text-green"></a></td>
+                        
                         <td><input type="text" name="keterangan[{{$k}}]" value="{{$v->keterangan}}"></td>
                       </tr>
                       @endforeach
@@ -142,6 +148,7 @@
                         <td>
                           <input type="checkbox" name="verifikasi[{{$k}}]" value="1" {{$disabled}}>
                         </td>
+                        <td><a href="/files/{{$v->file}}" class="fa fa-file-text text-green"></a></td>
                         <td><input type="text" name="keterangan[{{$k}}]" value="{{$v->keterangan}}"></td>
                       </tr>
                       @endforeach
@@ -164,7 +171,8 @@
                     <div class="input-group margin">
                       <select name="status" class="form-control">
                         <option value="0">Belum Disetujui</option>
-                        <option value="1">Disetujui</option>
+                        <option value="1">Diproses</option>
+                        <option value="2">Disetujui</option>
                       </select>
                       <span class="input-group-btn">
                           <button type="submit" class="btn btn-success pull-right">Submit</button>

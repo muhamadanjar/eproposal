@@ -208,8 +208,8 @@
                 <img src="http://placehold.it/160" class="img-circle" alt="User Image">
 
                 <p>
-                  {{\Auth::user()->name}} - Web Developer
-                  <small>Member since Nov. 2012</small>
+                  {{\Auth::user()->name}} - ----
+                  <small>----</small>
                 </p>
               </li>
               <!-- Menu Body -->

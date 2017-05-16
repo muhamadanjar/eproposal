@@ -1,5 +1,4 @@
 @extends('layouts.adminlte')
-
 @section('adminlte-contentheader')
   <h1>
       Dashboard
@@ -12,7 +11,7 @@
 @endsection
 
 @section('content')
-
+  
   <!-- Info boxes -->
   <div class="row">
         <div class="col-md-3 col-sm-6 col-xs-12">
@@ -33,7 +32,7 @@
             <span class="info-box-icon bg-red"><i class="fa fa-users"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">SKPD</span>
+              <span class="info-box-text">Jalan</span>
               <span class="info-box-number">41,410</span>
             </div>
             <!-- /.info-box-content -->
@@ -44,6 +43,33 @@
 
         <!-- fix for small devices only -->
         <div class="clearfix visible-sm-block"></div>
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="fa fa-comments"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">SAB</span>
+              <span class="info-box-number">90</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-red"><i class="fa fa-users"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">PLTS</span>
+              <span class="info-box-number">41,410</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
 
         
   </div>
@@ -134,6 +160,32 @@
       </div>
     </div>
   </div>
+
+  <div id="map"></div>
+
+  
+ 
   
   
+@endsection
+
+@section('js_tambahan')
+<script>
+      function initMap() {
+        var uluru = {lat: -25.363, lng: 131.044};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 4,
+          center: uluru
+        });
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUFQ_PdoGGeFoaimy-7AMAicWHQ3EGp3U&callback=initMap">
+    </script>
+
+    
 @endsection

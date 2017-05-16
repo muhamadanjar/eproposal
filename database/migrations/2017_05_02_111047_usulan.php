@@ -31,6 +31,7 @@ class Usulan extends Migration
             $table->string('dokumen')->nullable();
             $table->integer('user_id');
             $table->integer('status_usulan')->default(0);
+            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
     }

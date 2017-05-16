@@ -7,6 +7,9 @@ use App\User;
 use App\Role;
 use App\Permission;
 use App\Provinsi;
+use App\Kabupaten;
+use App\Notifications\UsulanAdd;
+use App\Notifications\UsulanUpdated;
 
 class UserCtrl extends Controller
 {
@@ -100,9 +103,12 @@ class UserCtrl extends Controller
         $user = User::find($id);
         $status = 'edit';
         session(['aksi'=>$status]);
-        $provinsi = provinsi::orderBy('kode_provinsi','ASC')->get();
+        $provinsi = Provinsi::orderBy('kode_provinsi','ASC')->get();
+        $kabupaten = Kabupaten::where('kode_provinsi',$user->kode_provinsi)->orderBy('kode_provinsi','ASC')->get();
+
         return view('master.userAddEdit')->withStatus('edit')
         ->withProvinsi($provinsi)
+        ->withKabupaten($kabupaten)
         ->withRole($role)
         ->withUsers($user);
     }
@@ -159,6 +165,22 @@ class UserCtrl extends Controller
     public function getHistoryLog(){
         $history = Activity::orderBy('user_id','DESC')->where('user_id',auth()->user()->id)->get();
         return view('master.activity_log')->with('history',$history);
+    }
+
+    function notifyJedi($id){
+        // this is where the notification logic will be implemented
+        $jedi = User::findOrFail($id);
+        $jedi->notify(new UsulanAdd($jedi));
+         
+        if($jedi->is_lightsaber_on){
+            return redirect()->route('home')
+                ->with('message', 'We have notified '.$jedi->name.' that their lightsaber is currently turned ON')
+                ->with('status', 'info');
+        }else{
+            return redirect()->route('home')
+                ->with('message', 'We have notified '.$jedi->name.' that their lightsaber is currently turned OFF')
+                ->with('status', 'info');
+        }
     }
 
     public function GetDftrLevel($lvl='') {

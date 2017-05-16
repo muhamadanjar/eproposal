@@ -16,9 +16,9 @@ class UsulanAdd extends Notification
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(\App\User $jedi)
     {
-        //
+        $this->jedi = $jedi;
     }
 
     /**
@@ -40,10 +40,23 @@ class UsulanAdd extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        $message = new MailMessage;
+        if($this->jedi->is_lightsaber_on){
+            $message->subject('Your Lightsaber is currently ON')
+                    ->line('Hey '.$this->jedi->name.', your lightsaber is off so I guess that you are relaxing somewere. If you are in a fight and wish to turn on your lightsaber, click on the button below')
+                    ->action('Turn On Ligthsaber', url('toggle',$this->jedi->id))
+                    ->success();
+        }else{
+            $message->subject('Your Lightsaber is currently OFF')
+                    ->line('Hey '.$this->jedi->name.', hope you are not in a fight because your lightsaber is currently off. If you wish to turn on your lightsaber, click on the button below')
+                    ->action('Turn On Ligthsaber', url('toggle',$this->jedi->id))
+                    ->error();
+                     
+        }
+        $message->line('Remember the rules: If you are in an actual fight, please turn on your lightsaber. Otherwise, keep it turned off!')->to($this->jedi->email);
+                     
+                     
+        return $message;
     }
 
     /**
@@ -55,7 +68,8 @@ class UsulanAdd extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'jedi_id' => $this->jedi->id,
+            'jedi' => $this->jedi,
         ];
     }
 }
