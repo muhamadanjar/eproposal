@@ -1,0 +1,57 @@
+#ini_set('memory_limit', '-1');
+php_value upload_max_filesize 100M
+php_value post_max_size 50M
+php_value max_execution_time 5000
+php_value max_input_time 5000
+#php_value memory_limit 250M
+
+#Header add Access-Control-Allow-Origin "http://localhost"
+
+
+<IfModule mod_headers.c>
+
+    Header add Access-Control-Allow-Origin "*"
+    Header add Access-Control-Allow-Methods: "GET,POST,OPTIONS,DELETE,PUT"
+    Header add Access-Control-Allow-Headers: "X-XSRF-TOKEN,X-ACCESS_TOKEN, Access-Control-Allow-Origin, Authorization, Origin, x-requested-with, Content-Type, Content-Range, Content-Disposition, Content-Description"
+
+    #Header set Access-Control-Allow-Origin: *
+    #Header set Access-Control-Request-Headers: "Access-Control-Request-Headers" ":" #x-xsrf-token
+
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews
+    </IfModule>
+
+    RewriteEngine On
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+</IfModule>
+
+
+<IfModule proxy_module.c>
+<IfModule proxy_http_module.c>
+
+ProxyRequests Off
+
+<Proxy *>
+      Require all granted
+</Proxy>
+
+ProxyPass /geoserver http://localhost:8080/geoserver
+ProxyPassReverse /geoserver http://localhost:8080/geoserver
+
+</IfModule>
+</IfModule>
