@@ -13,24 +13,31 @@
     @endif
 @endsection
 @section('content')
-
-	<table id="table_pengecekan" class="display" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th></th>
-                <th>Provinsi</th>
-                <th>Kabupaten</th>
-                <th>Kecamatan</th>
-                <th>Desa</th>
-                <th>Calon Penerima</th>
-                <th>Jumlah Usulan</th>
-                <th>Tahun</th>
-            </tr>
-        </thead>
-        
-        <tbody>
-        	
-        </tbody>
-    </table>
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">Pengecekan</h3>
+        </div>
+            <!-- /.box-header -->
+        <div class="box-body">
+        	<table id="table_pengecekan" class="display" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Provinsi</th>
+                        <th>Kabupaten</th>
+                        <th>Kecamatan</th>
+                        <th>Desa</th>
+                        <th>Calon Penerima</th>
+                        <th>Jumlah Usulan</th>
+                        <th>Tahun</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                	
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 @endsection

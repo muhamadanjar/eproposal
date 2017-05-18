@@ -303,7 +303,7 @@
         <div class="col-xs-12">
 
           <button type="submit" class="btn btn-primary pull-right">
-            <i class="fa fa-submit"></i> Submit
+            <i class="fa fa-submit"></i> Kirim
           </button>
         </div>
     </div>

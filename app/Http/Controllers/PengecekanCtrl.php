@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use App\Usulan;
 use DB;
 use App\Http\Controllers\ProposalCtrl;
+use App\Traits\SendEmailsEproposal;
 class PengecekanCtrl extends Controller
 {
+    use SendEmailsEproposal;
     public function __construct($value=''){
         $this->middleware('auth');
         $this->PC = new ProposalCtrl();
@@ -57,7 +59,10 @@ class PengecekanCtrl extends Controller
    	public function getUsulan($id=''){
    		
       $usulan = $this->getShowUsulanQuery($id);
-        
+      if ($usulan->status_usulan == 2) {
+          session()->flash('Usulanstatus', 'Data Sudah di setujui');
+          return redirect('pengecekan/usulan');
+      }
       $pjalan = DB::table('usulan_persyaratan_jalan')
                 ->join('usulan','usulan.id','usulan_persyaratan_jalan.usulan_id')
                 ->join('pjalan','pjalan.id','usulan_persyaratan_jalan.pjalan_id')
@@ -175,6 +180,10 @@ class PengecekanCtrl extends Controller
                         ]);
           }
       }
+      if($usulan->status_usulan == 2){
+        $this->sendEmailUsulanDisetujui($usulan->id);  
+      }
+      
 
       return redirect('pengecekan/usulan');
     }

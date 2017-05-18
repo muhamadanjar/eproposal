@@ -19,10 +19,15 @@ use Illuminate\Support\Facades\Log;
 use App\Jobs\SendEmail;
 use App\Notifications\UsulanUpdated;
 use App\Notifications\UsulanAdd;
-use Mail;
+
+use App\Traits\SendEmailsEproposal;
+
+use Illuminate\Support\Facades\Mail;
+
 
 class ProposalCtrl extends Controller
 {
+    use SendEmailsEproposal;
 	public function __construct($value='')
 	{
 		$this->middleware('auth');
@@ -55,6 +60,7 @@ class ProposalCtrl extends Controller
                 ->join('kabupaten', 'kabupaten.kode_kabupaten', '=', 'usulan.kode_kabupaten')
                 ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
                 ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
+                ->orderBy('updated_at','DESC')
                 ->get();
             }else{
                 $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
@@ -62,6 +68,7 @@ class ProposalCtrl extends Controller
                 ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
                 ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
                 ->where('usulan.user_id',auth()->user()->id)
+                ->orderBy('updated_at','DESC')
                 ->get();
             }
         }
@@ -83,12 +90,13 @@ class ProposalCtrl extends Controller
                     'pjalan.namausulan',
                     'pjalan.tipeusulan',
                     'usulan_persyaratan_jalan.isi',
-                    'usulan_persyaratan_jalan.file'
+                    'usulan_persyaratan_jalan.verifikasi',
+                    'usulan_persyaratan_jalan.file',
+                    'usulan_persyaratan_jalan.keterangan'
                 )
                 ->orderBy('no','DESC')
                 ->where('usulan_persyaratan_jalan.usulan_id',$value->id)
                 ->get();
-
             $psab = DB::table('usulan_persyaratan_sab')
                 ->join('usulan','usulan.id','usulan_persyaratan_sab.usulan_id')
                 ->join('psab','psab.id','usulan_persyaratan_sab.psab_id')
@@ -98,7 +106,9 @@ class ProposalCtrl extends Controller
                     'psab.namausulan',
                     'psab.tipeusulan',
                     'usulan_persyaratan_sab.isi',
-                    'usulan_persyaratan_sab.file'
+                    'usulan_persyaratan_sab.verifikasi',
+                    'usulan_persyaratan_sab.file',
+                    'usulan_persyaratan_sab.keterangan'
                 )
                 ->orderBy('no','DESC')
                 ->where('usulan_persyaratan_sab.usulan_id',$value->id)
@@ -112,7 +122,9 @@ class ProposalCtrl extends Controller
                     'pplts.namausulan',
                     'pplts.tipeusulan',
                     'usulan_persyaratan_plts.isi',
-                    'usulan_persyaratan_plts.file'
+                    'usulan_persyaratan_plts.verifikasi',
+                    'usulan_persyaratan_plts.file',
+                    'usulan_persyaratan_plts.keterangan'
                 )
                 ->orderBy('no','DESC')
                 ->where('usulan_persyaratan_plts.usulan_id',$value->id)
@@ -120,6 +132,7 @@ class ProposalCtrl extends Controller
             $array['data'][$key]['pjalan'] = $pjalan;
             $array['data'][$key]['psab'] = $psab;
             $array['data'][$key]['pplts'] = $pplts;
+            $array['data'][$key]['jamterakhir_update'] = $value->updated_at->diffForHumans();
         }
 
         return $array;
@@ -295,9 +308,9 @@ class ProposalCtrl extends Controller
                 }
                 
             }
-            $jedi = User::findOrFail($usulan->user_id);
-            $jedi->notify(new UsulanAdd($jedi));
-            
+            //$jedi = User::findOrFail($usulan->user_id);
+            //$jedi->notify(new UsulanAdd($jedi));
+            $this->sendEmailAddDataUsulan($usulan->id);
 
             
             DB::commit();
@@ -519,17 +532,12 @@ class ProposalCtrl extends Controller
             }
         }
 
-        $jedi = User::findOrFail($r->user_id);
-        $jedi->notify(new UsulanUpdated($jedi));
+        //$jedi = User::findOrFail($r->user_id);
+        //$jedi->notify(new UsulanUpdated($jedi));
 
-        /*$data = new \stdClass();
-        $data->subject = 'Usulan Telah Di Update';
-        $data->body = 'Usulan Telah Di Update '.$r->usulan_id;
-        $data->to = auth()->user()->email;
-        $this->sendEmail($data);*/
+        $this->sendEmailUpdateDataUsulan($r->usulan_id);
 
-        //$user = \App\User::find(auth()->user()->id);
-        //$user->notify(new UsulanUpdated($user));
+        
         return redirect('proposal/usulan');
     }
 
@@ -559,6 +567,8 @@ class ProposalCtrl extends Controller
 
 
     }
+
+  
 
     
 }

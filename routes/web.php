@@ -32,15 +32,13 @@ Route::post('register','Auth\RegisterController@register');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('provinsi',function ($value=''){
 	$provinsi = \App\Provinsi::orderBy('kode_provinsi')->get();
-	return $provinsi;
+	
+	return view('provinsi.provinsiList')->with('provinsi',$provinsi);
 });
 Route::get('kecamatan',function ($value=''){
-	$provinsi = \App\Kecamatan::orderBy('kode_kecamatan')->get();
-	return $provinsi;
+	$kecamatan = \App\Kecamatan::orderBy('kode_kecamatan')->get();
+	return view('provinsi.kecamatanList')->with('kecamatan',$kecamatan);
 });
-
-
-
 
 
 Route::get('/proposal','ProposalCtrl@getIndex');
@@ -75,6 +73,10 @@ Route::group(['prefix'=>'persyaratan'], function(){
 	Route::get('/jalan','PersyaratanCtrl@getJalan');
 	Route::get('/sab','PersyaratanCtrl@getSab');
 	Route::get('/plts','PersyaratanCtrl@getPlts');
+});
+
+Route::group(['prefix'=>'laporan'], function(){
+	Route::get('/usulan','LaporanCtrl@getUsulan');
 });
 
 

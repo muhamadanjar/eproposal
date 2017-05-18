@@ -96,21 +96,21 @@
                 </ol>
                 <div class="carousel-inner">
                   <div class="item">
-                    <img src="http://placehold.it/900x500/39CCCC/ffffff&amp;text=I+Love+Bootstrap" alt="First slide">
+                    <img src="http://placehold.it/900x500/39CCCC/ffffff&amp;text=Gallery+1" alt="First slide">
 
                     <div class="carousel-caption">
                       First Slide
                     </div>
                   </div>
                   <div class="item active">
-                    <img src="http://placehold.it/900x500/3c8dbc/ffffff&amp;text=I+Love+Bootstrap" alt="Second slide">
+                    <img src="http://placehold.it/900x500/3c8dbc/ffffff&amp;text=Gallery+2" alt="Second slide">
 
                     <div class="carousel-caption">
                       Second Slide
                     </div>
                   </div>
                   <div class="item">
-                    <img src="http://placehold.it/900x500/f39c12/ffffff&amp;text=I+Love+Bootstrap" alt="Third slide">
+                    <img src="http://placehold.it/900x500/f39c12/ffffff&amp;text=Gallery+3" alt="Third slide">
 
                     <div class="carousel-caption">
                       Third Slide

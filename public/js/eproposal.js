@@ -79,8 +79,6 @@ function dataupload(id){
         }); 
 }
 
-
-
 (function($, window, document){
     $('.formConfirm').on('click', function(e) {
         e.preventDefault();
@@ -107,36 +105,36 @@ function dataupload(id){
 }(jQuery, window, document));
 
 (function($, window, document){
-$('.loader').hide();
-$('select#provinsi').select2({
-    no_results_text: "Oops, nothing found!"
-}); 
-$('select#kabkota').html("<option value=''>Pilih Kota..</option>"); 
-$('select#kabkota').select2();
-$('select#provinsi').on('change', function (){
-    $('select#kabkota').html("<option value=''>Pilih Kota..</option>");// add this on each call then add the options when data receives from the request
-    $.ajax({
-        url: '/getKabKota/'+$(this).val(),
-        dataType: "json",
-        beforeSend: function() {
-            $('.loader').show();
-        },
-        success: function(data) {
-            $('select#kabkota').empty(); 
-        
-            var options = '<option value="0">Pilih Kota..</option>';
-            for (var x = 0; x < data.length; x++) {
-                options += '<option value="' + data[x]['kode_kabupaten'] + '">' + data[x]['kabupaten'] + '</option>';    
+    $('.loader').hide();
+    $('select#provinsi').select2({
+        no_results_text: "Oops, nothing found!"
+    }); 
+    $('select#kabkota').html("<option value=''>Pilih Kota..</option>"); 
+    $('select#kabkota').select2();
+    $('select#provinsi').on('change', function (){
+        $('select#kabkota').html("<option value=''>Pilih Kota..</option>");// add this on each call then add the options when data receives from the request
+        $.ajax({
+            url: '/getKabKota/'+$(this).val(),
+            dataType: "json",
+            beforeSend: function() {
+                $('.loader').show();
+            },
+            success: function(data) {
+                $('select#kabkota').empty(); 
+            
+                var options = '<option value="0">Pilih Kota..</option>';
+                for (var x = 0; x < data.length; x++) {
+                    options += '<option value="' + data[x]['kode_kabupaten'] + '">' + data[x]['kabupaten'] + '</option>';    
+                }
+                $('select#kabkota').select2();
+                $('select#kabkota').html(options);
+                $("#kabkota").trigger("chosen:updated");
+            },
+            complete: function() {
+                $('.loader').hide();
             }
-            $('select#kabkota').select2();
-            $('select#kabkota').html(options);
-            $("#kabkota").trigger("chosen:updated");
-        },
-        complete: function() {
-            $('.loader').hide();
-        }
+        });
     });
-});
 
     $('select#kecamatan').html("<option value=''>Pilih Kecamatan..</option>"); 
     $('select#kecamatan').select2();
@@ -200,13 +198,6 @@ $('select#provinsi').on('change', function (){
     }); 
 }(jQuery, window, document));
 
-
-(function($, window, document){
-    $('select#pembangunan').on('change', function (){
-        console.log($(this).val());
-    });
-}(jQuery, window, document));
-//removeClass
 
 (function($, window, document){
     function format ( d ) {
@@ -289,6 +280,11 @@ $('select#provinsi').on('change', function (){
 }(jQuery, window, document));
 
 (function($, window, document){
+    function number_format( toFormat ) {
+        return toFormat.toString().replace(
+          /\B(?=(\d{3})+(?!\d))/g, "."
+        );
+    }
     function format_usulan ( d ) {
         
         if (d.hasOwnProperty('pjalan')) {
@@ -296,18 +292,19 @@ $('select#provinsi').on('change', function (){
             var table = '<div class="box">';
             var table_admin = '<tr><th colspan="3">Admin</th></tr>';
             var table_teknis = '<tr><th colspan="3">Teknis</th></tr>';
-            table += '<div class="box-header"><h3 class="box-title">Jalan</h3><div class="box-tools"><a href="/proposal/usulan/'+d.id+'" type="button" class="btn btn-block btn-primary">Ubah</a></div></div>';
+            table += '<div class="box-header"><h3 class="box-title">Jalan</h3><h5>'+d.jamterakhir_update+'</h5><div class="box-tools"><a href="/proposal/usulan/'+d.id+'" type="button" class="btn btn-block btn-primary">Ubah</a></div></div>';
             table += '<div class="box-body"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
-                table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th></tr>';
-                table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th></tr>';
+                table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th><th>Keterangan</th></tr>';
+                table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th><th>Keterangan</th></tr>';
                 for (var i = d.pjalan.length - 1; i >= 0; i--) {
                     data = d.pjalan[i];
                     var adatidak = (d.pjalan[i]['isi'] == 1) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
-                    var ver = (d.pjalan[i]['verifikasi']) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
+                    var ver = (d.pjalan[i]['verifikasi']== 1) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
+                    var keterangan = (data['keterangan'] != null) ? data['keterangan']:"";
                     if (data['tipeusulan'] == 'admin') {
-                        table_admin += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td>'+ver+'</td></tr>';
+                        table_admin += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td>'+ver+'</td><td><span class="label label-primary">'+keterangan+'</span></td></tr>';
                     }else if(data['tipeusulan'] == 'teknis'){
-                        table_teknis += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td>'+ver+'</td></tr>';
+                        table_teknis += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td>'+ver+'</td><td><span class="label label-primary">'+keterangan+'</span></td></tr>';
                     }
                 }
                 table += table_admin;
@@ -383,10 +380,73 @@ $('select#provinsi').on('change', function (){
             { "data": "desa" },
             { "data": "skpd_pengusul" },
             { "data": "jumlah_usulan" },
+            { "data": "tahun_usulan" },
             
         ],
-        "order": [[1, 'asc']]
+        "columnDefs": [
+            {
+                "render": function ( data, type, row ) {
+                    if (row['status_usulan'] == 3) {
+                        return '<i class="fa fa-info-circle text-green"></i>';
+                    }else if (row['status_usulan'] == 2) {
+                        return '<i class="fa fa-info-circle text-blue"></i>';
+                    }else{
+                        return '<i class="fa fa-info-circle text-red"></i>';
+                    }
+                    
+                },
+                "targets": 0
+            },
+            { "visible": false,  "targets": [ 7 ] },
+            {  
+                "render": function(data,type,row){
+                    return '<i>Rp. '+ number_format(row['jumlah_usulan'])+'</i>';
+                },
+                "targets": [ 6 ] 
+            },
+        ],
+
+        "order": [[1, 'asc']],
+
+        initComplete: function () {
+            this.api().columns().every( function () {
+                var column = this;
+                var select = $('<select><option value=""></option></select>')
+                    .appendTo( $(column.footer()).empty() )
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+            } );
+        },
+
+        drawCallback: function ( settings ) {
+            var api = this.api();
+            var rows = api.rows( {page:'current'} ).nodes();
+            var last=null;
+ 
+            api.column(7, {page:'current'} ).data().each( function ( group, i ) {
+                if ( last !== group ) {
+                    $(rows).eq( i ).before(
+                        '<tr class="group"><td colspan="8">'+group+'</td></tr>'
+                    );
+ 
+                    last = group;
+                }
+            } );
+        }
     });
+
+   
     
     $('#table_usulan tbody').on('click', 'td.details-control', function () {
         var tr = $(this).closest('tr');
@@ -396,13 +456,13 @@ $('select#provinsi').on('change', function (){
             // This row is already open - close it
             row.child.hide();
             tr.removeClass('shown');
-            $(this).addClass('fa fa-plus-square-o');
+            //$(this).addClass('fa fa-plus-square-o');
             
         }else {
             // Open this row
             row.child( format_usulan(row.data()) ).show();
             tr.addClass('shown');
-            $(this).addClass('fa fa-minus-square-o');
+            //$(this).addClass('fa fa-minus-square-o');
             
         }
     } );
@@ -505,7 +565,27 @@ $('select#provinsi').on('change', function (){
             { "data": "tahun_usulan" },
             
         ],
-        "order": [[1, 'asc']]
+        "order": [[1, 'asc']],
+        "columnDefs": [
+           
+            { "visible": false,  "targets": [ 7 ] },
+            
+        ],
+        drawCallback: function ( settings ) {
+            var api = this.api();
+            var rows = api.rows( {page:'current'} ).nodes();
+            var last=null;
+ 
+            api.column(7, {page:'current'} ).data().each( function ( group, i ) {
+                if ( last !== group ) {
+                    $(rows).eq( i ).before(
+                        '<tr class="group"><td colspan="8">'+group+'</td></tr>'
+                    );
+ 
+                    last = group;
+                }
+            } );
+        }
     });
 
     $('#table_pengecekan tbody').on('click', 'td.details-control', function () {
@@ -585,13 +665,13 @@ $('select#provinsi').on('change', function (){
 (function($, window, document){
     $('#usulan-group').hide();
     $('#usulan_jenis_pilih').hide();
-        $('#jalan_sirip').hide();
-        $('#sarana_air_bersih').hide();
-        $('#plts').hide();
+    $('#jalan_sirip').hide();
+    $('#sarana_air_bersih').hide();
+    $('#plts').hide();
 
-        $('#pjalan').hide();
-        $('#psab').hide();
-        $('#pplts').hide();
+    $('#pjalan').hide();
+    $('#psab').hide();
+    $('#pplts').hide();
         
     
     
@@ -606,7 +686,7 @@ $('select#provinsi').on('change', function (){
         var options = '<option value="-">Satuan</option>';
         
         if ($(this).val() == '1') {
-            data = [{'k':'KK','v':'kk'},{'k':'Jiwa','v':'jiwa'}];
+            data = [{'k':'KK','v':'kk'},{'k':'Jiwa','v':'jiwa'},{'k':'Km','v':'km'}];
             $('#jalan_sirip').show();
             $('#sarana_air_bersih').hide();
             $('#plts').hide();
@@ -623,13 +703,11 @@ $('select#provinsi').on('change', function (){
             $('#sarana_air_bersih').show();
             $('#plts').hide();
             $('#lainnya').hide();
-
             $('.pjalan').hide();
             $('.psab').show();
             $('.pplts').hide();
-
         } else if($(this).val() == '3'){
-            data = [{'k':'KK','v':'kk'},{'k':'Jiwa','v':'jiwa'},{'k':'Km','v':'km'}];
+            data = [{'k':'KK','v':'kk'},{'k':'Jiwa','v':'jiwa'}];
             $('#jalan_sirip').hide();
             $('#sarana_air_bersih').hide();
             $('#plts').show();
@@ -798,4 +876,27 @@ $('select#provinsi').on('change', function (){
     
     
 }(jQuery, window, document));
+
+(function($, window, document){
+    $('#checkmap').click(function(){
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            $('input[name=latitude]').val(position.coords.latitude);
+            $('input[name=longitude]').val(position.coords.longitude);
+            
+          }, function() {
+            
+          });
+        } else {
+          // Browser doesn't support Geolocation
+         
+        }        
+    });
+}(jQuery, window, document));
  
+
+

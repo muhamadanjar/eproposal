@@ -30,7 +30,7 @@
                   <div class="col-xs-12">
                     <h2 class="page-header">
                       <i class="fa fa-globe"></i> PLANNAR.
-                      <small class="pull-right">Date: {{$usulan->created_at}}</small>
+                      <small class="pull-right">Tanggal: {{$usulan->created_at->format('m/d/Y H:i:s')}}</small>
                     </h2>
                   </div>
                   <!-- /.col -->
@@ -53,7 +53,7 @@
                     <address>
                       <strong>{{$usulan->skpd_pengusul}}</strong><br>
                       {{$usulan->penerima_manfaat}} {{$usulan->skpd_pengusul_satuan}}<br>
-                      {{$usulan->jumlah_usulan}}<br>
+                      Rp. {{number_format($usulan->jumlah_usulan,2,",",".")}}<br>
                       
                     </address>
                   </div>
@@ -92,7 +92,8 @@
                       @foreach($usulan->pjalan as $k => $v)
                         <?php
                           $disabled = ($v->isi) ? '' : 'disabled';
-                          $fileexist = (file_exists($v->file)) ? '<a href="/files/{{$v->file}}" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-gray"></a>' ;
+                          $checked = ($v->verifikasi) ? 'checked' : '';
+                          $fileexist = (file_exists(public_path('files').'/'.$v->file)) ? '<a href="/files/{{$v->file}}" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-gray"></a>' ;
                           $adatidak = ($v->isi) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
                         ?>
                       <tr>
@@ -100,7 +101,7 @@
                         <td>{{$v->namausulan}}</td>
                         <td>{!!$adatidak!!}</td>
                         <td>
-                          <input type="checkbox" name="verifikasi[{{$k}}]" value="1" {{$disabled}}>
+                          <input type="checkbox" name="verifikasi[{{$k}}]" value="1" {{$disabled}} {{$checked}}>
                         </td>
                         <td>{!!$fileexist!!}</td>
                         <td><input type="text" name="keterangan[{{$k}}]" value="{{$v->keterangan}}"></td>
@@ -116,16 +117,21 @@
                       @foreach($usulan->psab as $k => $v)
                         <?php
                           $disabled = ($v->isi) ? '' : 'disabled';
-                          $verifikasi = ($v->verifikasi) ? 'checked':'';
+                          $verifikasi = ($v->verifikasi == 1) ? 'checked':'';
+
+                          $fileexist = (file_exists(public_path('files').'/'.$v->file)) ? '<a href="/files/{{$v->file}}" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-gray"></a>' ;
+                          $adatidak = ($v->isi) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
+
                         ?>
                       <tr>
                         <td><input type="hidden" name="psab_id[{{$k}}]" value="{{$v->psab_id}}">{{$v->no}}</td>
                         <td>{{$v->namausulan}}</td>
-                        <td>{{$v->isi}}</td>
+                        <td>{!!$adatidak!!}</td>
+                        <td>{{$v->verifikasi}}</td>
                         <td>
                           <input type="checkbox" name="verifikasi[{{$k}}]" value="1" {{$disabled}} {{$verifikasi}}>
                         </td>
-                        <td><a href="/files/{{$v->file}}" class="fa fa-file-text text-green"></a></td>
+                        <td>{!!$fileexist!!}</td>
                         
                         <td><input type="text" name="keterangan[{{$k}}]" value="{{$v->keterangan}}"></td>
                       </tr>
@@ -140,15 +146,18 @@
                       @foreach($usulan->pplts as $k => $v)
                         <?php
                           $disabled = ($v->isi) ? '' : 'disabled';
+                          $verifikasi = ($v->verifikasi == 1) ? 'checked':'';
+                          $fileexist = (file_exists(public_path('files').'/'.$v->file)) ? '<a href="/files/{{$v->file}}" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-gray"></a>' ;
+                          $adatidak = ($v->isi) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
                         ?>
                       <tr>
                         <td><input type="hidden" name="pplts_id[{{$k}}]" value="{{$v->pplts_id}}">{{$v->no}}</td>
                         <td>{{$v->namausulan}}</td>
-                        <td>{{$v->isi}}</td>
+                        <td>{!!$adatidak!!}</td>
                         <td>
-                          <input type="checkbox" name="verifikasi[{{$k}}]" value="1" {{$disabled}}>
+                          <input type="checkbox" name="verifikasi[{{$k}}]" value="1" {{$disabled}} {{$verifikasi}}>
                         </td>
-                        <td><a href="/files/{{$v->file}}" class="fa fa-file-text text-green"></a></td>
+                        <td>{!!$fileexist!!}</td>
                         <td><input type="text" name="keterangan[{{$k}}]" value="{{$v->keterangan}}"></td>
                       </tr>
                       @endforeach

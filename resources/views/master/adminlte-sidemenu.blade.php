@@ -89,7 +89,7 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#"><i class="fa fa-circle-o"></i> Laporan Usulan</a></li>
+            <li><a href="{{ url('laporan/usulan') }}"><i class="fa fa-circle-o"></i> Laporan Usulan</a></li>
             
           </ul>
         </li>

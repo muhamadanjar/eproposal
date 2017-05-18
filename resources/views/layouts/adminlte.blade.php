@@ -44,7 +44,7 @@
   <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.min.css')}}">
   
   <link rel="stylesheet" type="text/css" href="{{ asset('/css/eproposal.css') }}">
-  <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png" sizes="16x16">
+  <link rel="icon" href="{{ asset('assets/images/kemendes.png') }}" type="image/png" sizes="16x16">
 
   <!-- jQuery 2.2.3 -->
   <script src="{{asset('assets/plugins/jQuery/jquery-2.2.3.min.js')}}"></script>
@@ -67,7 +67,7 @@
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>P</b>L</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>P</b>LANAR</span>
+      <span class="logo-lg"><img src="{{ asset('assets/images/kemendes.png') }}" width="25" height="25" /><b>P</b>LANAR</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">

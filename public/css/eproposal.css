@@ -2,3 +2,6 @@
 .disabledTab {
     pointer-events: none;
 }
+#map {
+    height: 100%;
+}
