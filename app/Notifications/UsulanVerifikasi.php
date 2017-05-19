@@ -7,19 +7,18 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use App\User;
-use App\Usulan;
-class UsulanUpdated extends Notification
+class UsulanVerifikasi extends Notification
 {
     use Queueable;
 
-    public $usulan;
-    public $user;
-    public function __construct($user,$usulan){
-        
-       
+    /**
+     * Create a new notification instance.
+     *
+     * @return void
+     */
+    public function __construct(User $user)
+    {
         $this->user = $user;
-        $this->usulan = $usulan;
-
     }
 
     /**
@@ -30,8 +29,7 @@ class UsulanUpdated extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail','database'];
-        //return $notifiable->prefers_sms ? ['nexmo'] : ['mail', 'database'];
+        return $notifiable->prefers_sms ? ['nexmo'] : ['mail', 'database'];
     }
 
     /**
@@ -40,15 +38,12 @@ class UsulanUpdated extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable){
-        $message = new MailMessage;
-        $message->subject('Usulan di Update')
-                    ->line('Hey '.$this->user->name.', Usulan Anda Sudah di update')
-                    ->action('Lihat Usulan', url('toggle',$this->user->id));
-        $message->line('Update data')
-        ->line($this->usulan->skpd_pengusul)
-        ->replyTo($this->user->email);
-        return $message;
+    public function toMail($notifiable)
+    {
+        return (new MailMessage)
+                    ->line('The introduction to the notification.')
+                    ->action('Notification Action', 'https://laravel.com')
+                    ->line('Thank you for using our application!');
     }
 
     /**
@@ -60,16 +55,15 @@ class UsulanUpdated extends Notification
     public function toArray($notifiable)
     {
         return [
-            'usulan_id' => $this->usulan->id,
-            'usulan' => $this->usulan,
+            //
         ];
     }
 
     public function toDatabase($notifiable)
     {
         return [
-            'usulan_id' => $this->user->id,
-            'user' => $this->user
+            'trainee_id' => $notifiable->id,
+            'workout_id' => $this->workout->id
         ];
     }
 }

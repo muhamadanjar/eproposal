@@ -1,7 +1,18 @@
 @extends('layouts.adminlte')
-
+<style type="text/css">
+    html, body, .container,  #map {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+#map {
+    position: relative;
+}
+</style>
 
 @section('content')
+
     <form method="POST" enctype='multipart/form-data'>
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
@@ -62,7 +73,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('skpd_pengusul') ? ' has-error' : '' }}">
-                            <label for="kordinat" class="control-label">SKPD Pengusul</label>
+                            <label for="kordinat" class="control-label">OPD Pengusul</label>
                             <input type="text" name="skpd_pengusul" class="form-control"/>
                             
                         </div>
@@ -82,7 +93,8 @@
 
                                 
                         </div>
-                        <div id="map" style="width: 100%;height: 50%"></div>
+                        <div id="map"></div>
+                        
 
                         <div class="form-group{{ $errors->has('penerima_manfaat') ? ' has-error' : '' }}">
                             <label for="kordinat" class="control-label">Penerima Manfaat </label>
@@ -113,29 +125,8 @@
                             
                         </div>
                         </div>
-                        <!--<div id="usulan_jenis_pilih">
-                        <div class="nav-tabs-custom">
-                            <ul class="nav nav-tabs">
-                              <li class="active"><a href="#jalan_sirip" data-toggle="tab">Pembangunan Jalan Sirip</a></li>
-                              <li><a href="#sarana_air_bersih" data-toggle="tab" >Pembangunan Sarana Air Bersih</a></li>
-                              <li><a href="#plts" data-toggle="tab" >Pembangunan Pembangkit Listrik Tenaga Surya (PLTS)</a></li>
-                            </ul>
-                            <div class="tab-content">
-                              <div class="tab-pane active" id="jalan_sirip">
-                                @include('usulan.usulan_jalan')
-                                
-                              </div>
-                              <div class="tab-pane" id="sarana_air_bersih">
-                                @include('usulan.usulan_sab')
-                              </div>
-                              <div class="tab-pane" id="plts">
-                                @include('usulan.usulan_plts')
-                              </div>
-                            </div>
-                        </div>
-                        </div>-->
-
-                        <div id="map"></div>
+                        
+                       
 
 
                         <div class="form-group">
@@ -192,7 +183,7 @@
                                             <div class="input-group margin">
                                                 <input type="text" class="form-control jalanadmin_ft" readonly="readonly" name="jalanadmin_file_text[{{$k}}]" value="{{ $v->file }}">
                                                 <span class="input-group-btn">
-                                                  <input type="file" name="jalanadmin_file[{{$k}}]" class="hidden jalanadmin_file">
+                                                  <input type="file" name="jalanadmin_file[{{$k}}]" class="hidden jalanadmin_file fileupload">
                                                     <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
                                                 </span>
                                             </div>
@@ -233,7 +224,7 @@
                                             <div class="input-group margin">
                                                 <input type="text" class="form-control jalanteknis_ft" readonly="readonly" name="jalanteknis_file_text[{{$k}}]" value="{{ $v->file }}">
                                                 <span class="input-group-btn">
-                                                  <input type="file" name="jalanteknis_file[{{$k}}]" class="hidden jalanteknis_file">
+                                                  <input type="file" name="jalanteknis_file[{{$k}}]" class="hidden jalanteknis_file fileupload">
                                                     <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
                                                 </span>
                                             </div>
@@ -291,7 +282,7 @@
                                             <div class="input-group margin">
                                                 <input type="text" class="form-control sabadmin_ft" readonly="readonly" name="sabadmin_file_text[{{$k}}]" value="{{ $v->file }}">
                                                 <span class="input-group-btn">
-                                                  <input type="file" name="sabadmin_file[{{$k}}]" class="hidden sabadmin_file">
+                                                  <input type="file" name="sabadmin_file[{{$k}}]" class="hidden sabadmin_file fileupload">
                                                     <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
                                                 </span>
                                             </div>
@@ -329,7 +320,7 @@
                                             <div class="input-group margin">
                                                 <input type="text" class="form-control sabteknis_ft" readonly="readonly" name="sabteknis_file_text[{{$k}}]" value="{{ $v->file }}">
                                                 <span class="input-group-btn">
-                                                  <input type="file" name="sabteknis_file[{{$k}}]" class="hidden sabteknis_file">
+                                                  <input type="file" name="sabteknis_file[{{$k}}]" class="hidden sabteknis_file fileupload">
                                                     <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
                                                 </span>
                                             </div>
@@ -388,7 +379,7 @@
                                             <div class="input-group margin">
                                                 <input type="text" class="form-control pltsadmin_ft" readonly="readonly" name="pltsadmin_file_text[{{$k}}]" value="{{ $v->file }}">
                                                 <span class="input-group-btn">
-                                                  <input type="file" name="pltsadmin_file[{{$k}}]" class="hidden pltsadmin_file">
+                                                  <input type="file" name="pltsadmin_file[{{$k}}]" class="hidden pltsadmin_file fileupload">
                                                     <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
                                                 </span>
                                             </div>
@@ -426,7 +417,7 @@
                                             <div class="input-group margin">
                                                 <input type="text" class="form-control pltsadmin_ft" readonly="readonly" name="pltsteknis_file_text[{{$k}}]" value="{{ $v->file }}">
                                                 <span class="input-group-btn">
-                                                  <input type="file" name="pltsteknis_file[{{$k}}]" class="hidden pltsteknis_file">
+                                                  <input type="file" name="pltsteknis_file[{{$k}}]" class="hidden pltsteknis_file fileupload">
                                                     <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
                                                 </span>
                                             </div>
@@ -448,25 +439,14 @@
         </div>
     </div>
     </form>
+    
 @endsection
 
 
 @section('js_tambahan')
-<script>
-      function initMap() {
-        var uluru = {lat: -25.363, lng: 131.044};
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 4,
-          center: uluru
-        });
-        var marker = new google.maps.Marker({
-          position: uluru,
-          map: map
-        });
-      }
-    </script>
+
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUFQ_PdoGGeFoaimy-7AMAicWHQ3EGp3U&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUFQ_PdoGGeFoaimy-7AMAicWHQ3EGp3U">
     </script>
 
     

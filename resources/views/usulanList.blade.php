@@ -16,6 +16,28 @@
     <div class="box">
         <div class="box-header with-border">
             <h3 class="box-title">Usulan</h3>
+            <div class="box-tools">
+                <div class="input-group">
+                        
+                    
+                </div>
+                <div class="input-group">
+                    
+                    <select name="search_category" id="search_category" class="search_category form-control">
+                            <option value="0">Category</option>
+                            <option value="1">Provinsi</option>
+                            <option value="2">Kabupaten</option>
+                            <option value="3">Kecamatan</option>
+                            <option value="4">Desa</option>
+                    </select>
+                    <span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
+                    <input type="text" name="search_text" class="search_text form-control" id="search_text">
+                    
+                    
+                </div>
+            </div>
+            
+            
         </div>
             <!-- /.box-header -->
         <div class="box-body">
@@ -27,7 +49,7 @@
                         <th>Kabupaten</th>
                         <th>Kecamatan</th>
                         <th>Desa</th>
-                        <th>Calon Penerima</th>
+                        <th>Pengusul</th>
                         <th>Jumlah Usulan</th>
                         <th>Tahun Usulan</th>
                     </tr>
@@ -39,7 +61,7 @@
                         <th>Kabupaten</th>
                         <th>Kecamatan</th>
                         <th>Desa</th>
-                        <th>Calon Penerima</th>
+                        <th>Pengusul</th>
                         <th>Jumlah Usulan</th>
                         <th>Tahun Usulan</th>
                     </tr>

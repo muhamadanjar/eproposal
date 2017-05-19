@@ -35,6 +35,10 @@ Route::get('provinsi',function ($value=''){
 	
 	return view('provinsi.provinsiList')->with('provinsi',$provinsi);
 });
+Route::get('kabupaten',function ($value=''){
+	$kabupaten = \App\Kabupaten::orderBy('kode_kabupaten')->get();
+	return view('provinsi.kabupatenList')->with('kabupaten',$kabupaten);
+});
 Route::get('kecamatan',function ($value=''){
 	$kecamatan = \App\Kecamatan::orderBy('kode_kecamatan')->get();
 	return view('provinsi.kecamatanList')->with('kecamatan',$kecamatan);
@@ -55,6 +59,8 @@ Route::group(['prefix'=>'proposal'], function(){
 	Route::post('/usulan/{id}','ProposalCtrl@postUbah');
 
 	Route::post('upload','ProposalCtrl@postUpload');
+	Route::post('uploaddokumentasi','ProposalCtrl@postUploadDokumentasi');
+	
 
 	Route::get('/pengecekan','PengecekanCtrl@getIndex');
 });

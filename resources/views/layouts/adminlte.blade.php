@@ -382,12 +382,13 @@
 <!-- assets dashboard demo (This is only for demo purposes) -->
 <script src="{{ asset('assets/dist/js/pages/dashboard2.js')}}"></script>
 
-
+@yield('js_tambahan')
 <!-- assets for demo purposes -->
 <script src="{{ asset('assets/dist/js/demo.js')}}"></script>
+
 <script src="{{ asset('/js/eproposal.js')}}"></script>
 
 </body>
-@yield('js_tambahan')
+
 </html>
 

@@ -21,13 +21,12 @@ use App\Notifications\UsulanUpdated;
 use App\Notifications\UsulanAdd;
 
 use App\Traits\SendEmailsEproposal;
-
+use App\Traits\EproposalTraits;
 use Illuminate\Support\Facades\Mail;
 
 
-class ProposalCtrl extends Controller
-{
-    use SendEmailsEproposal;
+class ProposalCtrl extends Controller{
+    use SendEmailsEproposal,EproposalTraits;
 	public function __construct($value='')
 	{
 		$this->middleware('auth');
@@ -35,50 +34,12 @@ class ProposalCtrl extends Controller
 
 	}
 
-    public function getShowUsulanQuery($id=''){
-        $usulan ='';
-        if (!empty($id)) {
-            if (auth()->user()->isSuper() || auth()->user()->isManager()) {
-                $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
-                ->join('kabupaten', 'kabupaten.kode_kabupaten', '=', 'usulan.kode_kabupaten')
-                ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
-                ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
-                ->where('usulan.id',$id)
-                ->first();
-            }else{
-                $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
-                ->join('kabupaten', 'kabupaten.kode_kabupaten', '=', 'usulan.kode_kabupaten')
-                ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
-                ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
-                ->where('usulan.id',$id)
-                ->where('usulan.user_id',auth()->user()->id)
-                ->first();
-            }
-        }else{
-            if (auth()->user()->isSuper() || auth()->user()->isManager()) {
-                $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
-                ->join('kabupaten', 'kabupaten.kode_kabupaten', '=', 'usulan.kode_kabupaten')
-                ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
-                ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
-                ->orderBy('updated_at','DESC')
-                ->get();
-            }else{
-                $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
-                ->join('kabupaten', 'kabupaten.kode_kabupaten', '=', 'usulan.kode_kabupaten')
-                ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
-                ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
-                ->where('usulan.user_id',auth()->user()->id)
-                ->orderBy('updated_at','DESC')
-                ->get();
-            }
-        }
-        return $usulan;
-    }
+    
 
     public function getArrayUsulan($value=''){
         $usulan = $this->getShowUsulanQuery();
 
-        $array = array();
+        $array = array('data'=>[]);
         foreach ($usulan as $key => $value) {
             $array['data'][$key] = $value;
             $pjalan = DB::table('usulan_persyaratan_jalan')
@@ -174,12 +135,14 @@ class ProposalCtrl extends Controller
         
         \DB::beginTransaction();
         try {
+            $no_usulan = $r->tahun.$r->jenis_usulan.$r->provinsi.$r->kabupaten.rand(1,10);
             
             $usulan = new Usulan();
+            $usulan->no_usulan = $no_usulan;
             $usulan->kode_provinsi = $r->provinsi;
             $usulan->kode_kabupaten = $r->kabupaten;
             $usulan->kode_kecamatan = $r->kecamatan;
-            $usulan->skpd_pengusul = $r->skpd_pengusul;
+            $usulan->opd_pengusul = $r->skpd_pengusul;
             $usulan->desa = $r->desa;
             $usulan->lat = $r->latitude;
             $usulan->lng = $r->longitude;
@@ -532,18 +495,19 @@ class ProposalCtrl extends Controller
             }
         }
 
-        //$jedi = User::findOrFail($r->user_id);
-        //$jedi->notify(new UsulanUpdated($jedi));
-
-        $this->sendEmailUpdateDataUsulan($r->usulan_id);
+        $jedi = User::findOrFail($r->user_id);
+        $usulan = Usulan::findOrFail($r->usulan_id);
+        $jedi->notify(new UsulanUpdated($jedi,$usulan));
+        
+        //$this->sendEmailUpdateDataUsulan($r->usulan_id);
 
         
         return redirect('proposal/usulan');
     }
 
     public function postUpload(){
-            $dir = public_path('files')."/";
-            if(!is_dir($dir))
+        $dir = public_path('files')."/";
+        if(!is_dir($dir))
                 mkdir($dir);
                 $ext = pathinfo($_FILES["images"]["name"],PATHINFO_EXTENSION);
                 $filename = time().'_'.urlencode(pathinfo($_FILES["images"]["name"],PATHINFO_FILENAME)).'.'.$ext;
@@ -556,8 +520,27 @@ class ProposalCtrl extends Controller
                         ));
                     exit;
                 }
-            echo json_encode(array('error'=>true,'message'=>'Upload process error'));
-            exit;
+        echo json_encode(array('error'=>true,'message'=>'Upload process error'));
+        exit;
+    }
+
+    public function postUploadDokumentasi(){
+        $dir = public_path('files')."/";
+        if(!is_dir($dir))
+                mkdir($dir);
+                $ext = pathinfo($_FILES["images"]["name"],PATHINFO_EXTENSION);
+                $filename = time().'_'.urlencode(pathinfo($_FILES["images"]["name"],PATHINFO_FILENAME)).'.'.$ext;
+                if(move_uploaded_file($_FILES["images"]["tmp_name"], $dir. $filename)){
+                    session()->pull('dokumentasifile', $filename);
+                    echo json_encode(array(
+                        'error'=>false,
+                        'filename'=>$filename,
+                        'data'=>$_FILES["images"]
+                        ));
+                    exit;
+                }
+        echo json_encode(array('error'=>true,'message'=>'Upload process error'));
+        exit;
     }
 
     public function sendEmail($data){

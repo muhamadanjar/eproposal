@@ -1,21 +1,6 @@
 @extends('layouts.adminlte')
-@section('alert')
-    
-    @if(Session::has('Usulanstatus'))
-
-        <div class="alert alert-info alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <h4><i class="icon fa fa-info"></i> Info!</h4>
-            {!! Session::get('Usulanstatus') !!}
-        </div>
-        
-        
-    @endif
-@endsection
 @section('content')
-  <form action="" method="post">
-  {{ csrf_field() }}
-  <div class="row">
+	<div class="row">
     <div class="col-md-12">
         <div class="box box-default">
             <div class="box-header with-border">
@@ -195,7 +180,5 @@
         </div>
         
     </div>
-  </div>
-  </form>
-
+  	</div>
 @endsection

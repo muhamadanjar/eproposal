@@ -27,6 +27,10 @@ class UserSeeder extends Seeder
             ['name' => 'create.usulan'],
             ['name' => 'edit.usulan'],
             ['name' => 'delete.usulan'],
+
+            ['name' => 'create.pengecekan'],
+            ['name' => 'edit.pengecekan'],
+            ['name' => 'delete.pengecekan'],
         ]);
     
         // Add a permission to a role

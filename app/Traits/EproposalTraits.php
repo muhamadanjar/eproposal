@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Traits;
-
+use App\Usulan;
 trait EproposalTraits
 {
 	public function getShowUsulanQuery($id=''){

@@ -2,82 +2,9 @@
 $.ajaxSetup({
     headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') }
 });
-var map;
-function dataupload(id){
-        $("#btnselectiamge"+ id).on('click',function(){
-            $("#fileinput"+ id).val('');
-            $("#fileinput"+ id).trigger('click');
-            
-        });
-        $("#fileinput"+ id).on('change',function(){
-            $("#picture"+ id).parent().parent().find('label.parsley-error').remove();
-            var allowed = ['chm','pdf','doc','docx'];
 
-            var tmp = $(this).val();
-            var ex_tmp = tmp.split('.');
-            if(allowed.indexOf(ex_tmp[ex_tmp.length-1])<0){
-                $("#picture"+ id).addClass('parsley-error');
-                $("#picture"+ id).parent().parent().append('<label class="parsley-error" for="image">Extension File Not Allowed</label>');
-                return false;
-            }
-                //checking validation size
-                var size = $(this)[0].size;
-                var max_size =20*1024*1024;
-                if(size>max_size){
-                    $("#picture"+ id).addClass('parsley-error');
-                    $("#picture"+ id).parent().parent().append('<label class="parsley-error" for="image">File Size Allowed '+ max_size +' byte</label>');
-                    return false;
-                }
-                    //end checking size
-                    input = document.getElementById("fileinput"+ id);
-                    file = input.files[0];
-                    if(file != undefined){
-                        formData= new FormData();
-                        if(!!file.type.match(/.*/)){
-                            formData.append("images", file);
-                            $.ajax({
-                                url: "/proposal/upload",
-                                type: "POST",
-                                data: formData,
-                                processData: false,
-                                contentType: false,
-                                dataType:'json',
-                                beforeSend: function(){
-                                    $("#picture").parent().parent().find('label.parsley-error').remove();
-                                    submit_form = false;
-                                },
-                                complete: function(){
-                                     
-                                },
-                                success: function(data){
-                                    if(data.error){
-                                        $("#picture"+ id).parent().parent().find('label.parsley-error').remove();
-                                        $("#picture"+ id).parent().parent().append('<label class="parsley-error" for="image">'+data.message+'</label>');
-                                        return false;
-                                    }else if(!data.error){
-                                      console.log(data.filename);
-                                        $("#picture"+ id).parent().parent().find('label.parsley-error').remove();
-                                        $("#picture"+ id).val(data.filename);
-                                        submit_form = true;
-                                        return false;
-                                    }
-                                }
-                            });
-                        }else{
-                            $("#picture"+ id).parent().parent().find('label.parsley-error').remove();
-                            $("#picture"+ id).parent().parent().append('<label class="parsley-error" for="image">Invalid File</label>');
-                            return false;
-                        }
-                    }else{
-                        $("#picture"+ id).parent().find('label.error').remove();
-                        $("#picture"+ id).parent().append('<label class="error" for="image">Invalid File</label>');
-                        return false;
-                    }
-        });
-        $("#clearimage"+ id).on('click',function(){
-            $("#picture"+ id).val('');
-        }); 
-}
+
+
 
 (function($, window, document){
     $('.formConfirm').on('click', function(e) {
@@ -105,12 +32,15 @@ function dataupload(id){
 }(jQuery, window, document));
 
 (function($, window, document){
+    var provinsi = $('select#provinsi');
+    var kabkota = $('select#kabkota');
+    var kecamatan = $('select#kecamatan');
+    var desa = $('select#desa');
     $('.loader').hide();
-    $('select#provinsi').select2({
-        no_results_text: "Oops, nothing found!"
-    }); 
-    $('select#kabkota').html("<option value=''>Pilih Kota..</option>"); 
-    $('select#kabkota').select2();
+    provinsi.select2(); 
+    //$('select#kabkota').html("<option value=''>Pilih Kota..</option>"); 
+    //$('select#kabkota').select2();
+    
     $('select#provinsi').on('change', function (){
         $('select#kabkota').html("<option value=''>Pilih Kota..</option>");// add this on each call then add the options when data receives from the request
         $.ajax({
@@ -135,9 +65,10 @@ function dataupload(id){
             }
         });
     });
-
-    $('select#kecamatan').html("<option value=''>Pilih Kecamatan..</option>"); 
-    $('select#kecamatan').select2();
+    
+    //$('select#kecamatan').html("<option value=''>Pilih Kecamatan..</option>"); 
+    //$('select#kecamatan').select2();
+    
     $('select#kabkota').on('change', function (){
         $('select#kecamatan').html("<option value=''>Pilih Kecamatan..</option>");// add this on each call then add the options when data receives from the request
         
@@ -170,8 +101,8 @@ function dataupload(id){
         });
     });
 
-    $('select#desa').html("<option value=''>Pilih Desa..</option>");
-    $('select#desa').select2();
+    //$('select#desa').html("<option value=''>Pilih Desa..</option>");
+    //$('select#desa').select2();
     $('select#kecamatan').on('change', function (){
         $('select#desa').html("<option value=''>Pilih Desa..</option>");// add this on each call then add the options when data receives from the request
         
@@ -261,22 +192,7 @@ function dataupload(id){
 
     var table_role = $('#role').DataTable();
 
-    $('#role tbody').on('click', 'td.fa-plus-square-o', function () {
-        var tr = $(this).closest('tr');
-        var row = table_role.row( tr );
- 
-        if ( row.child.isShown() ) {
-            // This row is already open - close it
-            row.child.hide();
-            tr.removeClass('shown');
-            tr.removeClass('fa fa-plus-square-o');
-        }else {
-            // Open this row
-            row.child( format_role(row.data()) ).show();
-            tr.addClass('shown');
-            tr.addClass('fa fa-minus-square-o');
-        }
-    } );
+    
 }(jQuery, window, document));
 
 (function($, window, document){
@@ -378,7 +294,7 @@ function dataupload(id){
             { "data": "kabupaten" },
             { "data": "kecamatan" },
             { "data": "desa" },
-            { "data": "skpd_pengusul" },
+            { "data": "opd_pengusul" },
             { "data": "jumlah_usulan" },
             { "data": "tahun_usulan" },
             
@@ -397,7 +313,11 @@ function dataupload(id){
                 },
                 "targets": 0
             },
-            { "visible": false,  "targets": [ 7 ] },
+            {   
+                "visible": false,  
+                "targets": [ 7 ] 
+
+            },
             {  
                 "render": function(data,type,row){
                     return '<i>Rp. '+ number_format(row['jumlah_usulan'])+'</i>';
@@ -406,30 +326,7 @@ function dataupload(id){
             },
         ],
 
-        "order": [[1, 'asc']],
-
-        initComplete: function () {
-            this.api().columns().every( function () {
-                var column = this;
-                var select = $('<select><option value=""></option></select>')
-                    .appendTo( $(column.footer()).empty() )
-                    .on( 'change', function () {
-                        var val = $.fn.dataTable.util.escapeRegex(
-                            $(this).val()
-                        );
- 
-                        column
-                            .search( val ? '^'+val+'$' : '', true, false )
-                            .draw();
-                    } );
- 
-                column.data().unique().sort().each( function ( d, j ) {
-                    select.append( '<option value="'+d+'">'+d+'</option>' )
-                } );
-            } );
-        },
-
-        drawCallback: function ( settings ) {
+        "drawCallback": function ( settings ) {
             var api = this.api();
             var rows = api.rows( {page:'current'} ).nodes();
             var last=null;
@@ -437,18 +334,32 @@ function dataupload(id){
             api.column(7, {page:'current'} ).data().each( function ( group, i ) {
                 if ( last !== group ) {
                     $(rows).eq( i ).before(
-                        '<tr class="group"><td colspan="8">'+group+'</td></tr>'
+                        '<tr class="group"><td colspan="7"><b>'+group+'</b></td></tr>'
                     );
  
                     last = group;
                 }
             } );
-        }
+        },
+
+        "order": [[7, 'asc']],
+        'sDom': 'lt<pi>' 
+
     });
 
-   
-    
-    $('#table_usulan tbody').on('click', 'td.details-control', function () {
+
+
+    $('#table_usulan tbody').on( 'click', 'tr.group', function () {
+        var currentOrder = table_usulan.order()[0];
+        if ( currentOrder[0] === 7 && currentOrder[1] === 'asc' ) {
+            table_usulan.order( [ 7, 'desc' ] ).draw();
+        }
+        else {
+            table_usulan.order( [ 7, 'asc' ] ).draw();
+        }
+    } )
+
+   .on('click', 'td.details-control', function () {
         var tr = $(this).closest('tr');
         var row = table_usulan.row( tr );
  
@@ -466,6 +377,23 @@ function dataupload(id){
             
         }
     } );
+    var search_cat = $('#search_category');
+    if (search_cat.val() != 0) {
+        $('#search_text').on( 'keyup', function () {
+            table_usulan
+                .columns( search_cat.val() )
+                .search( this.value )
+                .draw();
+        } );    
+    }else{
+        $('#search_text').on( 'keyup', function () {
+            table_usulan
+                
+                .search( this.value )
+                .draw();
+        } );
+    }
+    
     
                 
               
@@ -560,12 +488,12 @@ function dataupload(id){
             { "data": "kabupaten" },
             { "data": "kecamatan" },
             { "data": "desa" },
-            { "data": "skpd_pengusul" },
+            { "data": "opd_pengusul" },
             { "data": "jumlah_usulan" },
             { "data": "tahun_usulan" },
             
         ],
-        "order": [[1, 'asc']],
+        "order": [[7, 'asc']],
         "columnDefs": [
            
             { "visible": false,  "targets": [ 7 ] },
@@ -579,7 +507,7 @@ function dataupload(id){
             api.column(7, {page:'current'} ).data().each( function ( group, i ) {
                 if ( last !== group ) {
                     $(rows).eq( i ).before(
-                        '<tr class="group"><td colspan="8">'+group+'</td></tr>'
+                        '<tr class="group"><td colspan="8"><b>'+group+'</b></td></tr>'
                     );
  
                     last = group;
@@ -588,7 +516,8 @@ function dataupload(id){
         }
     });
 
-    $('#table_pengecekan tbody').on('click', 'td.details-control', function () {
+    $('#table_pengecekan tbody')
+    .on('click', 'td.details-control', function () {
         var tr = $(this).closest('tr');
         var row = table_pengecekan.row( tr );
  
@@ -604,6 +533,15 @@ function dataupload(id){
             tr.addClass('shown');
             
 
+        }
+    } )
+    .on( 'click', 'tr.group', function () {
+        var currentOrder = table_pengecekan.order()[0];
+        if ( currentOrder[0] === 7 && currentOrder[1] === 'asc' ) {
+            table_pengecekan.order( [ 7, 'desc' ] ).draw();
+        }
+        else {
+            table_pengecekan.order( [ 7, 'asc' ] ).draw();
         }
     } );
 
@@ -663,6 +601,54 @@ function dataupload(id){
 }(jQuery, window, document));
 
 (function($, window, document){
+
+    var map;
+    if($("#map").length > 0){
+    function initialize() {
+      var indo = { lat: -6.597952, lng: 106.801262 };
+      map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 6,
+        center: indo
+      });
+    }
+
+    function addMarker(location, map) {
+      // Add the marker at the clicked location, and add the next-available label
+      // from the array of alphabetical characters.
+      var marker = new google.maps.Marker({
+        position: location,
+        label: labels[labelIndex++ % labels.length],
+        map: map
+      });
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+    }
+
+    $('#checkmap').click(function(){
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            $('input[name=latitude]').val(position.coords.latitude);
+            $('input[name=longitude]').val(position.coords.longitude);
+            google.maps.event.trigger(map, "resize");
+            map.setCenter(pos);
+            var marker = new google.maps.Marker({
+                position: pos,
+                title:"Hello World!"
+            });
+            
+          }, function() {
+            
+          });
+        } else {
+          // Browser doesn't support Geolocation
+         
+        }        
+    });
     $('#usulan-group').hide();
     $('#usulan_jenis_pilih').hide();
     $('#jalan_sirip').hide();
@@ -677,6 +663,7 @@ function dataupload(id){
     
     $('select#tahun').on('change', function (){
         $('#usulan-group').show();
+        google.maps.event.trigger(map, "resize");
     });
 
     $('select#jenis_usulan').on('change', function (){
@@ -735,8 +722,6 @@ function dataupload(id){
         
     });
 
-    
-
 
 }(jQuery, window, document));
 
@@ -771,7 +756,7 @@ function dataupload(id){
         
     });
 
-    $(':file').change(function(){
+    $('.fileupload:file').change(function(){
         var fileinput = $(this);
         var file = this.files[0];
         name = file.name;
@@ -873,29 +858,58 @@ function dataupload(id){
         }
     });
 
+    $('.filedokumentasi:file').change(function(){
+        var fileinput = $(this);
+        var file = this.files[0];
+        name = file.name;
+        size = file.size;
+        type = file.type;
+        
+        if(file.name.length < 1) {
+        }else if(file.size > 209715200) {
+            alert("File Terlalu Besar, Maksimal 200 Mb");
+        }else if(file.type != 'image/png' && file.type != 'image/jpg' && file.type != 'image/gif' && file.type != 'image/jpeg' && file.type != 'application/pdf' && file.type != 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+            alert("File tidak diijinkan untuk di upload");
+            $(this).val('');
+        }else { 
+            var formData = new FormData($('*formId*')[0]);
+            if(!!file.type.match(/.*/)){
+                formData.append("images", file);
+            }
+                
+                $.ajax({
+                    url: "/proposal/uploaddokumentasi",
+                    type: "POST",
+                    data: formData,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    dataType:'json',
+                    beforeSend: function(){
+                        $('.loader').show();
+                    },
+                    complete: function(){
+                        $('.loader').hide();
+                    },
+                    success: function(data){
+                        console.log(data);
+                    },
+                    error: errorHandler = function() {
+                        alert("Something went wrong!");
+                    },
+                });
+        }
+    });
+
     
     
 }(jQuery, window, document));
 
 (function($, window, document){
-    $('#checkmap').click(function(){
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
-            $('input[name=latitude]').val(position.coords.latitude);
-            $('input[name=longitude]').val(position.coords.longitude);
-            
-          }, function() {
-            
-          });
-        } else {
-          // Browser doesn't support Geolocation
-         
-        }        
-    });
+    
+
+   
+    
 }(jQuery, window, document));
  
 

@@ -15,10 +15,11 @@ class Usulan extends Migration
     {
         Schema::create('usulan', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('no_usulan')->default(0);
             $table->integer('kode_provinsi');
             $table->string('kode_kabupaten',6);
             $table->string('kode_kecamatan',10);
-            $table->string('skpd_pengusul');
+            $table->string('opd_pengusul');
             $table->string('desa');
             $table->float('lat');
             $table->float('lng');

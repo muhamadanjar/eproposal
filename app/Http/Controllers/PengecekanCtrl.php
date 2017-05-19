@@ -5,11 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Usulan;
 use DB;
+use App\User;
 use App\Http\Controllers\ProposalCtrl;
 use App\Traits\SendEmailsEproposal;
+use App\Traits\EproposalTraits;
+
+use App\Notifications\UsulanDataKurang;
 class PengecekanCtrl extends Controller
 {
-    use SendEmailsEproposal;
+    use SendEmailsEproposal,EproposalTraits;
     public function __construct($value=''){
         $this->middleware('auth');
         $this->PC = new ProposalCtrl();
@@ -18,43 +22,6 @@ class PengecekanCtrl extends Controller
    	 	return view('usulan.pengecekanUsulanList');
    	}
 
-    public function getShowUsulanQuery($id=''){
-        $usulan ='';
-        if (!empty($id)) {
-            if (auth()->user()->isSuper() || auth()->user()->isManager()) {
-                $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
-                ->join('kabupaten', 'kabupaten.kode_kabupaten', '=', 'usulan.kode_kabupaten')
-                ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
-                ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
-                ->where('usulan.id',$id)
-                ->first();
-            }else{
-                $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
-                ->join('kabupaten', 'kabupaten.kode_kabupaten', '=', 'usulan.kode_kabupaten')
-                ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
-                ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
-                ->where('usulan.id',$id)
-                ->where('usulan.user_id',auth()->user()->id)
-                ->first();
-            }
-        }else{
-            if (auth()->user()->isSuper() || auth()->user()->isManager()) {
-                $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
-                ->join('kabupaten', 'kabupaten.kode_kabupaten', '=', 'usulan.kode_kabupaten')
-                ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
-                ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
-                ->get();
-            }else{
-                $usulan = Usulan::join('provinsi', 'provinsi.kode_provinsi', '=', 'usulan.kode_provinsi')
-                ->join('kabupaten', 'kabupaten.kode_kabupaten', '=', 'usulan.kode_kabupaten')
-                ->join('kecamatan', 'kecamatan.kode_kecamatan', '=', 'usulan.kode_kecamatan')
-                ->select('usulan.*', 'provinsi.provinsi','kabupaten.kabupaten','kecamatan.kecamatan')
-                ->where('usulan.user_id',auth()->user()->id)
-                ->get();
-            }
-        }
-        return $usulan;
-    }
 
    	public function getUsulan($id=''){
    		
@@ -182,6 +149,10 @@ class PengecekanCtrl extends Controller
       }
       if($usulan->status_usulan == 2){
         $this->sendEmailUsulanDisetujui($usulan->id);  
+      }elseif($usulan->status_usulan == 0){
+        $user = User::findOrFail($r->user_id);
+        $usulan = Usulan::findOrFail($r->usulan_id);
+        $user->notify(new UsulanDataKurang($user,$usulan));
       }
       
 

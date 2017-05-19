@@ -48,7 +48,7 @@
 												<div class="input-group margin">
 									                <input type="text" class="form-control jalanadmin_ft" readonly="readonly" name="jalanadmin_file_text[{{$k}}]" value="{{ $v->file }}">
 									                <span class="input-group-btn">
-									                	<input type="file" name="jalanadmin_file[{{$k}}]" class="hidden jalanadmin_file">
+									                	<input type="file" name="jalanadmin_file[{{$k}}]" class="hidden jalanadmin_file fileupload">
 									                    <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
 									                </span>
 									            </div>
@@ -86,7 +86,7 @@
 	                                          	<div class="input-group margin">
 									                <input type="text" class="form-control jalanteknis_ft" readonly="readonly" name="jalanteknis_file_text[{{$k}}]" value="{{ $v->file }}">
 									                <span class="input-group-btn">
-									                	<input type="file" name="jalanteknis_file[{{$k}}]" class="hidden jalanteknis_file">
+									                	<input type="file" name="jalanteknis_file[{{$k}}]" class="hidden jalanteknis_file fileupload">
 									                    <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
 									                </span>
 									            </div>
@@ -141,7 +141,7 @@
 												<div class="input-group margin">
 									                <input type="text" class="form-control sabadmin_ft" readonly="readonly" name="sabadmin_file_text[{{$k}}]" value="{{ $v->file }}">
 									                <span class="input-group-btn">
-									                	<input type="file" name="sabadmin_file[{{$k}}]" class="hidden sabadmin_file">
+									                	<input type="file" name="sabadmin_file[{{$k}}]" class="hidden sabadmin_file fileupload">
 									                    <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
 									                </span>
 									            </div>
@@ -180,7 +180,7 @@
 	                                          	<div class="input-group margin">
 									                <input type="text" class="form-control sabteknis_ft" readonly="readonly" name="sabteknis_file_text[{{$k}}]" value="{{ $v->file }}">
 									                <span class="input-group-btn">
-									                	<input type="file" name="sabteknis_file[{{$k}}]" class="hidden sabteknis_file">
+									                	<input type="file" name="sabteknis_file[{{$k}}]" class="hidden sabteknis_file fileupload">
 									                    <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
 									                </span>
 									            </div>
@@ -239,7 +239,7 @@
 	                                          	<div class="input-group margin">
 									                <input type="text" class="form-control pltsadmin_ft" readonly="readonly" name="pltsadmin_file_text[{{$k}}]" value="{{ $v->file }}">
 									                <span class="input-group-btn">
-									                	<input type="file" name="pltsadmin_file[{{$k}}]" class="hidden pltsadmin_file">
+									                	<input type="file" name="pltsadmin_file[{{$k}}]" class="hidden pltsadmin_file fileupload">
 									                    <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
 									                </span>
 									            </div>
@@ -278,7 +278,7 @@
 	                                          	<div class="input-group margin">
 									                <input type="text" class="form-control pltsteknis_ft" readonly="readonly" name="pltsteknis_file_text[{{$k}}]" value="{{ $v->file }}">
 									                <span class="input-group-btn">
-									                	<input type="file" name="pltsteknis_file[{{$k}}]" class="hidden pltsteknis_file">
+									                	<input type="file" name="pltsteknis_file[{{$k}}]" class="hidden pltsteknis_file fileupload">
 									                    <button type="button" class="btn btn-info btn-flat formUpload">File!</button>
 									                </span>
 									            </div>

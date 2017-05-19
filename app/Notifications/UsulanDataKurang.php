@@ -6,17 +6,17 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use App\User;
-use App\Usulan;
-class UsulanUpdated extends Notification
+
+class UsulanDataKurang extends Notification
 {
     use Queueable;
 
-    public $usulan;
-    public $user;
+    /**
+     * Create a new notification instance.
+     *
+     * @return void
+     */
     public function __construct($user,$usulan){
-        
-       
         $this->user = $user;
         $this->usulan = $usulan;
 
@@ -31,7 +31,6 @@ class UsulanUpdated extends Notification
     public function via($notifiable)
     {
         return ['mail','database'];
-        //return $notifiable->prefers_sms ? ['nexmo'] : ['mail', 'database'];
     }
 
     /**
@@ -42,12 +41,10 @@ class UsulanUpdated extends Notification
      */
     public function toMail($notifiable){
         $message = new MailMessage;
-        $message->subject('Usulan di Update')
-                    ->line('Hey '.$this->user->name.', Usulan Anda Sudah di update')
-                    ->action('Lihat Usulan', url('toggle',$this->user->id));
-        $message->line('Update data')
-        ->line($this->usulan->skpd_pengusul)
-        ->replyTo($this->user->email);
+        $message->subject('Usulan Data Kurang')
+            ->line('Hey '.$this->user->name.', Usulan Anda ada yang kurang Silakan cek usulan anda.')
+            ->action('Lihat Usulan', url('proposal/usulan',$this->usulan->id))
+            ->replyTo($this->user->email);
         return $message;
     }
 
@@ -60,15 +57,16 @@ class UsulanUpdated extends Notification
     public function toArray($notifiable)
     {
         return [
-            'usulan_id' => $this->usulan->id,
-            'usulan' => $this->usulan,
+            //
         ];
     }
 
     public function toDatabase($notifiable)
     {
         return [
+            'notifiable_id' => $notifiable->id,
             'usulan_id' => $this->user->id,
+            'usulan' => $this->usulan,
             'user' => $this->user
         ];
     }
