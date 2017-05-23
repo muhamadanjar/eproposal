@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-
+use App\User;
 class UsulanAdd extends Notification
 {
     use Queueable;
@@ -16,9 +16,11 @@ class UsulanAdd extends Notification
      *
      * @return void
      */
-    public function __construct(\App\User $jedi)
+    public function __construct($usulan)
     {
-        $this->user = $jedi;
+        
+        $this->usulan = $usulan;
+        $this->user = User::findOrFail($usulan->user_id);
     }
 
     /**
@@ -29,7 +31,7 @@ class UsulanAdd extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail','database'];
     }
 
     /**
@@ -60,8 +62,17 @@ class UsulanAdd extends Notification
     public function toArray($notifiable)
     {
         return [
-            'jedi_id' => $this->jedi->id,
-            'jedi' => $this->jedi,
+            
+        ];
+    }
+
+    public function toDatabase($notifiable)
+    {
+        return [
+            'notifiable_id' => $notifiable->id,
+            'usulan_id' => $this->usulan->id,
+            'user' => $this->user,
+            'usulan' => $this->usulan
         ];
     }
 }

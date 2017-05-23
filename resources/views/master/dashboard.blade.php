@@ -1,13 +1,15 @@
 @extends('layouts.adminlte')
-@section('adminlte-contentheader')
-  <h1>
-      Dashboard
-      <small>Control panel</small>
-  </h1>
-  <ol class="breadcrumb">
-    <li><a href="{{ url('home') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li class="active">Dashboard</li>
-  </ol>
+@section('assets-contentheader')
+  <h1>Dashboard</h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+    </ol>
+  <div class="rt-clock">
+      <span class="date"></span>&nbsp;
+      <span class="hours">00</span>:
+      <span class="minutes">00</span>:
+      <span class="seconds">00</span>
+  </div>
 @endsection
 
 @section('content')
@@ -20,7 +22,7 @@
 
             <div class="info-box-content">
               <span class="info-box-text">Usulan</span>
-              <span class="info-box-number">90</span>
+              <span class="info-box-number">{{$jumlah_usulan}}</span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -29,11 +31,11 @@
         <!-- /.col -->
         <div class="col-md-3 col-sm-6 col-xs-12">
           <div class="info-box">
-            <span class="info-box-icon bg-red"><i class="fa fa-users"></i></span>
+            <span class="info-box-icon bg-red"><i class="fa fa-road"></i></span>
 
             <div class="info-box-content">
               <span class="info-box-text">Jalan</span>
-              <span class="info-box-number">41,410</span>
+              <span class="info-box-number">Rp. {{number_format($totaljalan[0]->total,2,",",".")}}</span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -46,11 +48,11 @@
 
         <div class="col-md-3 col-sm-6 col-xs-12">
           <div class="info-box">
-            <span class="info-box-icon bg-aqua"><i class="fa fa-comments"></i></span>
+            <span class="info-box-icon bg-aqua"><i class="fa fa-heart"></i></span>
 
             <div class="info-box-content">
               <span class="info-box-text">SAB</span>
-              <span class="info-box-number">90</span>
+              <span class="info-box-number">Rp. {{number_format($totalsab[0]->total,2,",",".")}}</span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -59,19 +61,17 @@
         <!-- /.col -->
         <div class="col-md-3 col-sm-6 col-xs-12">
           <div class="info-box">
-            <span class="info-box-icon bg-red"><i class="fa fa-users"></i></span>
+            <span class="info-box-icon bg-red"><i class="fa fa-child"></i></span>
 
             <div class="info-box-content">
               <span class="info-box-text">PLTS</span>
-              <span class="info-box-number">41,410</span>
+              <span class="info-box-number">Rp. {{number_format($totalplts[0]->total,2,",",".")}}</span>
             </div>
             <!-- /.info-box-content -->
           </div>
           <!-- /.info-box -->
         </div>
         <!-- /.col -->
-
-        
   </div>
 
   <div class="row">
@@ -128,6 +128,7 @@
       </div>
     </div>
     <div class="col-md-4">
+      
       <div class="box box-primary">
           <div class="box-header with-border">
               <h3 class="box-title">Berita</h3>
@@ -162,6 +163,8 @@
   </div>
 
   <div id="map"></div>
+
+
 
   
  

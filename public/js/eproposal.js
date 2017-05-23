@@ -3,6 +3,62 @@ $.ajaxSetup({
     headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') }
 });
 
+function numeralsOnly(evt) {
+    evt = (evt) ? evt : event;
+    var charCode = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode :
+    ((evt.which) ? evt.which : 0));
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            alert("Hanya Nomor yang bisa di input pada kolom ini.");
+            console.log(evt);
+            return false;
+        }
+    return true;
+}
+
+function lettersOnly(evt) {
+    evt = (evt) ? evt : event;
+    var charCode = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode :
+        ((evt.which) ? evt.which : 0));
+    if (charCode > 31 && (charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122)) {
+        alert("Enter letters only.");
+        return false;
+    }
+    return true;
+}
+
+function ynOnly(evt) {
+    evt = (evt) ? evt : event;
+    var charCode = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode : ((evt.which) ? evt.which : 0));
+    if (charCode > 31 && charCode != 78 && charCode != 89 && charCode != 110 && charCode != 121) {
+    alert("Enter \"Y\" or \"N\" only.");
+
+    return false;
+    }
+    return true;
+}
+
+function rangeNumber(evt) {
+
+    evt = (evt) ? evt : event;
+    var charCode = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode :
+    ((evt.which) ? evt.which : 0));
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            alert("Hanya Nomor yang bisa di input pada kolom ini.");
+                $(this).val(0);
+            return false;
+        }
+        var max = 100;
+        var min = 0;
+        if ($(this).val() > max){
+             $(this).val(max);
+        }else if($(this).val() < min){
+             $(this).val(min);
+        }
+        
+        
+        
+    return true;
+}
 
 
 
@@ -201,6 +257,7 @@ $.ajaxSetup({
           /\B(?=(\d{3})+(?!\d))/g, "."
         );
     }
+    
     function format_usulan ( d ) {
         
         if (d.hasOwnProperty('pjalan')) {
@@ -208,7 +265,7 @@ $.ajaxSetup({
             var table = '<div class="box">';
             var table_admin = '<tr><th colspan="3">Admin</th></tr>';
             var table_teknis = '<tr><th colspan="3">Teknis</th></tr>';
-            table += '<div class="box-header"><h3 class="box-title">Jalan</h3><h5>'+d.jamterakhir_update+'</h5><div class="box-tools"><a href="/proposal/usulan/'+d.id+'" type="button" class="btn btn-block btn-primary">Ubah</a></div></div>';
+            table += '<div class="box-header"><h3 class="box-title">Jalan</h3><h5>'+d.jamterakhir_update+'</h5><div class="box-tools"><div class="btn-group"><a href="/proposal/usulan/lihat/'+d.id+'" type="button" class="btn btn-primary"><i class="fa fa-eye"></i></a><a href="/proposal/usulan/'+d.id+'" type="button" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a></div></div></div>';
             table += '<div class="box-body"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
                 table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th><th>Keterangan</th></tr>';
                 table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th><th>Keterangan</th></tr>';
@@ -233,7 +290,7 @@ $.ajaxSetup({
             var table = '<div class="box">';
             var table_admin = '<tr><th colspan="3">Admin</th></tr>';
             var table_teknis = '<tr><th colspan="3">Teknis</th></tr>';
-            table += '<div class="box-header"><h3 class="box-title">SAB</h3><div class="box-tools"><a href="/proposal/usulan/'+d.id+'" type="button" class="btn btn-block btn-primary">Ubah</a></div></div>';
+            table += '<div class="box-header"><h3 class="box-title">SAB</h3><div class="box-tools"><div class="btn-group"><a href="/proposal/usulan/lihat/'+d.id+'" type="button" class="btn btn-primary"><i class="fa fa-eye"></i></a><a href="/proposal/usulan/'+d.id+'" type="button" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a></div></div></div>';
             table += '<div class="box-body"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
                 table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th></tr>';
                 table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th></tr>';
@@ -258,7 +315,7 @@ $.ajaxSetup({
             var table = '<div class="box">';
             var table_admin = '<tr><th colspan="3">Admin</th></tr>';
             var table_teknis = '<tr><th colspan="3">Teknis</th></tr>';
-            table += '<div class="box-header"><h3 class="box-title">PLTS</h3><div class="box-tools"><a href="/proposal/usulan/'+d.id+'" type="button" class="btn btn-block btn-primary">Ubah</a></div></div>';
+            table += '<div class="box-header"><h3 class="box-title">PLTS</h3><div class="box-tools"><div class="btn-group"><a href="/proposal/usulan/lihat/'+d.id+'" type="button" class="btn btn-primary"><i class="fa fa-eye"></i></a><a href="/proposal/usulan/'+d.id+'" type="button" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a></div></div></div>';
             table += '<div class="box-body"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
                 table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th></tr>';
                 table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th></tr>';
@@ -303,7 +360,7 @@ $.ajaxSetup({
             {
                 "render": function ( data, type, row ) {
                     if (row['status_usulan'] == 3) {
-                        return '<i class="fa fa-info-circle text-green"></i>';
+                        return '<i class="fa fa-check-circle text-green"></i>';
                     }else if (row['status_usulan'] == 2) {
                         return '<i class="fa fa-info-circle text-blue"></i>';
                     }else{
@@ -394,10 +451,6 @@ $.ajaxSetup({
         } );
     }
     
-    
-                
-              
-
     function format_pengecekan ( d ) {
         if (d.hasOwnProperty('pjalan')) {
             if (d.pjalan.length > 0) {
@@ -411,7 +464,7 @@ $.ajaxSetup({
                 for (var i = d.pjalan.length - 1; i >= 0; i--) {
                     data = d.pjalan[i];
                     var adatidak = (d.pjalan[i]['isi'] == 1) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
-
+                    
                     if (data['tipeusulan'] == 'admin') {
                         table_admin += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td><a href="/files/'+data['file']+'" class="fa fa-file-text text-green"></a></td></tr>';
                     }else if(data['tipeusulan'] == 'teknis'){
@@ -910,6 +963,78 @@ $.ajaxSetup({
 
    
     
+}(jQuery, window, document));
+
+(function($, window, document){
+  
+    var Selector = 'th.check-all';
+
+    $(Selector).on('change', function() {
+        var $this = $(this),
+            index= $this.index() + 1,
+            checkbox = $this.find('input[type="checkbox"]'),
+            table = $this.parents('table');
+        // Make sure to affect only the correct checkbox column
+        table.find('tbody > tr > td:nth-child('+index+') input[type="checkbox"]')
+          .prop('checked', checkbox[0].checked);
+
+    });
+
+}(jQuery, window, document));
+
+(function($, window, document){
+    if( $( '.rt-clock' ).length > 0 ){
+        var monthNames = [ 'Januari', 'Pebruari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'Nopember', 'Desember' ];
+        var dayNames= [ 'Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum\'at', 'Sabtu' ];
+
+        var newDate = new Date();
+
+        newDate.setDate(newDate.getDate());
+
+        var date = dayNames[ newDate.getDay() ] + ', ' + newDate.getDate() + ' ' + monthNames[ newDate.getMonth() ] + ' ' + newDate.getFullYear();
+
+        $( '.rt-clock .date' ).html( date );
+
+        setInterval(
+            function() {
+                var seconds = new Date().getSeconds();
+                $(".rt-clock .seconds").html(( seconds < 10 ? "0" : "" ) + seconds);
+            },1000 );
+
+        setInterval(
+            function() {
+                var minutes = new Date().getMinutes();
+                $(".rt-clock .minutes").html(( minutes < 10 ? "0" : "" ) + minutes);
+            },1000);
+
+        setInterval(
+            function() {
+                var hours = new Date().getHours();
+                $(".rt-clock .hours").html(( hours < 10 ? "0" : "" ) + hours);
+            }, 1000);
+    }
+}(jQuery, window, document));
+
+(function($, window, document){
+
+    $('input.numberonly').bind('keypress', function(e) {
+        return numeralsOnly(e);
+    });
+    $('input.letteronly').bind('keypress', function(e) {
+        return lettersOnly(e);
+    });
+    function LinkCheck(url){
+        var http = new XMLHttpRequest();
+        http.open('HEAD', url, false);
+        http.send();
+        return http.status!=404;
+    }
+$.get('file/exists')
+    .done(function() { 
+        // exists code 
+    }).fail(function() { 
+        // not exists code
+    })
 }(jQuery, window, document));
  
 

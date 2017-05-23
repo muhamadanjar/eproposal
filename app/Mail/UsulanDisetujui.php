@@ -18,8 +18,8 @@ class UsulanDisetujui extends Mailable
 
     
     public function build(){
-        return $this->view('emails.usulan.disetujui')
-        ->subject('Usulan Sudah disetujui')
+        return $this->view('emails.usulan.verifikasi')
+        ->subject('Usulan Sudah Terverifikasi')
             ->with([
                 'usulanName' => $this->usulan->skpd_pengusul,
                 'usulanDesa' => $this->usulan->desa,

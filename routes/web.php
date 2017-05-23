@@ -44,6 +44,20 @@ Route::get('kecamatan',function ($value=''){
 	return view('provinsi.kecamatanList')->with('kecamatan',$kecamatan);
 });
 
+Route::get('/profil',function (){
+	return view('master.profil');
+});
+
+Route::get('usernotif',function(){
+	$user = App\User::join('role_user','users.id','role_user.user_id')
+	->join('roles','role_user.role_id','roles.id')->where('users.id',2)
+	->select('users.*','roles.name as RoleName')
+	->first();
+	
+	foreach ($user->notifications as $notification) {
+	    echo $notification->type;
+	}
+});
 
 Route::get('/proposal','ProposalCtrl@getIndex');
 Route::get('/proposal/periksa','ProposalCtrl@getPeriksaDokumen');
@@ -58,9 +72,10 @@ Route::group(['prefix'=>'proposal'], function(){
 	Route::get('/usulan/{id}','ProposalCtrl@getUbah');
 	Route::post('/usulan/{id}','ProposalCtrl@postUbah');
 
+	Route::get('/usulan/lihat/{id}','ProposalCtrl@getLihatUsulan');
+
 	Route::post('upload','ProposalCtrl@postUpload');
 	Route::post('uploaddokumentasi','ProposalCtrl@postUploadDokumentasi');
-	
 
 	Route::get('/pengecekan','PengecekanCtrl@getIndex');
 });
@@ -109,11 +124,9 @@ Route::group(['prefix'=>'pengaturan'], function(){
 Route::get('/getKabKota/{id}',function ($id=''){
 	return DB::table('kabupaten')->where('kode_provinsi',$id)->get();
 });
-
 Route::get('/getKecamatan/{id}',function ($id=''){
 	return DB::table('kecamatan')->where('kode_kabupaten',$id)->get();
 });
-
 Route::get('/getDesa/{id}',function ($id=''){
 	return DB::table('desa')->where('kode_kecamatan',$id)->get();
 });

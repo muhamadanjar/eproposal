@@ -15,7 +15,7 @@ class Usulan extends Migration
     {
         Schema::create('usulan', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('no_usulan')->default(0);
+            $table->bigInteger('no_usulan')->default(0);
             $table->integer('kode_provinsi');
             $table->string('kode_kabupaten',6);
             $table->string('kode_kecamatan',10);

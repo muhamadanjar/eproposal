@@ -11,6 +11,8 @@ use App\Traits\SendEmailsEproposal;
 use App\Traits\EproposalTraits;
 
 use App\Notifications\UsulanDataKurang;
+use App\Notifications\UsulanTelahDiperiksa;
+use App\Notifications\UsulanVerifikasi;
 class PengecekanCtrl extends Controller
 {
     use SendEmailsEproposal,EproposalTraits;
@@ -100,7 +102,6 @@ class PengecekanCtrl extends Controller
       }else{
           $_jenis = 'Lainnya';
       }
-
       
    		return view('usulan.pengecekanUsulan')
         ->with('jenis',$_jenis)
@@ -148,11 +149,12 @@ class PengecekanCtrl extends Controller
           }
       }
       if($usulan->status_usulan == 2){
-        $this->sendEmailUsulanDisetujui($usulan->id);  
+        //$this->sendEmailUsulanDisetujui($usulan->id);  
+        $user = User::findOrFail($r->user_id);
+        $user->notify(new UsulanVerifikasi($usulan));
       }elseif($usulan->status_usulan == 0){
         $user = User::findOrFail($r->user_id);
-        $usulan = Usulan::findOrFail($r->usulan_id);
-        $user->notify(new UsulanDataKurang($user,$usulan));
+        $user->notify(new UsulanTelahDiperiksa($usulan));
       }
       
 

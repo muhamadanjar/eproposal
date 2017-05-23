@@ -1,6 +1,6 @@
 @extends('layouts.adminlte')
+@section('title','Pengecekan Usulan')
 @section('alert')
-    
     @if(Session::has('Usulanstatus'))
 
         <div class="alert alert-info alert-dismissible">
@@ -180,9 +180,9 @@
                   <div class="col-xs-5 pull-right">
                     <div class="input-group margin">
                       <select name="status" class="form-control">
-                        <option value="0">Belum Disetujui</option>
-                        <option value="1">Diproses</option>
-                        <option value="2">Disetujui</option>
+                        <option value="0">Belum Diverifikasi</option>
+                        
+                        <option value="2">Sudah Diverifikasi</option>
                       </select>
                       <span class="input-group-btn">
                           <button type="submit" class="btn btn-success pull-right">Submit</button>

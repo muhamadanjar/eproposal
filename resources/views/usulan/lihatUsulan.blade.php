@@ -1,12 +1,25 @@
 @extends('layouts.adminlte')
+@section('title','Lihat Usulan')
 @section('content')
+  <?php
+  if ($usulan->jenis_usulan == 1) {
+    $jenis_usulan = 'Jalan';
+  }elseif($usulan->jenis_usulan == 2){
+      $jenis_usulan = 'SAB';
+  }elseif($usulan->jenis_usulan == 3){
+      $jenis_usulan = 'PLTS';
+  }else{
+      $jenis_usulan = 'Lainnya';
+  }
+
+  ?>
 	<div class="row">
     <div class="col-md-12">
         <div class="box box-default">
             <div class="box-header with-border">
-              <i class="fa fa-warning"></i>
+              <i class="fa fa-eye"></i>
 
-              <h3 class="box-title">Pengecekan</h3>
+              <h3 class="box-title">Lihat Usulan</h3>
             </div>
             
             <div class="box-body">
@@ -37,20 +50,20 @@
                   <div class="col-sm-4 invoice-col">
                     
                     <address>
-                      <strong>{{$usulan->skpd_pengusul}}</strong><br>
-                      {{$usulan->penerima_manfaat}} {{$usulan->skpd_pengusul_satuan}}<br>
+                      <strong>{{$usulan->opd_pengusul}}</strong><br>
+                      {{$usulan->penerima_manfaat}} {{$usulan->penerima_manfaat_satuan}}<br>
                       Rp. {{number_format($usulan->jumlah_usulan,2,",",".")}}<br>
                       
                     </address>
                   </div>
                   <!-- /.col -->
                   <div class="col-sm-4 invoice-col">
-                    <b>Usulan #{{$usulan->tahun_usulan}}{{ rand() }}{{$usulan->user_id}}</b><br>
+                    <b>Usulan #{{$usulan->no_usulan}}</b><br>
                     <br>
-                    <b>Pengusulan:</b> {{$jenis}}
+                    <b>Pengusulan: {{$jenis_usulan}}</b> 
                     <input type="hidden" name="jenis_usulan" value="{{$usulan->jenis_usulan}}"><br>
                     <b>Tahun:</b> {{$usulan->tahun_usulan}}<br>
-                    <b>User:</b> {{$usulan->user_id}}
+                    <b>User:</b> {{$usulan->UserNama}}
                   </div>
                   <!-- /.col -->
                 </div>
@@ -81,16 +94,15 @@
                           $checked = ($v->verifikasi) ? 'checked' : '';
                           $fileexist = (file_exists(public_path('files').'/'.$v->file)) ? '<a href="/files/'.$v->file.'" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-gray"></a>' ;
                           $adatidak = ($v->isi) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
+                          $verifikasi = ($v->verifikasi) ? "<i class='fa fa-check text-green'></i>":"<i class='fa fa-close text-red'></i>";
                         ?>
                       <tr>
                         <td><input type="hidden" name="pjalan_id[{{$k}}]" value="{{$v->pjalan_id}}">{{$v->no}}</td>
                         <td>{{$v->namausulan}}</td>
                         <td>{!!$adatidak!!}</td>
-                        <td>
-                          <input type="checkbox" name="verifikasi[{{$k}}]" value="1" {{$disabled}} {{$checked}}>
-                        </td>
+                        <td>{!!$verifikasi!!}</td>
                         <td>{!!$fileexist!!}</td>
-                        <td><input type="text" name="keterangan[{{$k}}]" value="{{$v->keterangan}}"></td>
+                        <td><span class="label label-primary">{{$v->keterangan}}</span></td>
                       </tr>
                       @endforeach
                       <?php
@@ -103,23 +115,18 @@
                       @foreach($usulan->psab as $k => $v)
                         <?php
                           $disabled = ($v->isi) ? '' : 'disabled';
-                          $verifikasi = ($v->verifikasi == 1) ? 'checked':'';
-
-                          $fileexist = (file_exists(public_path('files').'/'.$v->file)) ? '<a href="/files/{{$v->file}}" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-gray"></a>' ;
+                          $checked = ($v->verifikasi) ? 'checked' : '';
+                          $fileexist = (file_exists(public_path('files').'/'.$v->file)) ? '<a href="/files/'.$v->file.'" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-gray"></a>' ;
                           $adatidak = ($v->isi) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
-
+                          $verifikasi = ($v->verifikasi) ? "<i class='fa fa-check text-green'></i>":"<i class='fa fa-close text-red'></i>";
                         ?>
                       <tr>
                         <td><input type="hidden" name="psab_id[{{$k}}]" value="{{$v->psab_id}}">{{$v->no}}</td>
                         <td>{{$v->namausulan}}</td>
                         <td>{!!$adatidak!!}</td>
-                        <td>{{$v->verifikasi}}</td>
-                        <td>
-                          <input type="checkbox" name="verifikasi[{{$k}}]" value="1" {{$disabled}} {{$verifikasi}}>
-                        </td>
+                        <td>{!!$verifikasi!!}</td>
                         <td>{!!$fileexist!!}</td>
-                        
-                        <td><input type="text" name="keterangan[{{$k}}]" value="{{$v->keterangan}}"></td>
+                        <td><span class="label label-primary">{{$v->keterangan}}</span></td>
                       </tr>
                       @endforeach
                       <?php
@@ -132,19 +139,18 @@
                       @foreach($usulan->pplts as $k => $v)
                         <?php
                           $disabled = ($v->isi) ? '' : 'disabled';
-                          $verifikasi = ($v->verifikasi == 1) ? 'checked':'';
-                          $fileexist = (file_exists(public_path('files').'/'.$v->file)) ? '<a href="/files/{{$v->file}}" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-gray"></a>' ;
+                          $checked = ($v->verifikasi) ? 'checked' : '';
+                          $fileexist = (file_exists(public_path('files').'/'.$v->file)) ? '<a href="/files/'.$v->file.'" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-gray"></a>' ;
                           $adatidak = ($v->isi) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
+                          $verifikasi = ($v->verifikasi) ? "<i class='fa fa-check text-green'></i>":"<i class='fa fa-close text-red'></i>";
                         ?>
                       <tr>
                         <td><input type="hidden" name="pplts_id[{{$k}}]" value="{{$v->pplts_id}}">{{$v->no}}</td>
                         <td>{{$v->namausulan}}</td>
                         <td>{!!$adatidak!!}</td>
-                        <td>
-                          <input type="checkbox" name="verifikasi[{{$k}}]" value="1" {{$disabled}} {{$verifikasi}}>
-                        </td>
+                        <td>{!!$verifikasi!!}</td>
                         <td>{!!$fileexist!!}</td>
-                        <td><input type="text" name="keterangan[{{$k}}]" value="{{$v->keterangan}}"></td>
+                        <td><span class="label label-primary">{{$v->keterangan}}</span></td>
                       </tr>
                       @endforeach
                       <?php
@@ -160,21 +166,7 @@
 
               
                 <!-- this row will not appear when printing -->
-                <div class="row no-print">
-                  
-                  <div class="col-xs-5 pull-right">
-                    <div class="input-group margin">
-                      <select name="status" class="form-control">
-                        <option value="0">Belum Disetujui</option>
-                        <option value="1">Diproses</option>
-                        <option value="2">Disetujui</option>
-                      </select>
-                      <span class="input-group-btn">
-                          <button type="submit" class="btn btn-success pull-right">Submit</button>
-                      </span>
-                    </div>
-                  </div>
-                </div>        
+                      
             </div>
             
         </div>

@@ -68,8 +68,9 @@ class UsulanUpdated extends Notification
     public function toDatabase($notifiable)
     {
         return [
-            'usulan_id' => $this->user->id,
-            'user' => $this->user
+            'usulan_id' => $this->usulan->id,
+            'user' => $this->user,
+            'usulan' => $this->usulan
         ];
     }
 }

@@ -10,7 +10,7 @@
     position: relative;
 }
 </style>
-
+@section('title','Tambah Usulan')
 @section('content')
 
     <form method="POST" enctype='multipart/form-data'>
@@ -98,7 +98,7 @@
 
                         <div class="form-group{{ $errors->has('penerima_manfaat') ? ' has-error' : '' }}">
                             <label for="kordinat" class="control-label">Penerima Manfaat </label>
-                            <input type="text" id="penerima_manfaat" name="penerima_manfaat" class="form-control"/>
+                            <input type="text" id="penerima_manfaat" name="penerima_manfaat" class="form-control numberonly"/>
                             <div class="input-group">
                                 <span class="input-group-btn">
                                     <select id="penerima_manfaat_satuan" name="penerima_manfaat_satuan" class="form-control">
@@ -114,7 +114,7 @@
                         
                         <div class="form-group{{ $errors->has('jumlah_usulan') ? ' has-error' : '' }}">
                             <label for="jumlah_usulan" class="control-label">Jumlah Usulan (Rp.)</label>
-                            <input type="text" name="jumlah_usulan" class="form-control" placeholder="jumlah_usulan" />
+                            <input type="text" name="jumlah_usulan" class="form-control numberonly" placeholder="jumlah_usulan" />
                         </div>
 
                         <div class="form-group{{ $errors->has('dokumentasi') ? ' has-error' : '' }}">
@@ -125,10 +125,6 @@
                             
                         </div>
                         </div>
-                        
-                       
-
-
                         <div class="form-group">
                             <div class="col-md-1">
                                 <button type="submit" class="btn btn-primary">
@@ -150,6 +146,7 @@
             <div class="pjalan">
                 <div class="box-header">
                   <h3 class="box-title">Jalan</h3>
+                  <button type="submit" class="btn btn-info pull-right">Proses</button>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">

@@ -1,3 +1,10 @@
+<?php
+  $current_user = \Auth::user();
+  $current_user_notif = $current_user->notifications;
+  $current_user_unnotif = $current_user->unreadNotifications;
+  
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
