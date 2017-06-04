@@ -13,65 +13,68 @@
 @endsection
 
 @section('content')
+  <div class="alert alert-info alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+    <h4><i class="icon fa fa-info"></i> Info!</h4>
+    Ada {{$jumlah_usulan}} Kegiatan..
+  </div>
   
-  <!-- Info boxes -->
   <div class="row">
-        <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-aqua"><i class="fa fa-comments"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">Usulan</span>
-              <span class="info-box-number">{{$jumlah_usulan}}</span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
         <div class="col-md-3 col-sm-6 col-xs-12">
           <div class="info-box">
             <span class="info-box-icon bg-red"><i class="fa fa-road"></i></span>
 
             <div class="info-box-content">
               <span class="info-box-text">Jalan</span>
-              <span class="info-box-number">Rp. {{number_format($totaljalan[0]->total,2,",",".")}}</span>
+              <span class="info-box-number">Rp. {{number_format(($totaljalan[0]->total*1000000),2,",",".")}}</span>
             </div>
-            <!-- /.info-box-content -->
+        
           </div>
-          <!-- /.info-box -->
+        
         </div>
-        <!-- /.col -->
-
-        <!-- fix for small devices only -->
-        <div class="clearfix visible-sm-block"></div>
-
+        
         <div class="col-md-3 col-sm-6 col-xs-12">
           <div class="info-box">
-            <span class="info-box-icon bg-aqua"><i class="fa fa-heart"></i></span>
+            <span class="info-box-icon bg-aqua"><i class="fa fa-tint"></i></span>
 
             <div class="info-box-content">
               <span class="info-box-text">SAB</span>
-              <span class="info-box-number">Rp. {{number_format($totalsab[0]->total,2,",",".")}}</span>
+              <span class="info-box-number">Rp. {{number_format(($totalsab[0]->total*1000000),2,",",".")}}</span>
             </div>
             <!-- /.info-box-content -->
           </div>
           <!-- /.info-box -->
         </div>
-        <!-- /.col -->
+
+        
+        <div class="clearfix visible-sm-block"></div>
+
+        
         <div class="col-md-3 col-sm-6 col-xs-12">
           <div class="info-box">
-            <span class="info-box-icon bg-red"><i class="fa fa-child"></i></span>
+            <span class="info-box-icon bg-yellow"><i class="fa fa-bolt"></i></span>
 
             <div class="info-box-content">
               <span class="info-box-text">PLTS</span>
-              <span class="info-box-number">Rp. {{number_format($totalplts[0]->total,2,",",".")}}</span>
+              <span class="info-box-number">Rp. {{number_format(($totalplts[0]->total*1000000),2,",",".")}}</span>
             </div>
             <!-- /.info-box-content -->
           </div>
           <!-- /.info-box -->
         </div>
-        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="fa fa-building"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Lainnya</span>
+              <span class="info-box-number">{{number_format(($totalplts[0]->total*1000000),2,",",".")}}</span>
+            </div>
+          
+          </div>
+        </div>
+
+        <div class="clearfix visible-sm-block"></div>
   </div>
 
   <div class="row">
@@ -90,30 +93,49 @@
             <div class="box-body">
               <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
-                  <li data-target="#carousel-example-generic" data-slide-to="0" class=""></li>
-                  <li data-target="#carousel-example-generic" data-slide-to="1" class="active"></li>
+                  <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                  <li data-target="#carousel-example-generic" data-slide-to="1" class=""></li>
                   <li data-target="#carousel-example-generic" data-slide-to="2" class=""></li>
+                  <li data-target="#carousel-example-generic" data-slide-to="3" class=""></li>
+                  <li data-target="#carousel-example-generic" data-slide-to="4" class=""></li>
+                  <li data-target="#carousel-example-generic" data-slide-to="5" class=""></li>
                 </ol>
                 <div class="carousel-inner">
-                  <div class="item">
-                    <img src="http://placehold.it/900x500/39CCCC/ffffff&amp;text=Gallery+1" alt="First slide">
-
-                    <div class="carousel-caption">
-                      First Slide
-                    </div>
-                  </div>
                   <div class="item active">
-                    <img src="http://placehold.it/900x500/3c8dbc/ffffff&amp;text=Gallery+2" alt="Second slide">
+                    <img src="{{ asset('images/1.jpg')}}" alt="First slide">
+                    <div class="carousel-caption">
+                      Slide 1
+                    </div>
+                  </div>
+                  <div class="item ">
+                    <img src="{{ asset('images/2.jpg')}}" alt="Second slide">
 
                     <div class="carousel-caption">
-                      Second Slide
+                      Slide 2
                     </div>
                   </div>
                   <div class="item">
-                    <img src="http://placehold.it/900x500/f39c12/ffffff&amp;text=Gallery+3" alt="Third slide">
-
+                    <img src="{{ asset('images/3.jpg')}}" alt="Third slide">
                     <div class="carousel-caption">
-                      Third Slide
+                      Slide 3
+                    </div>
+                  </div>
+                  <div class="item">
+                    <img src="{{ asset('images/4.jpg')}}" alt="Third slide">
+                    <div class="carousel-caption">
+                      Slide 4
+                    </div>
+                  </div>
+                  <div class="item">
+                    <img src="{{ asset('images/5.jpg')}}" alt="Third slide">
+                    <div class="carousel-caption">
+                      Slide 5
+                    </div>
+                  </div>
+                  <div class="item">
+                    <img src="{{ asset('images/6.jpg')}}" alt="Third slide">
+                    <div class="carousel-caption">
+                      Slide 6
                     </div>
                   </div>
                 </div>

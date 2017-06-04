@@ -25,11 +25,13 @@ class HomeController extends Controller{
         $totaljalan = $this->getTotalJalan();
         $totalsab = $this->getTotalSab();
         $totalplts = $this->getTotalPlts();
-
+        $totallain = $this->getTotalLainnya();
+        
         $jumlah_usulan = $this->getJumlahUsulan();
         return view('master.dashboard')
         ->with('totalsab',$totalsab)
         ->with('totalplts',$totalplts)
+        ->with('totallain',$totallain)
         ->with('jumlah_usulan',$jumlah_usulan)
         
         ->with('totaljalan',$totaljalan);
@@ -37,29 +39,69 @@ class HomeController extends Controller{
 
 
     public function getTotalJalan($value=''){
-        return DB::table('usulan')
-        ->select(DB::raw('SUM(jumlah_usulan) as total'))
-        ->where('jenis_usulan',1)->get();
+        $jalan = DB::table('usulan')
+            ->select(DB::raw('SUM(jumlah_usulan) as total'))
+            ->where('jenis_usulan',1)
+            ->where('user_id',auth()->user()->id)
+            ->get();
+        if(auth()->user()->isManager()){
+            $jalan = DB::table('usulan')
+            ->select(DB::raw('SUM(jumlah_usulan) as total'))
+            ->where('jenis_usulan',1)->get();
+        }
+        return $jalan;
 
     }
 
     public function getTotalSab($value=''){
-        return DB::table('usulan')
+        $sab = DB::table('usulan')
         ->select(DB::raw('SUM(jumlah_usulan) as total'))
+        ->where('user_id',auth()->user()->id)
         ->where('jenis_usulan',2)->get();
+        if(auth()->user()->isManager()){
+            $sab = DB::table('usulan')
+                ->select(DB::raw('SUM(jumlah_usulan) as total'))
+                ->where('jenis_usulan',2)->get();
+        }
+        return $sab;
 
     }
 
     public function getTotalPlts($value=''){
-        return DB::table('usulan')
+        $plts = DB::table('usulan')
         ->select(DB::raw('SUM(jumlah_usulan) as total'))
+        ->where('user_id',auth()->user()->id)
         ->where('jenis_usulan',3)->get();
+        if(auth()->user()->isManager()){
+            $plts = DB::table('usulan')
+            ->select(DB::raw('SUM(jumlah_usulan) as total'))
+            ->where('jenis_usulan',3)->get();
+        }
+        return $plts;
+
+    }
+
+    public function getTotalLainnya($value=''){
+        $lainnya = DB::table('usulan')
+        ->select(DB::raw('SUM(jumlah_usulan) as total'))
+        ->where('user_id',auth()->user()->id)
+        ->where('jenis_usulan',4)->get();
+        if(auth()->user()->isManager()){
+            $lainnya = DB::table('usulan')
+            ->select(DB::raw('SUM(jumlah_usulan) as total'))
+            ->where('jenis_usulan',4)->get();
+        }
+        return $lainnya;
 
     }
 
     public function getJumlahUsulan($value='')
     {
-        return DB::table('usulan')->count();
+        $usulan = DB::table('usulan')->where('user_id',auth()->user()->id)->count();
+        if(auth()->user()->isManager()){
+            $usulan = DB::table('usulan')->count();
+        }
+        return $usulan;
     }
 
 

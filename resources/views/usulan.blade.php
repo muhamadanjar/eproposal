@@ -31,9 +31,9 @@
                             </select>
                             
                         </div>
-                        <div id="usulan-group">
+                    <div id="usulan-group">
                         <div class="form-group{{ $errors->has('jenis_usulan') ? ' has-error' : '' }}">
-                            <label for="desa" class="control-label">Jenis Usulan</label>
+                            <label for="jenis_usulan" class="control-label">Jenis Usulan</label>
                             <select name="jenis_usulan" id="jenis_usulan" class="form-control">
                                 <option value="0">-----</option>
                                 <option value="1">Jalan</option>
@@ -42,6 +42,7 @@
                                 <option value="4">Lainnya</option>
                             </select>
                         </div>
+                        @if(auth()->user()->isSuper() || auth()->user()->isManager())
                         <div class="form-group{{ $errors->has('provinsi') ? ' has-error' : '' }}">
                             <label for="provinsi" class="control-label">Provinsi</label>
                             <select name="provinsi" id="provinsi" class="form-control">
@@ -58,6 +59,10 @@
                             <select name="kabupaten" id="kabkota" class="form-control"></select>
                             
                         </div>
+                        @else
+                        <input type="hidden" name="provinsi" id="provinsi" value="{{ auth()->user()->kode_provinsi}}" />
+                        <input type="hidden" name="kabupaten" id="kabkota" value="{{ auth()->user()->kode_kabupaten}}" />
+                        @endif
 
                         <div class="form-group{{ $errors->has('kecamatan') ? ' has-error' : '' }}">
                             <label for="kecamatan" class="control-label">Kecamatan</label>
@@ -69,6 +74,18 @@
                             <select name="desa" id="desa" class="form-control">
                               <option value="---">-------</option>
                             </select>
+                            
+                        </div>
+
+                        <div class="form-group{{ $errors->has('nama_proyek') ? ' has-error' : '' }}">
+                            <label for="nama_proyek" class="control-label">Nama Proyek</label>
+                            <input type="text" name="nama_proyek" class="form-control"/>
+                            
+                        </div>
+
+                        <div class="form-group{{ $errors->has('surat_pengantar') ? ' has-error' : '' }}">
+                            <label for="surat_pengantar" class="control-label">Surat Pengantar/ Surat Referensi</label>
+                            <input type="text" name="surat_pengantar" class="form-control"/>
                             
                         </div>
 
@@ -97,7 +114,7 @@
                         
 
                         <div class="form-group{{ $errors->has('penerima_manfaat') ? ' has-error' : '' }}">
-                            <label for="kordinat" class="control-label">Penerima Manfaat </label>
+                            <!--<label for="penerima_manfaat" class="control-label">Penerima Manfaat </label>
                             <input type="text" id="penerima_manfaat" name="penerima_manfaat" class="form-control numberonly"/>
                             <div class="input-group">
                                 <span class="input-group-btn">
@@ -106,14 +123,30 @@
                                         <option>Jiwa</option>
                                         <option>Km</option>
                                     </select> 
-                                </span>
-                                    
-                            </div>
+                                </span>  
+                            </div>-->
+                            <table class="table table-bordered">
+                                <tbody>
+                                <tr>
+                                  <th>KK</th>
+                                  <th>Jiwa</th>
+                                  <th>Km</th>
+                                  <th>Ha</th>
+                                </tr>
+                                <tr>
+                                  <th><input type="text" class="form-control numberonly" name="penerima_manfaat_kk" placeholder="KK"></th>
+                                  <th><input type="text" class="form-control numberonly" name="penerima_manfaat_jiwa" placeholder="Jiwa"></th>
+                                  <th><input type="text" class="form-control numberonly" name="penerima_manfaat_km" placeholder="Km"></th>
+                                  <th><input type="text" class="form-control numberonly" name="penerima_manfaat_ha" placeholder="Ha"></th>
+                                </tr>
+                                </tbody>
+                            </table>
                             
                         </div>
+                            
                         
                         <div class="form-group{{ $errors->has('jumlah_usulan') ? ' has-error' : '' }}">
-                            <label for="jumlah_usulan" class="control-label">Jumlah Usulan (Rp.)</label>
+                            <label for="jumlah_usulan" class="control-label">Jumlah Usulan (Juta)</label>
                             <input type="text" name="jumlah_usulan" class="form-control numberonly" placeholder="jumlah_usulan" />
                         </div>
 
@@ -121,10 +154,9 @@
                             <label for="dokumentasi" class="control-label">Dokumentasi Lokasi Eksisting</label>
                             <input type="file" id="inputgambar" name="dokumentasi" class="validate"/ >
                             <p class="help-block"><i class="fa fa-file-pdf-o" class="text-red"></i><span>File Maksimal 200 Mb.</span></p>
-                                
-                            
+
                         </div>
-                        </div>
+                    </div>
                         <div class="form-group">
                             <div class="col-md-1">
                                 <button type="submit" class="btn btn-primary">

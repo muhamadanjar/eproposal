@@ -92,6 +92,7 @@ class ProposalCtrl extends Controller{
             $array['data'][$key]['psab'] = $psab;
             $array['data'][$key]['pplts'] = $pplts;
             $array['data'][$key]['jamterakhir_update'] = $value->updated_at->diffForHumans();
+            $array['data'][$key]['jumlah_usulan_juta'] = ($value->jumlah_usulan * 1000000);
             if ($value->jenis_usulan == 1) {
                 $array['data'][$key]['usulanpembangunan'] = 'Jalan';
             }elseif($value->jenis_usulan == 2){
@@ -124,7 +125,11 @@ class ProposalCtrl extends Controller{
     }
 
     public function getUsulan($value=''){
-        $provinsi = Provinsi::orderBy('kode_provinsi')->get();
+
+        if (! $this->authorize('create.usulan')) {
+           return "Anda tidak diijinkan menambah usulan :(";
+        }
+        $provinsi = Provinsi::orderBy('kode_provinsi')->where('isactived',1)->get();
         $c = Carbon::now();
         $jalan = PJalan::orderBy('id','ASC')->get();
         $sab = PSAB::orderBy('id','ASC')->get();
@@ -175,6 +180,7 @@ class ProposalCtrl extends Controller{
                     'usulan_persyaratan_sab.verifikasi',
                     'usulan_persyaratan_sab.keterangan'
                 )
+                ->orderBy('tipeusulan','ASC')
                 ->orderBy('no','ASC')
                 ->where('usulan_persyaratan_sab.usulan_id',$id)
                 ->get();
@@ -194,10 +200,11 @@ class ProposalCtrl extends Controller{
                     'usulan_persyaratan_plts.verifikasi',
                     'usulan_persyaratan_plts.keterangan'
                 )
+                ->orderBy('tipeusulan','ASC')
                 ->orderBy('no','ASC')
                 ->where('usulan_persyaratan_plts.usulan_id',$id)
                 ->get();
-
+        $usulan['jumlah_usulan_juta'] = ($usulan->jumlah_usulan * 1000000);
         $usulan['pjalan'] = $pjalan;
         $usulan['psab'] = $psab;
         $usulan['pplts'] = $pplts;
@@ -207,28 +214,32 @@ class ProposalCtrl extends Controller{
     }
 
     public function postUsulan(Request $r){
-
         
         \DB::beginTransaction();
         try {
-            $no_usulan = $r->tahun.$r->jenis_usulan.$r->provinsi.$r->kabupaten.rand(1,10);
+            $no_usulan = $r->tahun.$r->jenis_usulan.rand(1,10);
             
             $usulan = new Usulan();
             $usulan->no_usulan = $no_usulan;
             $usulan->kode_provinsi = $r->provinsi;
             $usulan->kode_kabupaten = $r->kabupaten;
             $usulan->kode_kecamatan = $r->kecamatan;
+            $usulan->nama_proyek = $r->nama_proyek;
+            $usulan->surat_kegiatan = $r->surat_pengantar;
             $usulan->opd_pengusul = $r->skpd_pengusul;
             $usulan->desa = $r->desa;
             $usulan->lat = $r->latitude;
             $usulan->lng = $r->longitude;
             $usulan->jenis_usulan = $r->jenis_usulan;
-            $usulan->penerima_manfaat = $r->penerima_manfaat;
-            $usulan->penerima_manfaat_satuan = $r->penerima_manfaat_satuan;
+            //$usulan->penerima_manfaat = $r->penerima_manfaat;
+            //$usulan->penerima_manfaat_satuan = $r->penerima_manfaat_satuan;
+            $usulan->penerima_manfaat_kk = (double)$r->penerima_manfaat_kk;
+            $usulan->penerima_manfaat_jiwa = (double)$r->penerima_manfaat_jiwa;
+            $usulan->penerima_manfaat_km = (double)$r->penerima_manfaat_km;
+            $usulan->penerima_manfaat_ha = (double)$r->penerima_manfaat_ha;
             $usulan->jumlah_usulan = $r->jumlah_usulan;
             $usulan->tahun_usulan = $r->tahun;
             
-
             $usulan->user_id = auth()->user()->id;
             if ($r->dokumentasi != null) {
                 
@@ -369,8 +380,10 @@ class ProposalCtrl extends Controller{
 
     public function getUbah($id=''){
         $usulan = $this->getShowUsulanQuery($id);
-
-
+        if ($usulan->status_usulan == 2) {
+            session()->flash('Usulanstatus', 'Data Sudah di setujui. Anda tidak dapat merubah data lagi');
+            return redirect('pengecekan/usulan');
+        }
         $pjalan = DB::table('usulan_persyaratan_jalan')
                 ->join('usulan','usulan.id','usulan_persyaratan_jalan.usulan_id')
                 ->join('pjalan','pjalan.id','usulan_persyaratan_jalan.pjalan_id')
@@ -438,6 +451,20 @@ class ProposalCtrl extends Controller{
     }
 
     public function postUbah(Request $r){
+        try {
+            
+        } catch (Exception $e) {
+            
+        }
+        $usulan = Usulan::findOrFail($r->usulan_id);
+        $usulan->jumlah_usulan = $r->jumlah_usulan;
+        $usulan->lat = $r->latitude;
+        $usulan->lng = $r->longitude;
+        $usulan->penerima_manfaat_kk = (double)$r->penerima_manfaat_kk;
+        $usulan->penerima_manfaat_jiwa = (double)$r->penerima_manfaat_jiwa;
+        $usulan->penerima_manfaat_km = (double)$r->penerima_manfaat_km;
+        $usulan->penerima_manfaat_ha = (double)$r->penerima_manfaat_ha;
+        $usulan->save();
         
         if($r->jenis_usulan == '1'){
             foreach ($r->pjalanadmin_id as $key => $v) {
@@ -577,12 +604,10 @@ class ProposalCtrl extends Controller{
 
 
         $user = User::findOrFail(2);
-        $usulan = Usulan::findOrFail($r->usulan_id);
-        $user->notify(new UsulanUpdated($user,$usulan));
+        $user->notify(new UsulanUpdated($usulan));
         
         //$this->sendEmailUpdateDataUsulan($r->usulan_id);
 
-        
         return redirect('proposal/usulan');
     }
 

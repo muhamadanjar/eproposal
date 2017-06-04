@@ -46,9 +46,9 @@
   <!-- Select2 -->
   <link rel="stylesheet" href="{{ asset('assets/plugins/select2/select2.min.css')}}"/>
 
-  <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables/jquery.datatables.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables/jquery.dataTables.min.css') }}">
   <!-- Theme style -->
-  <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.min.css')}}">
+  <link rel="stylesheet" href="{{ asset('assets/dist/css/AdminLTE.min.css')}}">
   
   <link rel="stylesheet" type="text/css" href="{{ asset('/css/eproposal.css') }}">
   <link rel="icon" href="{{ asset('assets/images/kemendes.png') }}" type="image/png" sizes="16x16">
@@ -354,7 +354,7 @@
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <!--Datatables -->
-<script type="text/javascript" charset="utf8" src="{{ asset('assets/plugins/datatables/jquery.datatables.min.js')}}"></script>
+<script type="text/javascript" charset="utf8" src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
 <!-- Morris.js charts -->
 <script src="{{ asset('assets/plugins/raphael/raphael.min.js')}}"></script>
 <script src="{{ asset('assets/plugins/morris/morris.min.js')}}"></script>

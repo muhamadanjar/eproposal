@@ -29,7 +29,7 @@
                 <div class="row">
                   <div class="col-xs-12">
                     <h2 class="page-header">
-                      <i class="fa fa-globe"></i> PLANNAR.
+                      <i class="fa fa-globe"></i> {{$usulan->nama_proyek}}.
                       <small class="pull-right">Tanggal: {{$usulan->created_at->format('m/d/Y H:i:s')}}</small>
                     </h2>
                   </div>
@@ -54,7 +54,7 @@
                     <address>
                       <strong>{{$usulan->skpd_pengusul}}</strong><br>
                       {{$usulan->penerima_manfaat}} {{$usulan->skpd_pengusul_satuan}}<br>
-                      Rp. {{number_format($usulan->jumlah_usulan,2,",",".")}}<br>
+                      Rp. {{number_format($usulan->jumlah_usulan_juta,2,",",".")}}<br>
                       
                     </address>
                   </div>
@@ -94,7 +94,7 @@
                         <?php
                           $disabled = ($v->isi) ? '' : 'disabled';
                           $checked = ($v->verifikasi) ? 'checked' : '';
-                          $fileexist = (file_exists(public_path('files').'/'.$v->file)) ? '<a href="/files/'.$v->file.'" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-gray"></a>' ;
+                          $fileexist = (file_exists(public_path('files').'/'.$v->file)) ? '<a target="_blank" href="/eproposal/public/files/'.$v->file.'" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-red"></a>' ;
                           $adatidak = ($v->isi) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
                         ?>
                       <tr>
@@ -120,7 +120,7 @@
                           $disabled = ($v->isi) ? '' : 'disabled';
                           $verifikasi = ($v->verifikasi == 1) ? 'checked':'';
 
-                          $fileexist = (file_exists(public_path('files').'/'.$v->file)) ? '<a href="/files/{{$v->file}}" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-gray"></a>' ;
+                          $fileexist = (file_exists(public_path('files').'/'.$v->file)) ? '<a target="_blank" href="/eproposal/public/files/'.$v->file.'" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-red"></a>' ;
                           $adatidak = ($v->isi) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
 
                         ?>
@@ -128,7 +128,6 @@
                         <td><input type="hidden" name="psab_id[{{$k}}]" value="{{$v->psab_id}}">{{$v->no}}</td>
                         <td>{{$v->namausulan}}</td>
                         <td>{!!$adatidak!!}</td>
-                        <td>{{$v->verifikasi}}</td>
                         <td>
                           <input type="checkbox" name="verifikasi[{{$k}}]" value="1" {{$disabled}} {{$verifikasi}}>
                         </td>
@@ -148,7 +147,7 @@
                         <?php
                           $disabled = ($v->isi) ? '' : 'disabled';
                           $verifikasi = ($v->verifikasi == 1) ? 'checked':'';
-                          $fileexist = (file_exists(public_path('files').'/'.$v->file)) ? '<a href="/files/{{$v->file}}" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-gray"></a>' ;
+                          $fileexist = (file_exists(public_path('files').'/'.$v->file)) ? '<a target="_blank" href="/eproposal/public/files/'.$v->file.'" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-gray"></a>' ;
                           $adatidak = ($v->isi) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
                         ?>
                       <tr>
@@ -184,6 +183,17 @@
                         
                         <option value="2">Sudah Diverifikasi</option>
                       </select>
+                      <span class="input-group-btn">
+                          <button type="submit" class="btn btn-success pull-right">Submit</button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="row no-print">
+                  
+                  <div class="col-xs-5 pull-right">
+                    <div class="input-group margin">
+                      <input type="text" name="jumlah_usulan_diterima" class="form-control numberonly" placeholder="Nominal yang disetujui" value="{{$usulan->jumlah_usulan_diterima}}">
                       <span class="input-group-btn">
                           <button type="submit" class="btn btn-success pull-right">Submit</button>
                       </span>

@@ -27,7 +27,7 @@
                 <div class="row">
                   <div class="col-xs-12">
                     <h2 class="page-header">
-                      <i class="fa fa-globe"></i> PLANNAR.
+                      <i class="fa fa-globe"></i> {{$usulan->nama_proyek}}
                       <small class="pull-right">Tanggal: {{$usulan->created_at->format('m/d/Y H:i:s')}}</small>
                     </h2>
                   </div>
@@ -52,7 +52,7 @@
                     <address>
                       <strong>{{$usulan->opd_pengusul}}</strong><br>
                       {{$usulan->penerima_manfaat}} {{$usulan->penerima_manfaat_satuan}}<br>
-                      Rp. {{number_format($usulan->jumlah_usulan,2,",",".")}}<br>
+                      Rp. {{number_format($usulan->jumlah_usulan_juta,2,",",".")}}<br>
                       
                     </address>
                   </div>

@@ -14,12 +14,10 @@ class UsulanUpdated extends Notification
 
     public $usulan;
     public $user;
-    public function __construct($user,$usulan){
+    public function __construct($usulan){
         
-       
-        $this->user = $user;
         $this->usulan = $usulan;
-
+        $this->user = User::findOrFail($usulan->user_id);
     }
 
     /**
@@ -30,7 +28,7 @@ class UsulanUpdated extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail','database'];
+        return ['database'];
         //return $notifiable->prefers_sms ? ['nexmo'] : ['mail', 'database'];
     }
 
@@ -43,8 +41,8 @@ class UsulanUpdated extends Notification
     public function toMail($notifiable){
         $message = new MailMessage;
         $message->subject('Usulan di Update')
-                    ->line('Hey '.$this->user->name.', Usulan Anda Sudah di update')
-                    ->action('Lihat Usulan', url('toggle',$this->user->id));
+            ->line('Halo '.$this->user->name.', Usulan Anda Sudah di update')
+            ->action('Lihat Usulan', url('proposal/usulan',$this->user->id));
         $message->line('Update data')
         ->line($this->usulan->skpd_pengusul)
         ->replyTo($this->user->email);

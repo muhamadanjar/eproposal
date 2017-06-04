@@ -39,8 +39,14 @@ class UserSeeder extends Seeder
         $role->addPermission('create.user');
         $role->addPermission('edit.user');    
         $role->addPermission('delete.user');
+
+        $role->addPermission('delete.usulan');
         // ... Add other role permission if necessary
-    
+        
+        $role_user = App\Role::where('name', 'user')->first();
+        $role_user->addPermission('create.usulan');
+        $role_user->addPermission('edit.usulan');
+        $role_user->addPermission('delete.usulan');
         // Create a user, and give roles
         $user = App\User::create([
             'username' => 'admin',

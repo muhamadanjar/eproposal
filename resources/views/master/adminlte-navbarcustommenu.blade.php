@@ -87,7 +87,7 @@
               
             </a>
             <ul class="dropdown-menu">
-              <li class="header">You have {{$current_user_unnotif->count()}} notifications</li>
+              <li class="header">Ada {{$current_user_unnotif->count()}} Pemberitahuan</li>
               <li>
                 
                 <ul class="menu">
@@ -155,7 +155,7 @@
                   @endforeach
                 </ul>
               </li>
-              <li class="footer"><a href="#">View all</a></li>
+              <li class="footer"><a href="#">Lihat Semua</a></li>
             </ul>
         </li>
     <!-- Tasks: style can be found in dropdown.less -->

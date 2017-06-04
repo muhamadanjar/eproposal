@@ -22,9 +22,8 @@
                     
                 </div>
                 <div class="input-group">
-                    
                     <select name="search_category" id="search_category" class="search_category form-control">
-                            <option value="0">Category</option>
+                            <option value="0">Semua</option>
                             <option value="1">Provinsi</option>
                             <option value="2">Kabupaten</option>
                             <option value="3">Kecamatan</option>
@@ -32,8 +31,6 @@
                     </select>
                     <span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
                     <input type="text" name="search_text" class="search_text form-control" id="search_text">
-                    
-                    
                 </div>
             </div>
             

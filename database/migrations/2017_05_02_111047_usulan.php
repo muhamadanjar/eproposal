@@ -19,14 +19,21 @@ class Usulan extends Migration
             $table->integer('kode_provinsi');
             $table->string('kode_kabupaten',6);
             $table->string('kode_kecamatan',10);
+            $table->string('nama_proyek');
+            $table->string('surat_kegiatan');
             $table->string('opd_pengusul');
             $table->string('desa');
             $table->float('lat');
             $table->float('lng');
-            $table->string('penerima_manfaat');
-            $table->string('penerima_manfaat_satuan',10);
+            $table->string('penerima_manfaat')->nullable();
+            $table->string('penerima_manfaat_satuan',10)->nullable();
+            $table->decimal('penerima_manfaat_kk')->nullable();
+            $table->decimal('penerima_manfaat_jiwa')->nullable();
+            $table->decimal('penerima_manfaat_km')->nullable();
+            $table->decimal('penerima_manfaat_ha')->nullable();
             $table->integer('jenis_usulan');
-            $table->string('jumlah_usulan');
+            $table->double('jumlah_usulan');
+            $table->double('jumlah_usulan_diterima')->nullable();
             $table->integer('tahun_usulan');
             
             $table->string('dokumen')->nullable();

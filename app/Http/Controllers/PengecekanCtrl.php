@@ -89,6 +89,8 @@ class PengecekanCtrl extends Controller
                 ->orderBy('no','ASC')
                 ->where('usulan_persyaratan_plts.usulan_id',$id)
                 ->get();
+      $usulan['jumlah_usulan_juta'] = ($usulan->jumlah_usulan * 1000000);
+      $usulan['jumlah_usulan_diterima_juta'] = ($usulan->jumlah_usulan_diterima * 1000000);
       $usulan['pjalan'] = $pjalan;
       $usulan['psab'] = $psab;
       $usulan['pplts'] = $pplts;
@@ -112,6 +114,7 @@ class PengecekanCtrl extends Controller
       
       $usulan = Usulan::find($r->usulan_id);
       $usulan->status_usulan = $r->status;
+      $usulan->jumlah_usulan_diterima = $r->jumlah_usulan_diterima;
       $usulan->save();
       if($r->jenis_usulan == '1'){
           foreach ($r->pjalan_id as $key => $id) {

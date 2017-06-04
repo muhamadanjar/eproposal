@@ -124,6 +124,7 @@ function rangeNumber(evt) {
     
     //$('select#kecamatan').html("<option value=''>Pilih Kecamatan..</option>"); 
     //$('select#kecamatan').select2();
+    $('select#kecamatan').select2();
     
     $('select#kabkota').on('change', function (){
         $('select#kecamatan').html("<option value=''>Pilih Kecamatan..</option>");// add this on each call then add the options when data receives from the request
@@ -159,6 +160,36 @@ function rangeNumber(evt) {
 
     //$('select#desa').html("<option value=''>Pilih Desa..</option>");
     //$('select#desa').select2();
+    if($('input#kabkota').val() != null){
+        $('select#kecamatan').html("<option value=''>Pilih Kecamatan..</option>");
+        $.ajax({
+            url: '/getKecamatan/'+$('#kabkota').val(),
+            dataType: "json",
+            beforeSend: function() {
+                $('.loader').show();
+            },
+            success: function(data) {
+                $('select#kecamatan').empty(); 
+            
+                var options = '<option value="0">Pilih Kecamatan..</option>';
+                for (var x = 0; x < data.length; x++) {
+                    //console.log($('#jenis_usulan').val());
+                    if ($('#jenis_usulan').val() == 2 || $('#jenis_usulan').val() == 3) {
+                        if (data[x]['lokpri'] == 1) {
+                            options += '<option value="' + data[x]['kode_kecamatan'] + '">' + data[x]['kecamatan'] + '</option>';        
+                        }
+                    }else{
+                        options += '<option value="' + data[x]['kode_kecamatan'] + '">' + data[x]['kecamatan'] + '</option>';
+                    }
+                }
+                //$('select#kecamatan').select2();
+                $('select#kecamatan').html(options);
+            },
+            complete: function() {
+                $('.loader').hide();
+            }
+        });
+    }
     $('select#kecamatan').on('change', function (){
         $('select#desa').html("<option value=''>Pilih Desa..</option>");// add this on each call then add the options when data receives from the request
         
@@ -352,7 +383,7 @@ function rangeNumber(evt) {
             { "data": "kecamatan" },
             { "data": "desa" },
             { "data": "opd_pengusul" },
-            { "data": "jumlah_usulan" },
+            { "data": "jumlah_usulan_juta" },
             { "data": "tahun_usulan" },
             
         ],
@@ -377,7 +408,7 @@ function rangeNumber(evt) {
             },
             {  
                 "render": function(data,type,row){
-                    return '<i>Rp. '+ number_format(row['jumlah_usulan'])+'</i>';
+                    return '<i>Rp. '+ number_format(row['jumlah_usulan_juta'])+'</i>';
                 },
                 "targets": [ 6 ] 
             },
@@ -542,7 +573,7 @@ function rangeNumber(evt) {
             { "data": "kecamatan" },
             { "data": "desa" },
             { "data": "opd_pengusul" },
-            { "data": "jumlah_usulan" },
+            { "data": "jumlah_usulan_juta" },
             { "data": "tahun_usulan" },
             
         ],
@@ -646,16 +677,11 @@ function rangeNumber(evt) {
         "order": [[0, 'asc']]
     });
 
-    /*$('#table_pengecekan tbody').on( 'click', 'a.linkpeng', function () {
-        var data = table_pengecekan.row( $(this).parents('tr') ).data();
-        document.location = '/proposal/pengecekan/'+data.id;
-    } );*/
-
 }(jQuery, window, document));
 
 (function($, window, document){
 
-    var map;
+    /*var map;
     if($("#map").length > 0){
     function initialize() {
       var indo = { lat: -6.597952, lng: 106.801262 };
@@ -676,7 +702,7 @@ function rangeNumber(evt) {
     }
 
     google.maps.event.addDomListener(window, 'load', initialize);
-    }
+    }*/
 
     $('#checkmap').click(function(){
         if (navigator.geolocation) {
@@ -687,12 +713,12 @@ function rangeNumber(evt) {
             };
             $('input[name=latitude]').val(position.coords.latitude);
             $('input[name=longitude]').val(position.coords.longitude);
-            google.maps.event.trigger(map, "resize");
-            map.setCenter(pos);
-            var marker = new google.maps.Marker({
+            //google.maps.event.trigger(map, "resize");
+            //map.setCenter(pos);
+            /*var marker = new google.maps.Marker({
                 position: pos,
                 title:"Hello World!"
-            });
+            });*/
             
           }, function() {
             
@@ -955,14 +981,11 @@ function rangeNumber(evt) {
     });
 
     
-    
 }(jQuery, window, document));
 
 (function($, window, document){
     
 
-   
-    
 }(jQuery, window, document));
 
 (function($, window, document){

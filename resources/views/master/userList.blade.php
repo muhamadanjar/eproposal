@@ -47,11 +47,11 @@
 							<th>Username</th>
 							<th>Email</th>
 							<th>Nama</th>
-							<th>Role</th>
+							<th>Aksi</th>
 						</tr>
 						
 						@foreach($users as $key => $v)
-                        <?php $class_active = ($v->isactive==0) ? 'btn-danger':'' ?>
+                        <?php $class_active = ($v->isactive==0) ? 'btn-danger':'btn-info' ?>
                         <?php $fa_active = ($v->isactive==0) ? 'fa-circle':'fa-circle-o' ?>
 
 						<tr>
@@ -87,7 +87,8 @@
                     
 				</div>
 				<div class="box-footer clearfix">
-					*) Kuning = Non AKtif || Abu abu = Aktif
+					*) Merah = Non AKtif || Biru = Aktif
+					
 	              	
 	            </div>
 			</div>

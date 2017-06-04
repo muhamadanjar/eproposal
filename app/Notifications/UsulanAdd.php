@@ -31,7 +31,7 @@ class UsulanAdd extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail','database'];
+        return ['database'];
     }
 
     /**
@@ -45,11 +45,9 @@ class UsulanAdd extends Notification
         $message = new MailMessage;
         
         $message->subject('Usulan di Sudah ditampung')
-                    ->line('Hey '.$this->user->name.', Usulan Anda Sudah di ditampung')
-                    ->action('Lihat Usulan', url('toggle',$this->user->id));
+            ->line('Halo '.$this->user->name.', Usulan Anda Sudah di ditampung')
+            ->action('Lihat Usulan', url('proposal/usulan',$this->user->id));
         $message->line('Usulan ditampung')->replyTo($this->user->email);
-                     
-                     
         return $message;
     }
 
@@ -62,7 +60,10 @@ class UsulanAdd extends Notification
     public function toArray($notifiable)
     {
         return [
-            
+            'notifiable_id' => $notifiable->id,
+            'usulan_id' => $this->usulan->id,
+            'user' => $this->user,
+            'usulan' => $this->usulan
         ];
     }
 
