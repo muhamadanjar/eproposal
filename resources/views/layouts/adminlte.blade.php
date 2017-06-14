@@ -23,7 +23,8 @@
   <link rel="stylesheet" href="{{ asset('assets/plugins/font-awesome/css/font-awesome.min.css')}}">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-  
+
+  <link rel="stylesheet" href="{{ asset('/css/loader.css') }}" type="text/css">
   <!-- assets Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="{{ asset('assets/dist/css/skins/_all-skins.min.css')}}">
@@ -45,8 +46,22 @@
   <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css')}}">
   <!-- Select2 -->
   <link rel="stylesheet" href="{{ asset('assets/plugins/select2/select2.min.css')}}"/>
+  <!-- Parsley -->
+  <link rel="stylesheet" href="{{ asset('assets/plugins/parsley/parsley.css')}}"/>
+  <!-- Datatables -->
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/DataTables/DataTables-1.10.15/css/dataTables.bootstrap.min.css')}}"/>
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/DataTables/AutoFill-2.2.0/css/autoFill.bootstrap.css')}}"/>
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/DataTables/Buttons-1.3.1/css/buttons.bootstrap.min.css')}}"/>
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/DataTables/ColReorder-1.3.3/css/colReorder.bootstrap.min.css')}}"/>
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/DataTables/FixedColumns-3.2.2/css/fixedColumns.bootstrap.min.css')}}"/>
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/DataTables/FixedHeader-3.1.2/css/fixedHeader.bootstrap.min.css')}}"/>
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/DataTables/KeyTable-2.2.1/css/keyTable.bootstrap.min.css')}}"/>
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/DataTables/Responsive-2.1.1/css/responsive.bootstrap.min.css')}}"/>
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/DataTables/RowGroup-1.0.0/css/rowGroup.bootstrap.min.css')}}"/>
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/DataTables/RowReorder-1.2.0/css/rowReorder.bootstrap.min.css')}}"/>
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/DataTables/Scroller-1.4.2/css/scroller.bootstrap.min.css')}}"/>
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/DataTables/Select-1.2.2/css/select.bootstrap.min.css')}}"/>
 
-  <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables/jquery.dataTables.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('assets/dist/css/AdminLTE.min.css')}}">
   
@@ -54,6 +69,7 @@
   <link rel="icon" href="{{ asset('assets/images/kemendes.png') }}" type="image/png" sizes="16x16">
 
   <!-- jQuery 2.2.3 -->
+  
   <script src="{{asset('assets/plugins/jQuery/jquery-2.2.3.min.js')}}"></script>
  
 
@@ -131,6 +147,7 @@
 
     <!-- Main content -->
     <section class="content">
+      @include('loader')
       @yield('alert')
       @yield('content')
     </section>
@@ -354,7 +371,33 @@
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <!--Datatables -->
-<script type="text/javascript" charset="utf8" src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/JSZip-3.1.3/jszip.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/pdfmake-0.1.27/build/pdfmake.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/pdfmake-0.1.27/build/vfs_fonts.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/DataTables-1.10.15/js/jquery.dataTables.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/DataTables-1.10.15/js/dataTables.bootstrap.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/AutoFill-2.2.0/js/dataTables.autoFill.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/AutoFill-2.2.0/js/autoFill.bootstrap.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/Buttons-1.3.1/js/dataTables.buttons.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/Buttons-1.3.1/js/buttons.bootstrap.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/Buttons-1.3.1/js/buttons.colVis.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/Buttons-1.3.1/js/buttons.flash.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/Buttons-1.3.1/js/buttons.html5.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/Buttons-1.3.1/js/buttons.print.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/ColReorder-1.3.3/js/dataTables.colReorder.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/FixedColumns-3.2.2/js/dataTables.fixedColumns.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/FixedHeader-3.1.2/js/dataTables.fixedHeader.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/KeyTable-2.2.1/js/dataTables.keyTable.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/Responsive-2.1.1/js/dataTables.responsive.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/Responsive-2.1.1/js/responsive.bootstrap.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/RowGroup-1.0.0/js/dataTables.rowGroup.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/RowReorder-1.2.0/js/dataTables.rowReorder.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/Scroller-1.4.2/js/dataTables.scroller.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/DataTables/Select-1.2.2/js/dataTables.select.min.js')}}"></script>
+
+
+<!--<script type="text/javascript" charset="utf8" src="{{ asset('assets/plugins/datatables/dataTables.bootstrap.min.js')}}"></script>-->
 <!-- Morris.js charts -->
 <script src="{{ asset('assets/plugins/raphael/raphael.min.js')}}"></script>
 <script src="{{ asset('assets/plugins/morris/morris.min.js')}}"></script>
@@ -366,7 +409,7 @@
 <!-- jQuery Knob Chart -->
 <script src="{{ asset('assets/plugins/knob/jquery.knob.js')}}"></script>
 <!-- daterangepicker -->
-<script src="{{asset('assets/plugins/moment/moment.js')}}"></script>-->
+<script src="{{asset('assets/plugins/moment/moment.js')}}"></script>
 <script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.js')}}"></script>
 <!-- datepicker -->
 <script src="{{ asset('assets/plugins/datepicker/bootstrap-datepicker.js')}}"></script>
@@ -386,6 +429,8 @@
 <script src="{{ asset('assets/plugins/chartjs/Chart.min.js')}}"></script>
 <!-- Select2 -->
 <script src="{{ asset('assets/plugins/select2/select2.full.min.js')}}"></script>
+<!-- Parsley -->
+<!--<script src="{{ asset('assets/plugins/parsley/parsley.min.js')}}"></script>-->
 <!-- assets dashboard demo (This is only for demo purposes) -->
 <script src="{{ asset('assets/dist/js/pages/dashboard2.js')}}"></script>
 

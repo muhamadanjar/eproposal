@@ -7,9 +7,10 @@ function numeralsOnly(evt) {
     evt = (evt) ? evt : event;
     var charCode = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode :
     ((evt.which) ? evt.which : 0));
-        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        //console.log(charCode);
+        if (charCode > 31 && (charCode < 48 || charCode > 57) && (charCode != 46)) {
             alert("Hanya Nomor yang bisa di input pada kolom ini.");
-            console.log(evt);
+            //console.log(evt);
             return false;
         }
     return true;
@@ -60,6 +61,41 @@ function rangeNumber(evt) {
     return true;
 }
 
+function makeTable(container, data) {
+    var table = $("<table/>").addClass('table');
+    $.each(data, function(rowIndex, r) {
+        var row = $("<tr/>");
+        $.each(r, function(colIndex, c) { 
+            row.append($("<t"+(rowIndex == 0 ?  "h" : "d")+"/>").text(c));
+        });
+        table.append(row);
+    });
+    return container.append(table);
+}
+
+function appendTableColumn(table, rowData) {
+  var lastRow = $('<tr/>').appendTo(table.find('tbody:last'));
+  $.each(rowData, function(colIndex, c) { 
+      lastRow.append($('<td/>').text(c));
+  });
+   
+  return lastRow;
+}
+
+function getjson(url){
+        var result = null;
+        $.ajax({
+            url: url,
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            success: function(data) {
+                result = data;
+            }
+        });
+        return result;
+}
+
 
 
 (function($, window, document){
@@ -84,26 +120,41 @@ function rangeNumber(evt) {
         console.log(id);
         $(id).submit();
     });
-    
-}(jQuery, window, document));
 
-(function($, window, document){
+    //iCheck for checkbox and radio inputs
+    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+      checkboxClass: 'icheckbox_minimal-blue',
+      radioClass: 'iradio_minimal-blue'
+    });
+    //Red color scheme for iCheck
+    $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+      checkboxClass: 'icheckbox_minimal-red',
+      radioClass: 'iradio_minimal-red'
+    });
+    //Flat red color scheme for iCheck
+    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+      checkboxClass: 'icheckbox_flat-green',
+      radioClass: 'iradio_flat-green'
+    });
+
     var provinsi = $('select#provinsi');
     var kabkota = $('select#kabkota');
     var kecamatan = $('select#kecamatan');
     var desa = $('select#desa');
     $('.loader').hide();
-    provinsi.select2(); 
+    $("#loader-wrapper").hide();
+    //provinsi.select2(); 
     //$('select#kabkota').html("<option value=''>Pilih Kota..</option>"); 
     //$('select#kabkota').select2();
     
-    $('select#provinsi').on('change', function (){
+    provinsi.on('change', function (){
         $('select#kabkota').html("<option value=''>Pilih Kota..</option>");// add this on each call then add the options when data receives from the request
         $.ajax({
             url: '/getKabKota/'+$(this).val(),
             dataType: "json",
             beforeSend: function() {
                 $('.loader').show();
+                $("#loader-wrapper").show();
             },
             success: function(data) {
                 $('select#kabkota').empty(); 
@@ -118,15 +169,16 @@ function rangeNumber(evt) {
             },
             complete: function() {
                 $('.loader').hide();
+                $("#loader-wrapper").hide();
             }
         });
     });
     
     //$('select#kecamatan').html("<option value=''>Pilih Kecamatan..</option>"); 
     //$('select#kecamatan').select2();
-    $('select#kecamatan').select2();
+    //$('select#kecamatan').select2();
     
-    $('select#kabkota').on('change', function (){
+    kabkota.on('change', function (){
         $('select#kecamatan').html("<option value=''>Pilih Kecamatan..</option>");// add this on each call then add the options when data receives from the request
         
         $.ajax({
@@ -134,6 +186,7 @@ function rangeNumber(evt) {
             dataType: "json",
             beforeSend: function() {
                 $('.loader').show();
+                $("#loader-wrapper").show();
             },
             success: function(data) {
                 $('select#kecamatan').empty(); 
@@ -154,13 +207,14 @@ function rangeNumber(evt) {
             },
             complete: function() {
                 $('.loader').hide();
+                $("#loader-wrapper").hide();
             }
         });
     });
 
     //$('select#desa').html("<option value=''>Pilih Desa..</option>");
     //$('select#desa').select2();
-    if($('input#kabkota').val() != null){
+    if(kabkota.val() != null){
         $('select#kecamatan').html("<option value=''>Pilih Kecamatan..</option>");
         $.ajax({
             url: '/getKecamatan/'+$('#kabkota').val(),
@@ -190,7 +244,7 @@ function rangeNumber(evt) {
             }
         });
     }
-    $('select#kecamatan').on('change', function (){
+    kecamatan.on('change', function (){
         $('select#desa').html("<option value=''>Pilih Desa..</option>");// add this on each call then add the options when data receives from the request
         
         $.ajax({
@@ -198,6 +252,7 @@ function rangeNumber(evt) {
             dataType: "json",
             beforeSend: function() {
                 $('.loader').show();
+                $("#loader-wrapper").show();
             },
             success: function(data) {
                 $('select#desa').empty(); 
@@ -211,9 +266,24 @@ function rangeNumber(evt) {
             },
             complete: function() {
                 $('.loader').hide();
+                $("#loader-wrapper").hide();
             }
         });
-    }); 
+    });
+
+    $('input.numberonly').bind('keypress', function(e) {
+        return numeralsOnly(e);
+    });
+    $('input.letteronly').bind('keypress', function(e) {
+        return lettersOnly(e);
+    });
+
+
+    
+}(jQuery, window, document));
+
+(function($, window, document){
+     
 }(jQuery, window, document));
 
 
@@ -293,11 +363,11 @@ function rangeNumber(evt) {
         
         if (d.hasOwnProperty('pjalan')) {
             if (d.pjalan.length > 0) {
-            var table = '<div class="box">';
+            var table = '<div class="box ">';
             var table_admin = '<tr><th colspan="3">Admin</th></tr>';
             var table_teknis = '<tr><th colspan="3">Teknis</th></tr>';
             table += '<div class="box-header"><h3 class="box-title">Jalan</h3><h5>'+d.jamterakhir_update+'</h5><div class="box-tools"><div class="btn-group"><a href="/proposal/usulan/lihat/'+d.id+'" type="button" class="btn btn-primary"><i class="fa fa-eye"></i></a><a href="/proposal/usulan/'+d.id+'" type="button" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a></div></div></div>';
-            table += '<div class="box-body"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
+            table += '<div class="box-body table-responsive no-padding"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
                 table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th><th>Keterangan</th></tr>';
                 table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th><th>Keterangan</th></tr>';
                 for (var i = d.pjalan.length - 1; i >= 0; i--) {
@@ -321,18 +391,19 @@ function rangeNumber(evt) {
             var table = '<div class="box">';
             var table_admin = '<tr><th colspan="3">Admin</th></tr>';
             var table_teknis = '<tr><th colspan="3">Teknis</th></tr>';
-            table += '<div class="box-header"><h3 class="box-title">SAB</h3><div class="box-tools"><div class="btn-group"><a href="/proposal/usulan/lihat/'+d.id+'" type="button" class="btn btn-primary"><i class="fa fa-eye"></i></a><a href="/proposal/usulan/'+d.id+'" type="button" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a></div></div></div>';
-            table += '<div class="box-body"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
+            table += '<div class="box-header"><h3 class="box-title">SAB</h3><h5>'+d.jamterakhir_update+'</h5><div class="box-tools"><div class="btn-group"><a href="/proposal/usulan/lihat/'+d.id+'" type="button" class="btn btn-primary"><i class="fa fa-eye"></i></a><a href="/proposal/usulan/'+d.id+'" type="button" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a></div></div></div>';
+            table += '<div class="box-body table-responsive no-padding"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
                 table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th></tr>';
                 table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th></tr>';
                 for (var i = d.psab.length - 1; i >= 0; i--) {
                     data = d.psab[i];
                     var adatidak = (d.psab[i]['isi'] == 1) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
                     var ver = (d.psab[i]['verifikasi']) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
+                    var keterangan = (data['keterangan'] != null) ? data['keterangan']:"";
                     if (data['tipeusulan'] == 'admin') {
-                        table_admin += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td>'+ver+'</td></tr>';
+                        table_admin += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td>'+ver+'</td><td><span class="label label-primary">'+keterangan+'</span></td></tr>';
                     }else if(data['tipeusulan'] == 'teknis'){
-                        table_teknis += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td>'+ver+'</td></tr>';
+                        table_teknis += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td>'+ver+'</td><td><span class="label label-primary">'+keterangan+'</span></td></tr>';
                     }
                 }
                 table += table_admin;
@@ -346,18 +417,19 @@ function rangeNumber(evt) {
             var table = '<div class="box">';
             var table_admin = '<tr><th colspan="3">Admin</th></tr>';
             var table_teknis = '<tr><th colspan="3">Teknis</th></tr>';
-            table += '<div class="box-header"><h3 class="box-title">PLTS</h3><div class="box-tools"><div class="btn-group"><a href="/proposal/usulan/lihat/'+d.id+'" type="button" class="btn btn-primary"><i class="fa fa-eye"></i></a><a href="/proposal/usulan/'+d.id+'" type="button" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a></div></div></div>';
-            table += '<div class="box-body"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
+            table += '<div class="box-header"><h3 class="box-title">PLTS</h3><h5>'+d.jamterakhir_update+'</h5><div class="box-tools"><div class="btn-group"><a href="/proposal/usulan/lihat/'+d.id+'" type="button" class="btn btn-primary"><i class="fa fa-eye"></i></a><a href="/proposal/usulan/'+d.id+'" type="button" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a></div></div></div>';
+            table += '<div class="box-body table-responsive no-padding"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
                 table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th></tr>';
                 table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Verifikasi</th></tr>';
                 for (var i = d.pplts.length - 1; i >= 0; i--) {
                     data = d.pplts[i];
                     var adatidak = (d.pplts[i]['isi'] == 1) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
                     var ver = (d.pplts[i]['verifikasi']) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
+                    var keterangan = (data['keterangan'] != null) ? data['keterangan']:"";
                     if (data['tipeusulan'] == 'admin') {
-                        table_admin += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td>'+ver+'</td></tr>';
+                        table_admin += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td>'+ver+'</td><td><span class="label label-primary">'+keterangan+'</span></td></tr>';
                     }else if(data['tipeusulan'] == 'teknis'){
-                        table_teknis += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td>'+ver+'</td></tr>';
+                        table_teknis += '<tr><td>'+data['no']+'</td><td>'+data['namausulan']+'</td><td>'+adatidak+'</td><td>'+ver+'</td><td><span class="label label-primary">'+keterangan+'</span></td></tr>';
                     }
                 }
                 table += table_admin;
@@ -391,11 +463,11 @@ function rangeNumber(evt) {
             {
                 "render": function ( data, type, row ) {
                     if (row['status_usulan'] == 3) {
-                        return '<i class="fa fa-check-circle text-green"></i>';
+                        return '<i data-usulan="'+row.id+'" data-statususulan="'+row.status_usulan+'"  class="fa fa-check-circle text-green info-usulan"></i>&nbsp;<a href="/pengecekan/usulan/'+row.id+'" class="fa fa-eye text-green"></a>';
                     }else if (row['status_usulan'] == 2) {
-                        return '<i class="fa fa-info-circle text-blue"></i>';
+                        return '<i data-usulan="'+row.id+'" data-statususulan="'+row.status_usulan+'"  class="fa fa-info-circle text-blue info-usulan"></i>&nbsp;<a href="/pengecekan/usulan/'+row.id+'" class="fa fa-eye text-green"></a>';
                     }else{
-                        return '<i class="fa fa-info-circle text-red"></i>';
+                        return '<i data-usulan="'+row.id+'" data-statususulan="'+row.status_usulan+'"  class="fa fa-info-circle text-red info-usulan"></i>&nbsp;<a href="/pengecekan/usulan/'+row.id+'" class="fa fa-eye text-green"></a>';
                     }
                     
                 },
@@ -431,11 +503,26 @@ function rangeNumber(evt) {
         },
 
         "order": [[7, 'asc']],
-        'sDom': 'lt<pi>' 
+        'sDom': 'lt<pi>',
+        responsive: {
+            details: {
+                renderer: function ( api, rowIdx, columns ) {
+                    console.log(rowIdx);
+                    var data = $.map( columns, function ( col, i ) {
+                        return col.hidden ?
+                            '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
+                                '<td>'+col.title+':'+'</td> '+
+                                '<td>'+col.data+'</td>'+
+                            '</tr>' :
+                            '';
+                    } ).join('');
+     
+                    return data ? $('<table class="table"/>').append( data ) : false;
+                }
+            }
+        }
 
     });
-
-
 
     $('#table_usulan tbody').on( 'click', 'tr.group', function () {
         var currentOrder = table_usulan.order()[0];
@@ -447,8 +534,26 @@ function rangeNumber(evt) {
         }
     } )
 
-   .on('click', 'td.details-control', function () {
-        var tr = $(this).closest('tr');
+    .on('click', 'i.info-usulan', function (e) {
+        e.preventDefault();
+        var el = $(this);
+        var datausulanid = el.attr('data-usulan');
+        var datausulan = getjson("/proposal/proposal/"+datausulanid);
+        console.log(datausulan);
+
+        var table = format_usulan(datausulan);
+        
+
+        $('#InfoUsulan')
+        .find('#frm_body').html(table)
+        .end().find('#frm_title').html('<h3>Info Usulan </h3>')
+        .end().modal('show');
+        
+        //$('#formConfirm').find('#frm_submit').attr('data-form', dataForm);
+    } )
+
+    .on('click', 'td.details-control', function () {
+        /*var tr = $(this).closest('tr');
         var row = table_usulan.row( tr );
  
         if ( row.child.isShown() ) {
@@ -463,8 +568,9 @@ function rangeNumber(evt) {
             tr.addClass('shown');
             //$(this).addClass('fa fa-minus-square-o');
             
-        }
+        }*/
     } );
+
     var search_cat = $('#search_category');
     if (search_cat.val() != 0) {
         $('#search_text').on( 'keyup', function () {
@@ -489,7 +595,7 @@ function rangeNumber(evt) {
             var table_admin = '<tr><th colspan="3">Admin</th></tr>';
             var table_teknis = '<tr><th colspan="3">Teknis</th></tr>';
             table += '<div class="box-header"><h3 class="box-title">Jalan</h3><div class="box-tools"><a href="/pengecekan/usulan/'+d.id+'" type="button" class="btn btn-block btn-primary">Cek</a></div></div>';
-            table += '<div class="box-body"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
+            table += '<div class="box-body table-responsive no-padding"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
                 table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Dokumen</th></tr>';
                 table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Dokumen</th></tr>';
                 for (var i = d.pjalan.length - 1; i >= 0; i--) {
@@ -514,7 +620,7 @@ function rangeNumber(evt) {
             var table_admin = '<tr><th colspan="3">Admin</th></tr>';
             var table_teknis = '<tr><th colspan="3">Teknis</th></tr>';
             table += '<div class="box-header"><h3 class="box-title">SAB</h3><div class="box-tools"><a href="/pengecekan/usulan/'+d.id+'" type="button" class="btn btn-block btn-primary">Cek</a></div></div>';
-            table += '<div class="box-body"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
+            table += '<div class="box-body table-responsive no-padding"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
                 table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Dokumen</th></tr>';
                 table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Dokumen</th></tr>';
                 for (var i = d.psab.length - 1; i >= 0; i--) {
@@ -538,7 +644,7 @@ function rangeNumber(evt) {
             var table_admin = '<tr><th colspan="3">Admin</th></tr>';
             var table_teknis = '<tr><th colspan="3">Teknis</th></tr>';
             table += '<div class="box-header"><h3 class="box-title">PLTS</h3><div class="box-tools"><a href="/pengecekan/usulan/'+d.id+'" type="button" class="btn btn-block btn-primary">Cek</a></div></div>';
-            table += '<div class="box-body"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
+            table += '<div class="box-body table-responsive no-padding"><table class="table table-bordered" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
                 table_admin += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Dokumen</th></tr>';
                 table_teknis += '<tr><th>No</th><th>Usulan</th><th>Ada/Tidak</th><th>Dokumen</th></tr>';
                 for (var i = d.pplts.length - 1; i >= 0; i--) {
@@ -579,9 +685,30 @@ function rangeNumber(evt) {
         ],
         "order": [[7, 'asc']],
         "columnDefs": [
-           
-            { "visible": false,  "targets": [ 7 ] },
-            
+            {
+                "render": function ( data, type, row ) {
+                    if (row['status_usulan'] == 3) {
+                        return '<i data-usulan="'+row.id+'" data-statususulan="'+row.status_usulan+'"  class="fa fa-check-circle text-green info-usulan"></i>&nbsp;<a href="/pengecekan/usulan/'+row.id+'" class="fa fa-eye text-green"></a>';
+                    }else if (row['status_usulan'] == 2) {
+                        return '<i data-usulan="'+row.id+'" data-statususulan="'+row.status_usulan+'"  class="fa fa-info-circle text-blue info-usulan"></i>&nbsp;<a href="/pengecekan/usulan/'+row.id+'" class="fa fa-eye text-green"></a>';
+                    }else{
+                        return '<i data-usulan="'+row.id+'" data-statususulan="'+row.status_usulan+'"  class="fa fa-info-circle text-red info-usulan"></i>&nbsp;<a href="/pengecekan/usulan/'+row.id+'" class="fa fa-eye text-green"></a>';
+                    }
+                    
+                },
+                "targets": 0
+            },
+            {   
+                "visible": false,  
+                "targets": [ 7 ] 
+
+            },
+            {  
+                "render": function(data,type,row){
+                    return '<i>Rp. '+ number_format(row['jumlah_usulan_juta'])+'</i>';
+                },
+                "targets": [ 6 ] 
+            },
         ],
         drawCallback: function ( settings ) {
             var api = this.api();
@@ -597,12 +724,29 @@ function rangeNumber(evt) {
                     last = group;
                 }
             } );
+        },
+        responsive: {
+            details: {
+                renderer: function ( api, rowIdx, columns ) {
+                    console.log(rowIdx);
+                    var data = $.map( columns, function ( col, i ) {
+                        return col.hidden ?
+                            '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
+                                '<td>'+col.title+':'+'</td> '+
+                                '<td>'+col.data+'</td>'+
+                            '</tr>' :
+                            '';
+                    } ).join('');
+     
+                    return data ? $('<table class="table"/>').append( data ) : false;
+                }
+            }
         }
     });
 
     $('#table_pengecekan tbody')
     .on('click', 'td.details-control', function () {
-        var tr = $(this).closest('tr');
+        /*var tr = $(this).closest('tr');
         var row = table_pengecekan.row( tr );
  
         if ( row.child.isShown() ) {
@@ -615,9 +759,24 @@ function rangeNumber(evt) {
             // Open this row
             row.child( format_pengecekan(row.data()) ).show();
             tr.addClass('shown');
-            
+        }*/
+    } )
+    .on('click', 'i.info-usulan', function (e) {
+        e.preventDefault();
+        var el = $(this);
+        var datausulanid = el.attr('data-usulan');
+        var datausulan = getjson("/proposal/proposal/"+datausulanid);
+        console.log(datausulan);
 
-        }
+        var table = format_pengecekan(datausulan);
+        
+
+        $('#InfoUsulan')
+        .find('#frm_body').html(table)
+        .end().find('#frm_title').html('<h3>Info Pengecekan </h3>')
+        .end().modal('show');
+        
+        //$('#formConfirm').find('#frm_submit').attr('data-form', dataForm);
     } )
     .on( 'click', 'tr.group', function () {
         var currentOrder = table_pengecekan.order()[0];
@@ -704,30 +863,7 @@ function rangeNumber(evt) {
     google.maps.event.addDomListener(window, 'load', initialize);
     }*/
 
-    $('#checkmap').click(function(){
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
-            $('input[name=latitude]').val(position.coords.latitude);
-            $('input[name=longitude]').val(position.coords.longitude);
-            //google.maps.event.trigger(map, "resize");
-            //map.setCenter(pos);
-            /*var marker = new google.maps.Marker({
-                position: pos,
-                title:"Hello World!"
-            });*/
-            
-          }, function() {
-            
-          });
-        } else {
-          // Browser doesn't support Geolocation
-         
-        }        
-    });
+    
     $('#usulan-group').hide();
     $('#usulan_jenis_pilih').hide();
     $('#jalan_sirip').hide();
@@ -853,39 +989,6 @@ function rangeNumber(evt) {
             if(!!file.type.match(/.*/)){
                 formData.append("images", file);
             }
-                /*$.ajax({
-                    url: '/proposal/upload',  //server script to process data
-                    type: 'POST',
-                    xhr: function() {  // custom xhr
-                        myXhr = $.ajaxSettings.xhr();
-                        if(myXhr.upload){ // if upload property exists
-                            myXhr.upload.addEventListener('progress', progressHandlingFunction, false); // progressbar
-                        }
-                        return myXhr;
-                    },
-                    // Ajax events
-                    success: completeHandler = function(data) {
-                        
-                        if(navigator.userAgent.indexOf('Chrome')) {
-                            var catchFile = $(":file").val().replace(/C:\\fakepath\\/i, '');
-                        }else {
-                            var catchFile = $(":file").val();
-                        }
-                        var writeFile = $(":file");
-                        writeFile.html(writer(catchFile));
-                        $("*setIdOfImageInHiddenInput*").val(data.logo_id);
-                        console.log($(this).closest('jalanadmin_ft'));
-                    },
-                    error: errorHandler = function() {
-                        alert("Something went wrong!");
-                    },
-                    // Form data
-                    data: formData,
-                    // Options to tell jQuery not to process data or worry about the content-type
-                    cache: false,
-                    contentType: false,
-                    processData: false
-                }, 'json');*/
                 
                 $.ajax({
                     url: "/proposal/upload",
@@ -896,10 +999,12 @@ function rangeNumber(evt) {
                     contentType: false,
                     dataType:'json',
                     beforeSend: function(){
-                        $('.loader').show();
+                        //$('.loader').show();
+                        $("#loader-wrapper").show();
                     },
                     complete: function(){
-                        $('.loader').hide();
+                        //$('.loader').hide();
+                        $("#loader-wrapper").hide();
                     },
                     success: function(data){
                         
@@ -1040,24 +1145,19 @@ function rangeNumber(evt) {
 
 (function($, window, document){
 
-    $('input.numberonly').bind('keypress', function(e) {
-        return numeralsOnly(e);
-    });
-    $('input.letteronly').bind('keypress', function(e) {
-        return lettersOnly(e);
-    });
+    
     function LinkCheck(url){
         var http = new XMLHttpRequest();
         http.open('HEAD', url, false);
         http.send();
         return http.status!=404;
     }
-$.get('file/exists')
+    /*$.get('file/exists')
     .done(function() { 
         // exists code 
     }).fail(function() { 
         // not exists code
-    })
+    })*/
 }(jQuery, window, document));
  
 

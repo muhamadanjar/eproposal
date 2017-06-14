@@ -19,7 +19,7 @@
         </div>
             <!-- /.box-header -->
         <div class="box-body">
-        	<table id="table_pengecekan" class="display" cellspacing="0" width="100%">
+        	<table id="table_pengecekan" class="display table" cellspacing="0" width="100%">
                 <thead>
                     <tr>
                         <th></th>

@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('latestlogin')->nullable();
             $table->string('kode_provinsi',12)->nullable();
             $table->string('kode_kabupaten',16)->nullable();
+            $table->bigInteger('no_hp')->nullable();
             
             $table->rememberToken();
             $table->timestamps();

@@ -54,8 +54,8 @@ class ProvinsiSeeder extends Seeder
 
             ['kode_provinsi' => 81,'provinsi' => 'MALUKU','isactived'=>1],
             ['kode_provinsi' => 82,'provinsi' => 'MALUKU UTARA','isactived'=>1],
-            ['kode_provinsi' => 91,'provinsi' => 'PAPUA','isactived'=>1],
-            ['kode_provinsi' => 92,'provinsi' => 'PAPUA BARAT','isactived'=>1],
+            ['kode_provinsi' => 91,'provinsi' => 'PAPUA BARAT','isactived'=>1],
+            ['kode_provinsi' => 94,'provinsi' => 'PAPUA','isactived'=>1],
 
 
             

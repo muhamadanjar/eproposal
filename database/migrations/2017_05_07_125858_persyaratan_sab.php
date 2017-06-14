@@ -14,7 +14,7 @@ class PersyaratanSab extends Migration
     public function up()
     {
         Schema::create('psab', function (Blueprint $table) {
-           $table->increments('id');
+            $table->increments('id');
             $table->string('no',10)->default(0);
             $table->string('slugusulan');
             $table->string('namausulan');

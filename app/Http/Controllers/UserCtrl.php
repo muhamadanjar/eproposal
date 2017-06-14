@@ -48,7 +48,7 @@ class UserCtrl extends Controller
     public function postAddEdit(Request $request){
         if ($request->isMethod('post')) {
             $validator = Validator::make($request->all(), [
-                'username' => 'required|max:10',
+                'username' => 'required|max:20',
                 'password' => 'required',
                 'name' => 'required',
             ]);
@@ -95,6 +95,8 @@ class UserCtrl extends Controller
             }else{
                 $user->password = bcrypt($request->password);           
             }
+            $user->kode_provinsi = $request->provinsi;
+            $user->kode_kabupaten = $request->kabupaten;
             
             $user->save();
             if (!$user->hasRole($request->role)) {

@@ -94,7 +94,7 @@
                         <?php
                           $disabled = ($v->isi) ? '' : 'disabled';
                           $checked = ($v->verifikasi) ? 'checked' : '';
-                          $fileexist = (file_exists(public_path('files').'/'.$v->file)) ? '<a target="_blank" href="/eproposal/public/files/'.$v->file.'" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-red"></a>' ;
+                          $fileexist = (file_exists(public_path('files').'/'.$v->file)) ? '<a target="_blank" href="/files/'.$v->file.'" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-red"></a>' ;
                           $adatidak = ($v->isi) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
                         ?>
                       <tr>
@@ -120,7 +120,7 @@
                           $disabled = ($v->isi) ? '' : 'disabled';
                           $verifikasi = ($v->verifikasi == 1) ? 'checked':'';
 
-                          $fileexist = (file_exists(public_path('files').'/'.$v->file)) ? '<a target="_blank" href="/eproposal/public/files/'.$v->file.'" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-red"></a>' ;
+                          $fileexist = (file_exists(public_path('files').'/'.$v->file)) ? '<a target="_blank" href="/files/'.$v->file.'" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-red"></a>' ;
                           $adatidak = ($v->isi) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
 
                         ?>
@@ -147,7 +147,7 @@
                         <?php
                           $disabled = ($v->isi) ? '' : 'disabled';
                           $verifikasi = ($v->verifikasi == 1) ? 'checked':'';
-                          $fileexist = (file_exists(public_path('files').'/'.$v->file)) ? '<a target="_blank" href="/eproposal/public/files/'.$v->file.'" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-gray"></a>' ;
+                          $fileexist = (file_exists(public_path('files').'/'.$v->file)) ? '<a target="_blank" href="/files/'.$v->file.'" class="fa fa-file-text text-green"></a>' : '<a href="#" class="fa fa-file-text text-gray"></a>' ;
                           $adatidak = ($v->isi) ? "<i class='fa fa-check text-blue'></i>":"<i class='fa fa-close text-red'></i>";
                         ?>
                       <tr>
@@ -176,7 +176,7 @@
                 <!-- this row will not appear when printing -->
                 <div class="row no-print">
                   
-                  <div class="col-xs-5 pull-right">
+                  <div class="col-xs-12 col-md-6 pull-right">
                     <div class="input-group margin">
                       <select name="status" class="form-control">
                         <option value="0">Belum Diverifikasi</option>
@@ -191,7 +191,7 @@
                 </div>
                 <div class="row no-print">
                   
-                  <div class="col-xs-5 pull-right">
+                  <div class="col-xs-12 col-md-6 pull-right">
                     <div class="input-group margin">
                       <input type="text" name="jumlah_usulan_diterima" class="form-control numberonly" placeholder="Nominal yang disetujui" value="{{$usulan->jumlah_usulan_diterima}}">
                       <span class="input-group-btn">

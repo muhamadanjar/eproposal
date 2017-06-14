@@ -73,11 +73,16 @@ Route::group(['prefix'=>'proposal'], function(){
 	Route::post('/usulan/{id}','ProposalCtrl@postUbah');
 
 	Route::get('/usulan/lihat/{id}','ProposalCtrl@getLihatUsulan');
+	Route::get('/proposal/{id}','ProposalCtrl@getProposal');
+
+	Route::get('/usulan/delete/{id}','PengecekanCtrl@postDelete');
 
 	Route::post('upload','ProposalCtrl@postUpload');
 	Route::post('uploaddokumentasi','ProposalCtrl@postUploadDokumentasi');
 
 	Route::get('/pengecekan','PengecekanCtrl@getIndex');
+
+
 });
 
 Route::group(['prefix'=>'pengecekan'], function(){

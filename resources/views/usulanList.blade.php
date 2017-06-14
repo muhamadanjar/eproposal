@@ -38,7 +38,7 @@
         </div>
             <!-- /.box-header -->
         <div class="box-body">
-        	<table id="table_usulan" class="display" cellspacing="0" width="100%">
+        	<table id="table_usulan" class="display table" cellspacing="0" width="100%">
                 <thead>
                     <tr>
                         <th></th>

@@ -9,9 +9,16 @@ class Usulan extends Model{
     use Notifiable;
     protected $table = 'usulan';
     protected $primaryKey = 'id';
-
+    protected $fillable = ['nama_proyek','surat_pengantar','opd_pengusul','latitude','longitude','jumlah_usulan'];
     
-    
+    public static $rules = array(
+        'nama_proyek'=>'required|min:3',
+        'surat_pengantar' => 'required',
+        'opd_pengusul'=>'required',
+        'latitude'=>'numeric|required',
+        'longitude'=>'numeric|required',
+        'jumlah_usulan' => 'numeric|required',
+    );
 
     public function pjalan(){
         return $this->belongsToMany(PJalan::class,'usulan_persyaratan_jalan','usulan_id','pjalan_id');

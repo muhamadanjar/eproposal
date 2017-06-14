@@ -74,7 +74,7 @@
                         
 
                         <div class="form-group{{ $errors->has('penerima_manfaat') ? ' has-error' : '' }}">
-                            
+                            <label for="penerima_manfaat" class="control-label">Penerima Manfaat </label>
                             <table class="table table-bordered">
                                 <tbody>
                                 <tr>

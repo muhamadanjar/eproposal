@@ -1,19 +1,21 @@
 @extends('layouts.adminlte')
-<style type="text/css">
-    html, body, .container,  #map {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-#map {
-    position: relative;
-}
+<style>
+    html, body, #map_canvas {
+        width: 100%;
+        height: 80%;
+        margin: 0;
+        padding: 0;
+    }
+    #map_canvas {
+        position: relative;
+    }
+    </style>
 </style>
 @section('title','Tambah Usulan')
 @section('content')
+    
 
-    <form method="POST" enctype='multipart/form-data'>
+    <form method="POST" enctype='multipart/form-data' data-parsley-validate="">
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
@@ -21,7 +23,7 @@
                 <div class="panel-body">
                     
                         {{ csrf_field() }}
-                        <div class="form-group{{ $errors->has('tahun') ? ' has-error' : '' }}">
+                        <div class="form-group {{ $errors->has('tahun') ? ' has-error' : '' }}">
                             <label for="tahun" class="control-label">Tahun Usulan</label>
                             <select name="tahun" id="tahun" class="form-control">
                                     <option value="0">----</option>
@@ -31,8 +33,8 @@
                             </select>
                             
                         </div>
-                    <div id="usulan-group">
-                        <div class="form-group{{ $errors->has('jenis_usulan') ? ' has-error' : '' }}">
+                    <div id="usulan-group" style="display: none;">
+                        <div class="form-group {{ $errors->has('jenis_usulan') ? ' has-error' : '' }}">
                             <label for="jenis_usulan" class="control-label">Jenis Usulan</label>
                             <select name="jenis_usulan" id="jenis_usulan" class="form-control">
                                 <option value="0">-----</option>
@@ -43,7 +45,7 @@
                             </select>
                         </div>
                         @if(auth()->user()->isSuper() || auth()->user()->isManager())
-                        <div class="form-group{{ $errors->has('provinsi') ? ' has-error' : '' }}">
+                        <div class="form-group {{ $errors->has('provinsi') ? ' has-error' : '' }}">
                             <label for="provinsi" class="control-label">Provinsi</label>
                             <select name="provinsi" id="provinsi" class="form-control">
                                     <option value="--">----</option>
@@ -54,7 +56,7 @@
                             
                         </div>
 
-                        <div class="form-group{{ $errors->has('kabupaten') ? ' has-error' : '' }}">
+                        <div class="form-group {{ $errors->has('kabupaten') ? ' has-error' : '' }}">
                             <label for="kabupaten" class="control-label">Kabupaten/Kota</label>
                             <select name="kabupaten" id="kabkota" class="form-control"></select>
                             
@@ -64,12 +66,12 @@
                         <input type="hidden" name="kabupaten" id="kabkota" value="{{ auth()->user()->kode_kabupaten}}" />
                         @endif
 
-                        <div class="form-group{{ $errors->has('kecamatan') ? ' has-error' : '' }}">
+                        <div class="form-group {{ $errors->has('kecamatan') ? ' has-error' : '' }}">
                             <label for="kecamatan" class="control-label">Kecamatan</label>
                             <select name="kecamatan" id="kecamatan" class="form-control"></select>
                         </div>
 
-                        <div class="form-group{{ $errors->has('desa') ? ' has-error' : '' }}">
+                        <div class="form-group {{ $errors->has('desa') ? ' has-error' : '' }}">
                             <label for="desa" class="control-label">Desa</label>
                             <select name="desa" id="desa" class="form-control">
                               <option value="---">-------</option>
@@ -77,43 +79,43 @@
                             
                         </div>
 
-                        <div class="form-group{{ $errors->has('nama_proyek') ? ' has-error' : '' }}">
+                        <div class="form-group {{ $errors->has('nama_proyek') ? ' has-error' : '' }}">
                             <label for="nama_proyek" class="control-label">Nama Proyek</label>
-                            <input type="text" name="nama_proyek" class="form-control"/>
+                            <input type="text" name="nama_proyek" class="form-control" required="" />
                             
                         </div>
 
-                        <div class="form-group{{ $errors->has('surat_pengantar') ? ' has-error' : '' }}">
+                        <div class="form-group {{ $errors->has('surat_pengantar') ? ' has-error' : '' }}">
                             <label for="surat_pengantar" class="control-label">Surat Pengantar/ Surat Referensi</label>
-                            <input type="text" name="surat_pengantar" class="form-control"/>
+                            <input type="text" name="surat_pengantar" class="form-control" required=""/>
                             
                         </div>
 
-                        <div class="form-group{{ $errors->has('skpd_pengusul') ? ' has-error' : '' }}">
+                        <div class="form-group {{ $errors->has('skpd_pengusul') ? ' has-error' : '' }}">
                             <label for="kordinat" class="control-label">OPD Pengusul</label>
-                            <input type="text" name="skpd_pengusul" class="form-control"/>
+                            <input type="text" name="skpd_pengusul" class="form-control" required=""/>
+                            <span class="help-block"></span>
                             
                         </div>
 
                         <div class="form-group{{ $errors->has('kordinat') ? ' has-error' : '' }}">
                             <label for="kordinat" class="control-label">Koordinat Lokasi</label>
                             <div class="input-group">
-                                <input type="text" name="latitude" class="form-control" placeholder="Latitude" />
-                                <input type="text" name="longitude" class="form-control" placeholder="Longitude" />
+                                <input type="text" name="latitude" id="latitude" class="form-control numberonly" placeholder="Latitude" required=""/>
+                                <input type="text" name="longitude" id="longitude" class="form-control numberonly" placeholder="Longitude" required=""/>
                                 <div class="input-group-btn">
                                     <button type="button" id="checkmap" class="btn btn-primary">
                                         Check Map
                                     </button>
                                 </div>
-
                             </div>
 
                                 
                         </div>
-                        <div id="map"></div>
+                        <div id="map_canvas"></div>
                         
 
-                        <div class="form-group{{ $errors->has('penerima_manfaat') ? ' has-error' : '' }}">
+                        <div class="form-group {{ $errors->has('penerima_manfaat') ? ' has-error' : '' }}">
                             <!--<label for="penerima_manfaat" class="control-label">Penerima Manfaat </label>
                             <input type="text" id="penerima_manfaat" name="penerima_manfaat" class="form-control numberonly"/>
                             <div class="input-group">
@@ -125,6 +127,7 @@
                                     </select> 
                                 </span>  
                             </div>-->
+                            <label for="penerima_manfaat" class="control-label">Penerima Manfaat </label>
                             <table class="table table-bordered">
                                 <tbody>
                                 <tr>
@@ -134,10 +137,10 @@
                                   <th>Ha</th>
                                 </tr>
                                 <tr>
-                                  <th><input type="text" class="form-control numberonly" name="penerima_manfaat_kk" placeholder="KK"></th>
-                                  <th><input type="text" class="form-control numberonly" name="penerima_manfaat_jiwa" placeholder="Jiwa"></th>
-                                  <th><input type="text" class="form-control numberonly" name="penerima_manfaat_km" placeholder="Km"></th>
-                                  <th><input type="text" class="form-control numberonly" name="penerima_manfaat_ha" placeholder="Ha"></th>
+                                  <th class="spenerima_manfaat_kk"><input type="text" class="form-control numberonly" name="penerima_manfaat_kk" placeholder="KK"></th>
+                                  <th class="spenerima_manfaat_jiwa"><input type="text" class="form-control numberonly" name="penerima_manfaat_jiwa" placeholder="Jiwa"></th>
+                                  <th class="spenerima_manfaat_km"><input type="text" class="form-control numberonly" name="penerima_manfaat_km" placeholder="Km"></th>
+                                  <th class="spenerima_manfaat_ha"><input type="text" class="form-control numberonly" name="penerima_manfaat_ha" placeholder="Ha"></th>
                                 </tr>
                                 </tbody>
                             </table>
@@ -145,12 +148,12 @@
                         </div>
                             
                         
-                        <div class="form-group{{ $errors->has('jumlah_usulan') ? ' has-error' : '' }}">
+                        <div class="form-group {{ $errors->has('jumlah_usulan') ? ' has-error' : '' }}">
                             <label for="jumlah_usulan" class="control-label">Jumlah Usulan (Juta)</label>
-                            <input type="text" name="jumlah_usulan" class="form-control numberonly" placeholder="jumlah_usulan" />
+                            <input type="text" name="jumlah_usulan" class="form-control numberonly" placeholder="Jumlah Usulan" required="" />
                         </div>
 
-                        <div class="form-group{{ $errors->has('dokumentasi') ? ' has-error' : '' }}">
+                        <div class="form-group {{ $errors->has('dokumentasi') ? ' has-error' : '' }}">
                             <label for="dokumentasi" class="control-label">Dokumentasi Lokasi Eksisting</label>
                             <input type="file" id="inputgambar" name="dokumentasi" class="validate"/ >
                             <p class="help-block"><i class="fa fa-file-pdf-o" class="text-red"></i><span>File Maksimal 200 Mb.</span></p>
@@ -172,7 +175,7 @@
         </div>
     </div>
 
-    <div class="row" id="usulan_jenis_pilih">
+    <div class="row" id="usulan_jenis_pilih" style="display: none;">
         <div class="col-xs-12">
         <div class="box">
             <div class="pjalan">
@@ -468,14 +471,133 @@
         </div>
     </div>
     </form>
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1j4LJ2c2RhsqEiA9aWYQoJdoij9QyCYw"  type="text/javascript"></script>
     
 @endsection
 
 
 @section('js_tambahan')
 
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUFQ_PdoGGeFoaimy-7AMAicWHQ3EGp3U">
+  <script type="text/javascript">
+    var map;
+    var style = [];
+    var layers = [];
+    var line = [];
+    var marker = [];
+    var markers = [];
+    var img = [];
+    var arrMakers = new Array();
+    var infowindow;
+    var infoBubble;
+    var geocoder;
+    var myLatlng;
+    google.maps.event.addDomListener(window, 'load', initialize);
+    $('#checkmap').click(function(){
+        if ($("#latitude").val() != "" && $("#longitude").val() != "") {
+            myLatlng = new google.maps.LatLng($("#latitude").val(),$("#longitude").val());
+                
+                var mapOptions = {
+                    zoom: 4,
+                    center: myLatlng
+                }
+
+                google.maps.event.trigger(map, "resize");
+                map.setCenter(myLatlng);
+                marker = new google.maps.Marker({
+                    position: myLatlng,
+                    title: "Lokasi Usulan!",
+                    map:map
+                });   
+        }else{
+            if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(function(position) {
+                    console.log(position);
+                    myLatlng = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+                    $("#latitude").val(position.coords.latitude);
+                    $("#longitude").val(position.coords.longitude);
+                    var mapOptions = {
+                        zoom: 4,
+                        center: myLatlng
+                    }
+
+                    google.maps.event.trigger(map, "resize");
+                    map.setCenter(myLatlng);
+                    marker = new google.maps.Marker({
+                        position: myLatlng,
+                        title: "Lokasi Usulan!",
+                        map:map
+                    });
+              }, function() {
+                
+              });
+            } else {
+              alert("Browser doesn't support Geolocation");
+            }   
+        }
+        
+        
+    });
+    function initialize() {
+        
+        
+        var C_lat   = -6.945941;    
+        var C_long  = 106.764116;   
+        var C_zoom  = 5;
+        var mapDiv = document.getElementById('map_canvas');
+            map =   new google.maps.Map(mapDiv,{
+                center: new google.maps.LatLng(C_lat, C_long),
+                zoom: C_zoom,
+                zoomControlOptions: {
+                    position: google.maps.ControlPosition.RIGHT_BOTTOM
+                },
+                mapTypeControlOptions: {
+                        position: google.maps.ControlPosition.BOTTOM_CENTER,
+                        mapTypeIds:[google.maps.MapTypeId.ROADMAP,google.maps.MapTypeId.SATELLITE],
+                },
+                scaleControl: true,
+                streetViewControl: true,
+                streetViewControlOptions: {
+                    position: google.maps.ControlPosition.RIGHT_BOTTOM
+                },      
+                        
+            });
+                            
+            geocoder = new google.maps.Geocoder();  
+    }
+
+    function addMarker(latlng, i=0) {
+        var offset = Math.floor(Math.random() * 3) * 16; // pick one of the three icons in the sprite
+
+        // Calculate desired pixel-size of the marker
+        var size = Math.floor(4*(count-1) + 8);
+        var scaleFactor = size/16;
+        
+        var data = i;
+        var icon = {
+          url: 'assets/img/marker/point/'+data.icon_pju,
+          // This marker is 20 pixels wide by 32 pixels high.
+          size: new google.maps.Size(20, 32),
+          // The origin for this image is (0, 0).
+          origin: new google.maps.Point(0, 0),
+          // The anchor for this image is the base of the flagpole at (0, 32).
+          anchor: new google.maps.Point(0, 32)
+        };
+        var marker = new google.maps.Marker({
+            map: map,
+            position: latlng,
+        
+            data:data,
+            icon: icon,
+        });
+
+        markers.push(marker);
+        google.maps.event.addListener(marker, "click", function () {
+            console.log(this.data);
+            openModal(this.data);
+            //t.openModal({poi:data});
+        });
+    }   
     </script>
 
     

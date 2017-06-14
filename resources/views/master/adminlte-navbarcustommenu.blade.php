@@ -116,7 +116,7 @@
                             {{$notification->data['user']['name']}}
                             <small><i class="fa fa-clock-o"></i> {{$notification->created_at->diffForHumans()}}</small>
                           </h4>
-                          <p>Usulan Masuk</p>
+                          <p>Usulan {{$notification->data['usulan']['nama_proyek']}} telah Masuk</p>
                         </a>
                       </li>
                     @endif
