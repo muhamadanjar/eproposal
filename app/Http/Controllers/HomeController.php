@@ -98,7 +98,7 @@ class HomeController extends Controller{
     public function getJumlahUsulan($value='')
     {
         $usulan = DB::table('usulan')->where('user_id',auth()->user()->id)->count();
-        if(auth()->user()->isManager()){
+        if(auth()->user()->isManager() || auth()->user()->isSuper()){
             $usulan = DB::table('usulan')->count();
         }
         return $usulan;
